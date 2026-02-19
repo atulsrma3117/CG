@@ -1,0 +1,23 @@
+stages:
+  - build
+  - test
+
+variables:
+  JAVA_HOME: "/usr/lib/jvm/java-17-openjdk"
+
+before_script:
+  - export PATH="$JAVA_HOME/bin:$PATH"
+  - java -version
+
+build_job:
+  stage: build
+  script:
+    - ./gradlew build   # or mvn clean install
+
+test_job:
+  stage: test
+  script:
+    - ./gradlew test    # or mvn test
+  artifacts:
+    paths:
+      - build/reports/tests/test
