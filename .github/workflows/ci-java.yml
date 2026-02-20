@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - "**"
+  repository_dispatch:
+    types: [frontend_push]
 
 jobs:
   Carrier_Guard:
