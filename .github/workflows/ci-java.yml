@@ -6,7 +6,7 @@ on:
       - "**"
 
 jobs:
-  test:
+  Carrier_Guard:
     runs-on: ubuntu-latest
     env:
       TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
