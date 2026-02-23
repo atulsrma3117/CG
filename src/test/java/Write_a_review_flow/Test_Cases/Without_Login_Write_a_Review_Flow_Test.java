@@ -4,14 +4,10 @@ import Write_a_review_flow.Pages.HomePage;
 import Write_a_review_flow.Pages.ReviewPage;
 import base.BaseTest;
 import io.qameta.allure.*;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import zutilities.Logs;
-
-import java.time.Duration;
 
 @Listeners({zutilities.CustomDriverListener.class, zutilities.RetryListener.class, io.qameta.allure.testng.AllureTestNg.class})
 @Epic("Review Module")
@@ -20,7 +16,7 @@ public class Without_Login_Write_a_Review_Flow_Test extends BaseTest {
 
     HomePage homePage;
     ReviewPage reviewPage;
-    String dotNumber = "123456";
+    String dotNumber = "1234567";
 
     @Test(priority = 1)
     @Description("Select DOT filter and search DOT number")
@@ -29,7 +25,7 @@ public class Without_Login_Write_a_Review_Flow_Test extends BaseTest {
         Logs.info(test, "==== START FLOW FOR DOT: " + dotNumber + " ====");
         homePage = new HomePage(driver);
         reviewPage = new ReviewPage(driver);
-        homePage.selectDOTFilter();
+       // homePage.selectDOTFilter();
         homePage.searchDOT(dotNumber);
         Logs.pass(driver, test, "DOT filter selected and DOT number searched: " + dotNumber);
 
@@ -38,15 +34,15 @@ public class Without_Login_Write_a_Review_Flow_Test extends BaseTest {
     @Test(priority = 2, dependsOnMethods = "TC_01_Search_and_Review_Flow")
     @Description("Click Write a Review and validate redirect to login/signup page")
     @Severity(SeverityLevel.BLOCKER)
-    public void TC_03_Click_on_Write_a_Review() {
+    public void TC_02_Click_on_Write_a_Review() {
         reviewPage.openReviewForm();
-        Logs.info(test, "POP-UP Titile" + reviewPage.getPopupTitle());
+        Logs.info(test, "POP-UP Titile: " + reviewPage.getPopupTitle());
         Assert.assertTrue(reviewPage.getPopupTitle().contains("Sign in to write a review"), "Popup title mismatch!");
-        Logs.info(test, "POP-UP Message" + reviewPage.getPopupMessage());
+        Logs.info(test, "POP-UP Message: " + reviewPage.getPopupMessage());
         Assert.assertTrue(reviewPage.getPopupMessage().contains("sign in or create an account"), "Popup message mismatch!");
-        Logs.info(test, "isCancelButtonDisplayed " + reviewPage.isCancelButtonDisplayed());
+        Logs.info(test, "isCancelButtonDisplayed: " + reviewPage.isCancelButtonDisplayed());
         Assert.assertTrue(reviewPage.isCancelButtonDisplayed(), "Cancel button is not displayed!");
-        Logs.info(test, "isContinueButtonDisplayed" + reviewPage.isContinueButtonDisplayed());
+        Logs.info(test, "isContinueButtonDisplayed: " + reviewPage.isContinueButtonDisplayed());
         Assert.assertTrue(reviewPage.isContinueButtonDisplayed(), "Continue to Login button is not displayed!");
         Logs.pass(driver, test, "Sign-in popup validated successfully!");
     }

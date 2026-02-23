@@ -54,17 +54,18 @@ public class Logs {
         Allure.step("ℹ️ " + message);
     }
 
-    public static void warn( ExtentTest test, String message) {
+    public static void warn(ExtentTest test, String message) {
         Logger().warn("⚠️ " + message);
         test.warning("⚠️ " + message);
         Allure.step("⚠️ " + message);
-       // attachScreenshot(driver, test, "warn", "⚠️ " + message);
+        // attachScreenshot(driver, test, "warn", "⚠️ " + message);
     }
-    public static void error( ExtentTest test, String message) {
+
+    public static void error(ExtentTest test, String message) {
         Logger().error("🛑" + message);
         test.warning("🛑" + message);
         Allure.step("🛑" + message);
         // attachScreenshot(driver, test, "warn", "⚠️ " + message);
     }
 
-   }
+}

@@ -3,13 +3,17 @@ package Signup_Login.Test_Cases;
 import Signup_Login.Pages.LoginPage;
 import Signup_Login.Pages.OtpPage;
 import base.BaseTest;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import zutilities.Logs;
 
 public class SignupLoginValidationTest extends BaseTest {
-
+    @BeforeClass
+    public void generateEmail() {
+        email = "user" + System.currentTimeMillis() + "@yopmail.com";
+    }
     @Test(priority = 1)
-    public void signupValidationFlow() {
+    public void signupValidationFlow() throws InterruptedException {
 
         LoginPage login = new LoginPage(driver);
         login.clickLogin();

@@ -7,12 +7,19 @@ import org.testng.ITestResult;
 import org.testng.annotations.*;
 import zutilities.*;
 
+import java.lang.reflect.Method;
 import java.time.Duration;
 
 public class BaseTest extends StartupCode {
-
     protected static WebDriverWait wait;
     protected final String HOME_PAGE_URL = Config.get("base.url");
+
+    @BeforeSuite
+    public void setupReport() {
+        extent = Extentreportmanager.getExtentReports();
+    }
+
+
     @BeforeClass
     @Parameters("browser")
     public void start(@Optional("") String browser) throws InterruptedException {
@@ -21,31 +28,36 @@ public class BaseTest extends StartupCode {
         driver = new EventFiringDecorator(listener).decorate(originalDriver);
         wait = new WebDriverWait(driver, Duration.ofSeconds(12));
         AllureEnvWriter.createEnvFile();
-        Logs.info(test,"Started Test on browser: " +
-                (browser.isEmpty() ? Config.get("browser") : browser));
+
     }
 
- /*   @BeforeMethod
-    public void initTest(java.lang.reflect.Method method) {
+    @BeforeMethod
+    @Parameters("browser")
+    public void initTest(Method method, @Optional("") String browser) {
 
-        test = Extentreportmanager
-                .getExtentReports()
-                .createTest(method.getName());
+        String className = this.getClass().getSimpleName();
+        String methodName = method.getName();
 
-        driver.navigate().to(HOME_PAGE_URL);
-    }*/
+        test = extent.createTest("Test Name - " + className + " - Test Case - " + methodName);
 
- @AfterMethod(alwaysRun = true)
- public void takeScreenshot(ITestResult result) throws Exception {
+        Logs.info(test, "🚀 TEST STARTED on browser: " + (browser.isEmpty() ? Config.get("browser") : browser));
+    }
 
-     if (result.getStatus() == ITestResult.FAILURE) {
-         Screenshot.tearDown(result);
-     }
- }
+    @AfterMethod(alwaysRun = true)
+    public void takeScreenshot(ITestResult result) throws Exception {
+
+        if (result.getStatus() == ITestResult.FAILURE) {
+            Screenshot.tearDown(result);
+        }
+    }
 
     @AfterClass
     public void quitBrowser() {
-        finalizeReport();
         quitDriver();
+    }
+
+    @AfterSuite
+    public void ReportLoaded() {
+        finalizeReport();
     }
 }

@@ -7,27 +7,28 @@ import static zutilities.StartupCode.test;
 
 public class CustomDriverListener implements WebDriverListener, ITestListener {
 
-    @Override
-    public void onTestStart(ITestResult result) {
-        String testName = result.getMethod().getMethodName();
+    /*
+       @Override
+       public void onTestStart(ITestResult result) {
+           String testName = result.getMethod().getMethodName();
+           test = Extentreportmanager.getExtentReports().createTest(testName);
 
-        test = Extentreportmanager.getExtentReports().createTest(testName);
+           Logs.info(test, "🚀 TEST STARTED: " + testName);
+       }
 
-        Logs.info(test, "🚀 TEST STARTED: " + testName);
-    }
-/*
-    @Override
-    public void onTestSuccess(ITestResult result) {
-        attachScreenshot(StartupCode.driver, StartupCode.test,
-                "PASS", "✅ TEST PASSED: " + result.getMethod().getMethodName());
-    }
-/*
-    @Override
-    public void onTestFailure(ITestResult result) {
-        String error = result.getThrowable() != null ? result.getThrowable().toString() : "No Exception";
-        attachScreenshot(StartupCode.driver, StartupCode.test,
-                "FAIL", "❌ TEST FAILED: " + error);    }
-*/
+       /*
+           @Override
+           public void onTestSuccess(ITestResult result) {
+               attachScreenshot(StartupCode.driver, StartupCode.test,
+                       "PASS", "✅ TEST PASSED: " + result.getMethod().getMethodName());
+           }
+       /*
+           @Override
+           public void onTestFailure(ITestResult result) {
+               String error = result.getThrowable() != null ? result.getThrowable().toString() : "No Exception";
+               attachScreenshot(StartupCode.driver, StartupCode.test,
+                       "FAIL", "❌ TEST FAILED: " + error);    }
+       */
     @Override
     public void onTestSkipped(ITestResult result) {
         String methodName = result.getMethod().getMethodName();

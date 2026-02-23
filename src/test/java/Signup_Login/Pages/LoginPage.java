@@ -50,10 +50,9 @@ public class LoginPage extends BasePage {
             String validationMessage = (String) js.executeScript("return arguments[0].validationMessage;", driver.findElement(emailInput));
 
             if (validationMessage.isEmpty()) {
-                Logs.info(test, email + " : No validation message (Possibly valid email)");
+                Logs.info(test, "Email '" + email + "' is accepted no validation message (Possibly valid email)");
             } else {
-                Logs.info(test, email + " : " + validationMessage);
-            }
+                Logs.info(test, "Email validation for '" + email + "' is  → " + validationMessage);            }
         }
     }
 

@@ -26,18 +26,18 @@ public class StartupCode {
     protected String zipCode = data.ZipCode();
     protected String phoneNumber = data.PhoneNumber();
     protected String website = data.Website();
-    protected  String TwoDigitNumber = String.valueOf(data.TwoDigitNumber());
+    protected String TwoDigitNumber = String.valueOf(data.TwoDigitNumber());
+
     public static WebDriver setup() throws InterruptedException {
         reuse = new Reuseable();
         driver = reuse.Reuseable1();
 
         logger = LogManager.getLogger(StartupCode.class);
 
-        extent = Extentreportmanager.getExtentReports();
-        String testClassName = StartupCode.class.getSimpleName();
-        test = extent.createTest(testClassName);
-
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+      //  extent = Extentreportmanager.getExtentReports();
+      //  String testClassName = new Object(){}.getClass().getEnclosingClass().getSimpleName();
+      //   test = extent.createTest(testClassName);
+       // Logs.info(test, "🚀 TEST STARTED: " + testClassName);
 
         return driver;
     }
@@ -56,5 +56,6 @@ public class StartupCode {
         } else {
             logger.warn("Driver is null. Nothing to quit.");
         }
-        Logs.info(test, "Browser Closed");    }
+        Logs.info(test, "Browser Closed");
+    }
 }

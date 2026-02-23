@@ -29,8 +29,7 @@ public class Reuseable {
         prefs.put("safebrowsing.enabled", true);
         // logger = LogManager.getLogger(this.getClass());
         ChromeOptions options = new ChromeOptions();
-        //options.addArguments("--headless=new");
-        //   options.setExperimentalOption("prefs", prefs);
+        options.addArguments("--headless=new");
         options.addArguments("start-maximized");
         options.addArguments("--disable-save-password-bubble");
         // options.addArguments("--window-size=1366,768");
@@ -39,7 +38,6 @@ public class Reuseable {
         HashMap allow = new HashMap<>();
         allow.put("credentials_enable_service", false);
         allow.put("profile.password_manager_enabled", false);
-        //  options.setExperimentalOption("prefs", allow);
         allow.put("profile.default_content_setting_values.notifications", 1);
         allow.put("profile.default_content_setting_values.geolocation", 1);
         options.setExperimentalOption("prefs", allow);

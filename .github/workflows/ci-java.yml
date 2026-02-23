@@ -1,4 +1,4 @@
-name: Selenium CI with Allure and Teams
+name: Carrier Guard CI/CD
 
 on:
   push:

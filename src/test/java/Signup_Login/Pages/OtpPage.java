@@ -5,9 +5,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
 
 public class OtpPage extends BasePage {
 
@@ -34,9 +31,8 @@ public class OtpPage extends BasePage {
         return wait.until(d -> d.findElement(invalidOtpToast)).getText();
     }
 
-    public void clickResend() {
-        WebElement resend = wait.until(ExpectedConditions.elementToBeClickable(resendBtn));
-        resend.click();
+    public void clickResend() throws InterruptedException {
+        clickWhenReady(resendBtn, 35);
     }
 
     public String getResendMessage() {

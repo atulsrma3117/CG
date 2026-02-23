@@ -33,7 +33,7 @@ public class AllureEnvWriter {
             if (!allureResultsDir.exists()) {
                 boolean created = allureResultsDir.mkdirs();
                 if (!created) {
-                    Logs.info(test,"❌ Failed to create allure-results directory.");
+                   // Logs.info(test,"❌ Failed to create allure-results directory.");
                     return;
                 }
             }
@@ -41,11 +41,11 @@ public class AllureEnvWriter {
             File envFile = new File(allureResultsDir, "environment.properties");
             try (FileWriter writer = new FileWriter(envFile)) {
                 props.store(writer, "Allure Environment Properties");
-                Logs.info(test,"✔️ Allure environment.properties file created at " + envFile.getAbsolutePath());
+               // Logs.info(test,"✔️ Allure environment.properties file created at " + envFile.getAbsolutePath());
             }
 
         } catch (IOException e) {
-            Logs.info(test,"❌ Failed to create environment.properties: " + e.getMessage());
+           // Logs.info(test,"❌ Failed to create environment.properties: " + e.getMessage());
         }
     }
 }

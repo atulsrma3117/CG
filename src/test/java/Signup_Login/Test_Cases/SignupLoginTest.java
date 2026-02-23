@@ -4,10 +4,16 @@ import Signup_Login.Pages.*;
 import Signup_Login.services.OtpApiService;
 import base.BaseTest;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 public class SignupLoginTest extends BaseTest {
+    private String email;
 
+    @BeforeClass
+    public void generateEmail() {
+        email = "user" + System.currentTimeMillis() + "@yopmail.com";
+    }
     @Test(priority = 1)
     public void signupFlow() {
 
