@@ -11,23 +11,23 @@ import org.testng.annotations.Test;
 public class SignupLoginTest extends BaseTest {
 
     private String email;
-    HomePage home = new HomePage(driver);
 
     @Test(priority = 1)
-    public void signupFlow() {
+    public void TC_01_signupFlow() {
         email = SignupHelper.signupNewUser(driver);
         Assert.assertTrue(new HomePage(driver).isLoginSuccessful(),
                 "Signup failed - User not logged in");
     }
 
     @Test(priority = 2)
-    public void logoutFlow() {
+    public void TC_02_logoutFlow() throws InterruptedException {
+        HomePage home = new HomePage(driver);
         home.clickSkipForNow();
         new HeaderComponent(driver).logout();
-    }
+}
 
     @Test(priority = 3, dependsOnMethods = "logoutFlow")
-    public void loginFlow() {
+    public void TC_03_loginFlow() {
 
         LoginHelper.loginWithEmail(driver, email);
         Assert.assertTrue(new HomePage(driver).isLoginSuccessful(),

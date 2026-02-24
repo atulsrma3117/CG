@@ -27,7 +27,7 @@ public class Search_MC_DOT_Test extends BaseTest {
     public void Emailgenerated() {
         email = SignupHelper.signupNewUser(driver);
 
-        Logs.info(test, "Signup completed with email: " + email);
+      Logs.info(null, "Signup completed with email: " + email);
     }
 
     @BeforeMethod

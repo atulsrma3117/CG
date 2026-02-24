@@ -9,7 +9,7 @@ import static zutilities.StartupCode.test;
 
 public class OtpApiService {
 
-    private static final String BASE_URL = "http://192.168.1.103:8000";
+    private static final String BASE_URL = "http://3.84.224.180/backend";
 
     public static String fetchOtp(String email, String authType) {
 
@@ -36,8 +36,8 @@ public class OtpApiService {
 
             String responseBody = response.getBody().asPrettyString();
             Allure.addAttachment("Response JSON", "application/json", responseBody);
-            test.info("📤 Request JSON:<pre>" + requestBody + "</pre>");
-            test.info("📥 Response JSON:<pre>" + responseBody + "</pre>");
+            Logs.info( test,"📤 Request JSON:<pre>" + requestBody + "</pre>");
+            Logs.info( test,"📥 Response JSON:<pre>" + responseBody + "</pre>");
 
             Logs.info(test,
                     "✅ API Status: " + response.getStatusCode()
@@ -45,7 +45,7 @@ public class OtpApiService {
 
             return response.jsonPath().getString("data.OTP");
         } catch (Exception e) {
-            Logs.fail(null, test, "❌ OTP API FAILED → " + e.getMessage());
+            Logs.info( test, "❌ OTP API FAILED → " + e.getMessage());
             throw e;
         }
     }

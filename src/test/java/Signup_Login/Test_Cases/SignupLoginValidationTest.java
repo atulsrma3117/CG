@@ -13,7 +13,7 @@ public class SignupLoginValidationTest extends BaseTest {
         email = "user" + System.currentTimeMillis() + "@yopmail.com";
     }
     @Test(priority = 1)
-    public void signupValidationFlow() throws InterruptedException {
+    public void TC_01_signupValidationFlow() throws InterruptedException {
 
         LoginPage login = new LoginPage(driver);
         login.clickLogin();
@@ -35,7 +35,7 @@ public class SignupLoginValidationTest extends BaseTest {
     }
 
     @Test(priority = 2)
-    public void loginValidationFlow() {
+    public void TC_02_loginValidationFlow() {
 
         LoginPage login = new LoginPage(driver);
         login.clickLogin();
