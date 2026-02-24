@@ -1,56 +1,36 @@
 package Signup_Login.Test_Cases;
 
-import Signup_Login.Pages.*;
-import Signup_Login.services.OtpApiService;
 import base.BaseTest;
+import Signup_Login.Pages.SignupHelper;
+import Signup_Login.Pages.LoginHelper;
+import Signup_Login.Pages.HeaderComponent;
+import Signup_Login.Pages.HomePage;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 public class SignupLoginTest extends BaseTest {
-    private String email;
 
-    @BeforeClass
-    public void generateEmail() {
-        email = "user" + System.currentTimeMillis() + "@yopmail.com";
-    }
+    private String email;
+    HomePage home = new HomePage(driver);
+
     @Test(priority = 1)
     public void signupFlow() {
-
-        LoginPage login = new LoginPage(driver);
-        login.clickLogin();
-
-        SignupPage signup = login.clickSignUp();
-        signup.enterEmail(email);
-        signup.clickCreateAccount();
-
-        String otp = OtpApiService.fetchOtp(email, "signup");
-
-        OtpPage otpPage = new OtpPage(driver);
-        otpPage.enterOtp(otp);
-        otpPage.clickVerify();
-
-        HomePage home = new HomePage(driver);
-        Assert.assertTrue(home.isLoginSuccessful());
+        email = SignupHelper.signupNewUser(driver);
+        Assert.assertTrue(new HomePage(driver).isLoginSuccessful(),
+                "Signup failed - User not logged in");
     }
 
     @Test(priority = 2)
     public void logoutFlow() {
+        home.clickSkipForNow();
         new HeaderComponent(driver).logout();
     }
 
-    @Test(priority = 3)
+    @Test(priority = 3, dependsOnMethods = "logoutFlow")
     public void loginFlow() {
 
-        LoginPage login = new LoginPage(driver);
-        login.clickLogin();
-        login.enterEmail(email);
-        login.clickSendCode();
-        String otp = OtpApiService.fetchOtp(email, "login");
-        OtpPage otpPage = new OtpPage(driver);
-        otpPage.enterOtp(otp);
-        otpPage.clickVerify();
-
-        Assert.assertTrue(new HomePage(driver).isLoginSuccessful());
+        LoginHelper.loginWithEmail(driver, email);
+        Assert.assertTrue(new HomePage(driver).isLoginSuccessful(),
+                "Login failed");
     }
 }

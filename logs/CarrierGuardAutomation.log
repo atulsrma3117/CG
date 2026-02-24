@@ -3036,3 +3036,360 @@ Session ID: 1d1251d30ecf852fa2ce785733de1d09
 17:56:15.528 [main] INFO  zutilities.StartupCode - ℹ️ Browser Closed
 17:56:16.584 [main] INFO  zutilities.CustomDriverListener - ℹ️ =========== SUITE FINISHED ===========
 17:56:16.614 [main] INFO  zutilities.StartupCode - ℹ️  Extent report Loaded.
+09:37:12.276 [main] DEBUG org.testng.TestNG - suiteXmlPath: "H:\Automation\CarrierGuard\testng.xml"
+09:37:33.476 [main] INFO  base.BaseTest - ℹ️ 🚀 TEST STARTED on browser: chrome
+09:37:34.033 [main] INFO  base.BasePage - ℹ️ LoginPage → Click → loginBtn (75 ms)
+09:37:35.176 [main] INFO  base.BasePage - ℹ️ LoginPage → Click → signUpBtn (62 ms)
+09:37:35.371 [main] INFO  base.BasePage - ℹ️ SignupPage → Type → user1771906053377@yopmail.com → emailInput (160 ms)
+09:37:35.484 [main] INFO  base.BasePage - ℹ️ SignupPage → Click → createAccountBtn (63 ms)
+09:37:35.489 [main] INFO  Signup_Login.services.OtpApiService - ℹ️ 🚀 OTP API → Fetch OTP for → user1771906053377@yopmail.com
+09:37:46.731 [main] DEBUG org.apache.http.impl.conn.BasicClientConnectionManager - Get connection for route {}->http://192.168.1.103:8000
+09:37:48.030 [main] DEBUG org.apache.http.impl.conn.DefaultClientConnectionOperator - Connecting to 192.168.1.103:8000
+09:37:49.167 [main] DEBUG org.apache.http.client.protocol.RequestAddCookies - CookieSpec selected: ignoreCookies
+09:37:49.172 [main] DEBUG org.apache.http.client.protocol.RequestAuthCache - Auth cache not set in the context
+09:37:49.173 [main] DEBUG org.apache.http.client.protocol.RequestTargetAuthentication - Target auth state: UNCHALLENGED
+09:37:49.175 [main] DEBUG org.apache.http.client.protocol.RequestProxyAuthentication - Proxy auth state: UNCHALLENGED
+09:37:49.176 [main] DEBUG org.apache.http.impl.client.DefaultHttpClient - Attempt 1 to execute request
+09:37:49.176 [main] DEBUG org.apache.http.impl.conn.DefaultClientConnection - Sending request: POST /api/v1/auth/send-otp/ HTTP/1.1
+09:37:49.177 [main] DEBUG org.apache.http.wire -  >> "POST /api/v1/auth/send-otp/ HTTP/1.1[\r][\n]"
+09:37:49.232 [main] DEBUG org.apache.http.wire -  >> "Accept: */*[\r][\n]"
+09:37:49.233 [main] DEBUG org.apache.http.wire -  >> "Content-Type: application/json[\r][\n]"
+09:37:49.234 [main] DEBUG org.apache.http.wire -  >> "Content-Length: 67[\r][\n]"
+09:37:49.235 [main] DEBUG org.apache.http.wire -  >> "Host: 192.168.1.103:8000[\r][\n]"
+09:37:49.235 [main] DEBUG org.apache.http.wire -  >> "Connection: Keep-Alive[\r][\n]"
+09:37:49.236 [main] DEBUG org.apache.http.wire -  >> "User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.18)[\r][\n]"
+09:37:49.236 [main] DEBUG org.apache.http.wire -  >> "Accept-Encoding: gzip,deflate[\r][\n]"
+09:37:49.237 [main] DEBUG org.apache.http.wire -  >> "[\r][\n]"
+09:37:49.237 [main] DEBUG org.apache.http.headers - >> POST /api/v1/auth/send-otp/ HTTP/1.1
+09:37:49.237 [main] DEBUG org.apache.http.headers - >> Accept: */*
+09:37:49.238 [main] DEBUG org.apache.http.headers - >> Content-Type: application/json
+09:37:49.238 [main] DEBUG org.apache.http.headers - >> Content-Length: 67
+09:37:49.239 [main] DEBUG org.apache.http.headers - >> Host: 192.168.1.103:8000
+09:37:49.240 [main] DEBUG org.apache.http.headers - >> Connection: Keep-Alive
+09:37:49.241 [main] DEBUG org.apache.http.headers - >> User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.18)
+09:37:49.241 [main] DEBUG org.apache.http.headers - >> Accept-Encoding: gzip,deflate
+09:37:49.241 [main] DEBUG org.apache.http.wire -  >> "{ "email": "user1771906053377@yopmail.com", "auth_type": "signup" }"
+09:38:05.213 [main] DEBUG org.apache.http.wire -  << "HTTP/1.1 200 OK[\r][\n]"
+09:38:05.221 [main] DEBUG org.apache.http.wire -  << "date: Tue, 24 Feb 2026 04:06:15 GMT[\r][\n]"
+09:38:05.222 [main] DEBUG org.apache.http.wire -  << "server: uvicorn[\r][\n]"
+09:38:05.222 [main] DEBUG org.apache.http.wire -  << "content-length: 97[\r][\n]"
+09:38:05.223 [main] DEBUG org.apache.http.wire -  << "content-type: application/json[\r][\n]"
+09:38:05.224 [main] DEBUG org.apache.http.wire -  << "[\r][\n]"
+09:38:05.227 [main] DEBUG org.apache.http.impl.conn.DefaultClientConnection - Receiving response: HTTP/1.1 200 OK
+09:38:05.229 [main] DEBUG org.apache.http.headers - << HTTP/1.1 200 OK
+09:38:05.229 [main] DEBUG org.apache.http.headers - << date: Tue, 24 Feb 2026 04:06:15 GMT
+09:38:05.229 [main] DEBUG org.apache.http.headers - << server: uvicorn
+09:38:05.230 [main] DEBUG org.apache.http.headers - << content-length: 97
+09:38:05.231 [main] DEBUG org.apache.http.headers - << content-type: application/json
+09:38:05.336 [main] DEBUG org.apache.http.impl.client.DefaultHttpClient - Connection can be kept alive indefinitely
+09:38:05.436 [main] DEBUG io.restassured.internal.RestAssuredHttpBuilder - Parsing response as: application/json
+09:38:05.438 [main] DEBUG io.restassured.internal.RestAssuredHttpBuilder - Parsed data to instance of: class org.apache.http.conn.EofSensorInputStream
+09:38:05.535 [main] DEBUG org.apache.http.wire -  << "{"status":"success","status_code":200,"message":"OTP sent successfully.","data":{"OTP":"155977"}}"
+09:38:05.540 [main] DEBUG org.apache.http.impl.conn.BasicClientConnectionManager - Releasing connection org.apache.http.impl.conn.ManagedClientConnectionImpl@5978ba12
+09:38:05.541 [main] DEBUG org.apache.http.impl.conn.BasicClientConnectionManager - Connection can be kept alive indefinitely
+09:38:06.116 [main] INFO  Signup_Login.services.OtpApiService - ℹ️ ✅ API Status: 200 (30016 ms)
+09:38:10.672 [main] INFO  base.BasePage - ℹ️ OtpPage → Type → 155977 → otpField (63 ms)
+09:38:10.767 [main] INFO  base.BasePage - ℹ️ OtpPage → Click → verifyBtn (58 ms)
+09:38:11.760 [main] INFO  zutilities.StartupCode - ℹ️ Browser Closed
+09:38:13.204 [main] INFO  zutilities.CustomDriverListener - ℹ️ =========== SUITE FINISHED ===========
+09:38:16.720 [Finalizer] DEBUG org.apache.http.impl.conn.DefaultClientConnection - Connection 0.0.0.0:64988<->192.168.1.103:8000 closed
+09:38:30.272 [main] INFO  base.BasePage - ℹ️ LoginPage → Click → loginBtn (80 ms)
+09:38:38.341 [main] INFO  base.BasePage - ℹ️ LoginPage → Click → signUpBtn (66 ms)
+09:38:38.525 [main] INFO  base.BasePage - ℹ️ SignupPage → Type → user1771906053377@yopmail.com → emailInput (148 ms)
+09:38:38.630 [main] INFO  base.BasePage - ℹ️ SignupPage → Click → createAccountBtn (72 ms)
+09:38:38.632 [main] INFO  Signup_Login.services.OtpApiService - ℹ️ 🚀 OTP API → Fetch OTP for → user1771906053377@yopmail.com
+09:38:39.228 [main] DEBUG org.apache.http.impl.conn.BasicClientConnectionManager - Get connection for route {}->http://192.168.1.103:8000
+09:38:39.229 [main] DEBUG org.apache.http.impl.conn.DefaultClientConnectionOperator - Connecting to 192.168.1.103:8000
+09:38:39.234 [main] DEBUG org.apache.http.client.protocol.RequestAddCookies - CookieSpec selected: ignoreCookies
+09:38:39.235 [main] DEBUG org.apache.http.client.protocol.RequestAuthCache - Auth cache not set in the context
+09:38:39.236 [main] DEBUG org.apache.http.client.protocol.RequestTargetAuthentication - Target auth state: UNCHALLENGED
+09:38:39.237 [main] DEBUG org.apache.http.client.protocol.RequestProxyAuthentication - Proxy auth state: UNCHALLENGED
+09:38:39.238 [main] DEBUG org.apache.http.impl.client.DefaultHttpClient - Attempt 1 to execute request
+09:38:39.238 [main] DEBUG org.apache.http.impl.conn.DefaultClientConnection - Sending request: POST /api/v1/auth/send-otp/ HTTP/1.1
+09:38:39.240 [main] DEBUG org.apache.http.wire -  >> "POST /api/v1/auth/send-otp/ HTTP/1.1[\r][\n]"
+09:38:39.240 [main] DEBUG org.apache.http.wire -  >> "Accept: */*[\r][\n]"
+09:38:39.241 [main] DEBUG org.apache.http.wire -  >> "Content-Type: application/json[\r][\n]"
+09:38:39.242 [main] DEBUG org.apache.http.wire -  >> "Content-Length: 67[\r][\n]"
+09:38:39.242 [main] DEBUG org.apache.http.wire -  >> "Host: 192.168.1.103:8000[\r][\n]"
+09:38:39.243 [main] DEBUG org.apache.http.wire -  >> "Connection: Keep-Alive[\r][\n]"
+09:38:39.243 [main] DEBUG org.apache.http.wire -  >> "User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.18)[\r][\n]"
+09:38:39.244 [main] DEBUG org.apache.http.wire -  >> "Accept-Encoding: gzip,deflate[\r][\n]"
+09:38:39.245 [main] DEBUG org.apache.http.wire -  >> "[\r][\n]"
+09:38:39.246 [main] DEBUG org.apache.http.headers - >> POST /api/v1/auth/send-otp/ HTTP/1.1
+09:38:39.246 [main] DEBUG org.apache.http.headers - >> Accept: */*
+09:38:39.247 [main] DEBUG org.apache.http.headers - >> Content-Type: application/json
+09:38:39.249 [main] DEBUG org.apache.http.headers - >> Content-Length: 67
+09:38:39.249 [main] DEBUG org.apache.http.headers - >> Host: 192.168.1.103:8000
+09:38:39.250 [main] DEBUG org.apache.http.headers - >> Connection: Keep-Alive
+09:38:39.251 [main] DEBUG org.apache.http.headers - >> User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.18)
+09:38:39.251 [main] DEBUG org.apache.http.headers - >> Accept-Encoding: gzip,deflate
+09:38:39.252 [main] DEBUG org.apache.http.wire -  >> "{ "email": "user1771906053377@yopmail.com", "auth_type": "signup" }"
+09:38:55.184 [main] DEBUG org.apache.http.wire -  << "HTTP/1.1 200 OK[\r][\n]"
+09:38:55.186 [main] DEBUG org.apache.http.wire -  << "date: Tue, 24 Feb 2026 04:07:05 GMT[\r][\n]"
+09:38:55.186 [main] DEBUG org.apache.http.wire -  << "server: uvicorn[\r][\n]"
+09:38:55.187 [main] DEBUG org.apache.http.wire -  << "content-length: 97[\r][\n]"
+09:38:55.188 [main] DEBUG org.apache.http.wire -  << "content-type: application/json[\r][\n]"
+09:38:55.189 [main] DEBUG org.apache.http.wire -  << "[\r][\n]"
+09:38:55.189 [main] DEBUG org.apache.http.impl.conn.DefaultClientConnection - Receiving response: HTTP/1.1 200 OK
+09:38:55.190 [main] DEBUG org.apache.http.headers - << HTTP/1.1 200 OK
+09:38:55.191 [main] DEBUG org.apache.http.headers - << date: Tue, 24 Feb 2026 04:07:05 GMT
+09:38:55.192 [main] DEBUG org.apache.http.headers - << server: uvicorn
+09:38:55.193 [main] DEBUG org.apache.http.headers - << content-length: 97
+09:38:55.194 [main] DEBUG org.apache.http.headers - << content-type: application/json
+09:38:55.194 [main] DEBUG org.apache.http.impl.client.DefaultHttpClient - Connection can be kept alive indefinitely
+09:38:55.195 [main] DEBUG io.restassured.internal.RestAssuredHttpBuilder - Parsing response as: application/json
+09:38:55.195 [main] DEBUG io.restassured.internal.RestAssuredHttpBuilder - Parsed data to instance of: class org.apache.http.conn.EofSensorInputStream
+09:38:55.198 [main] DEBUG org.apache.http.wire -  << "{"status":"success","status_code":200,"message":"OTP sent successfully.","data":{"OTP":"592412"}}"
+09:38:55.207 [main] DEBUG org.apache.http.impl.conn.BasicClientConnectionManager - Releasing connection org.apache.http.impl.conn.ManagedClientConnectionImpl@40d0bff1
+09:38:55.208 [main] DEBUG org.apache.http.impl.conn.BasicClientConnectionManager - Connection can be kept alive indefinitely
+09:38:55.228 [main] INFO  Signup_Login.services.OtpApiService - ℹ️ ✅ API Status: 200 (16567 ms)
+09:38:55.387 [main] INFO  base.BasePage - ℹ️ OtpPage → Type → 592412 → otpField (68 ms)
+09:38:55.495 [main] INFO  base.BasePage - ℹ️ OtpPage → Click → verifyBtn (60 ms)
+09:38:55.527 [main] INFO  Write_a_review_flow.Test_Cases.Search_MC_DOT_Test - ℹ️ Signup flow executed once for class.
+09:38:55.539 [main] INFO  base.BaseTest - ℹ️ 🚀 TEST STARTED on browser: chrome
+09:38:56.058 [main] INFO  Write_a_review_flow.Test_Cases.Search_MC_DOT_Test - ℹ️ Navigated to Home Page 
+09:38:56.340 [main] INFO  Write_a_review_flow.Test_Cases.Search_MC_DOT_Test - ℹ️ ==== START FLOW FOR DOT: 123456 ====
+09:38:56.505 [main] INFO  base.BasePage - ℹ️ HomePage → Click → dropdown (127 ms)
+09:38:56.850 [main] INFO  base.BasePage - ℹ️ HomePage → Type → 123456 → searchBox (93 ms)
+09:39:07.596 [main] INFO  zutilities.Screenshot - ℹ️ ✨ Screenshot saved to: H:\Automation\CarrierGuard\screenshots\Search_and_Review_Flow_2026_02_24_09.39.07.png
+09:39:07.624 [main] INFO  base.BaseTest - ℹ️ 🚀 TEST STARTED on browser: chrome
+09:39:08.031 [main] INFO  Write_a_review_flow.Test_Cases.Search_MC_DOT_Test - ℹ️ Navigated to Home Page 
+09:39:08.051 [main] INFO  Write_a_review_flow.Test_Cases.Search_MC_DOT_Test - ℹ️ ==== START FLOW FOR DOT: 234567 ====
+09:39:08.168 [main] INFO  base.BasePage - ℹ️ HomePage → Click → dropdown (78 ms)
+09:39:08.423 [main] INFO  base.BasePage - ℹ️ HomePage → Type → 234567 → searchBox (109 ms)
+09:39:12.301 [main] INFO  base.BasePage - ℹ️ ReviewPage → Click → writeReviewBtn (92 ms)
+09:39:22.933 [main] INFO  zutilities.Screenshot - ℹ️ ✨ Screenshot saved to: H:\Automation\CarrierGuard\screenshots\Search_and_Review_Flow_2026_02_24_09.39.22.png
+09:39:22.978 [main] INFO  base.BaseTest - ℹ️ 🚀 TEST STARTED on browser: chrome
+09:39:23.390 [main] INFO  Write_a_review_flow.Test_Cases.Search_MC_DOT_Test - ℹ️ Navigated to Home Page 
+09:39:23.408 [main] INFO  Write_a_review_flow.Test_Cases.Search_MC_DOT_Test - ℹ️ ==== START FLOW FOR DOT: 345678 ====
+09:39:23.538 [main] INFO  base.BasePage - ℹ️ HomePage → Click → dropdown (72 ms)
+09:39:23.786 [main] INFO  base.BasePage - ℹ️ HomePage → Type → 345678 → searchBox (109 ms)
+09:39:34.432 [main] INFO  zutilities.Screenshot - ℹ️ ✨ Screenshot saved to: H:\Automation\CarrierGuard\screenshots\Search_and_Review_Flow_2026_02_24_09.39.34.png
+09:39:34.636 [main] INFO  zutilities.StartupCode - ℹ️ Browser Closed
+09:39:34.890 [main] INFO  zutilities.CustomDriverListener - ℹ️ =========== SUITE FINISHED ===========
+09:39:34.906 [main] INFO  zutilities.StartupCode - ℹ️  Extent report Loaded.
+10:03:26.257 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+10:03:40.942 [main] INFO  base.BaseTest - ℹ️ 🚀 TEST STARTED on browser: chrome
+10:03:41.463 [main] INFO  base.BasePage - ℹ️ LoginPage → Click → loginBtn (77 ms)
+10:03:42.752 [main] INFO  base.BasePage - ℹ️ LoginPage → Click → signUpBtn (192 ms)
+10:03:43.016 [main] INFO  base.BasePage - ℹ️ SignupPage → Type → user1771907621273@yopmail.com → emailInput (188 ms)
+10:03:43.120 [main] INFO  base.BasePage - ℹ️ SignupPage → Click → createAccountBtn (64 ms)
+10:03:43.125 [main] INFO  Signup_Login.services.OtpApiService - ℹ️ 🚀 OTP API → Fetch OTP for → user1771907621273@yopmail.com
+10:03:47.613 [main] DEBUG org.apache.http.impl.conn.BasicClientConnectionManager - Get connection for route {}->http://192.168.1.103:8000
+10:03:47.677 [main] DEBUG org.apache.http.impl.conn.DefaultClientConnectionOperator - Connecting to 192.168.1.103:8000
+10:03:47.733 [main] DEBUG org.apache.http.client.protocol.RequestAddCookies - CookieSpec selected: ignoreCookies
+10:03:47.740 [main] DEBUG org.apache.http.client.protocol.RequestAuthCache - Auth cache not set in the context
+10:03:47.742 [main] DEBUG org.apache.http.client.protocol.RequestTargetAuthentication - Target auth state: UNCHALLENGED
+10:03:47.745 [main] DEBUG org.apache.http.client.protocol.RequestProxyAuthentication - Proxy auth state: UNCHALLENGED
+10:03:47.745 [main] DEBUG org.apache.http.impl.client.DefaultHttpClient - Attempt 1 to execute request
+10:03:47.746 [main] DEBUG org.apache.http.impl.conn.DefaultClientConnection - Sending request: POST /api/v1/auth/send-otp/ HTTP/1.1
+10:03:47.747 [main] DEBUG org.apache.http.wire -  >> "POST /api/v1/auth/send-otp/ HTTP/1.1[\r][\n]"
+10:03:47.751 [main] DEBUG org.apache.http.wire -  >> "Accept: */*[\r][\n]"
+10:03:47.752 [main] DEBUG org.apache.http.wire -  >> "Content-Type: application/json[\r][\n]"
+10:03:47.752 [main] DEBUG org.apache.http.wire -  >> "Content-Length: 67[\r][\n]"
+10:03:47.752 [main] DEBUG org.apache.http.wire -  >> "Host: 192.168.1.103:8000[\r][\n]"
+10:03:47.753 [main] DEBUG org.apache.http.wire -  >> "Connection: Keep-Alive[\r][\n]"
+10:03:47.753 [main] DEBUG org.apache.http.wire -  >> "User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.18)[\r][\n]"
+10:03:47.754 [main] DEBUG org.apache.http.wire -  >> "Accept-Encoding: gzip,deflate[\r][\n]"
+10:03:47.755 [main] DEBUG org.apache.http.wire -  >> "[\r][\n]"
+10:03:47.755 [main] DEBUG org.apache.http.headers - >> POST /api/v1/auth/send-otp/ HTTP/1.1
+10:03:47.756 [main] DEBUG org.apache.http.headers - >> Accept: */*
+10:03:47.756 [main] DEBUG org.apache.http.headers - >> Content-Type: application/json
+10:03:47.757 [main] DEBUG org.apache.http.headers - >> Content-Length: 67
+10:03:47.757 [main] DEBUG org.apache.http.headers - >> Host: 192.168.1.103:8000
+10:03:47.758 [main] DEBUG org.apache.http.headers - >> Connection: Keep-Alive
+10:03:47.758 [main] DEBUG org.apache.http.headers - >> User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.18)
+10:03:47.759 [main] DEBUG org.apache.http.headers - >> Accept-Encoding: gzip,deflate
+10:03:47.760 [main] DEBUG org.apache.http.wire -  >> "{ "email": "user1771907621273@yopmail.com", "auth_type": "signup" }"
+10:03:49.356 [main] DEBUG org.apache.http.wire -  << "HTTP/1.1 200 OK[\r][\n]"
+10:03:49.362 [main] DEBUG org.apache.http.wire -  << "date: Tue, 24 Feb 2026 04:32:13 GMT[\r][\n]"
+10:03:49.363 [main] DEBUG org.apache.http.wire -  << "server: uvicorn[\r][\n]"
+10:03:49.365 [main] DEBUG org.apache.http.wire -  << "content-length: 97[\r][\n]"
+10:03:49.366 [main] DEBUG org.apache.http.wire -  << "content-type: application/json[\r][\n]"
+10:03:49.366 [main] DEBUG org.apache.http.wire -  << "[\r][\n]"
+10:03:49.370 [main] DEBUG org.apache.http.impl.conn.DefaultClientConnection - Receiving response: HTTP/1.1 200 OK
+10:03:49.371 [main] DEBUG org.apache.http.headers - << HTTP/1.1 200 OK
+10:03:49.371 [main] DEBUG org.apache.http.headers - << date: Tue, 24 Feb 2026 04:32:13 GMT
+10:03:49.372 [main] DEBUG org.apache.http.headers - << server: uvicorn
+10:03:49.373 [main] DEBUG org.apache.http.headers - << content-length: 97
+10:03:49.374 [main] DEBUG org.apache.http.headers - << content-type: application/json
+10:03:49.390 [main] DEBUG org.apache.http.impl.client.DefaultHttpClient - Connection can be kept alive indefinitely
+10:03:49.412 [main] DEBUG io.restassured.internal.RestAssuredHttpBuilder - Parsing response as: application/json
+10:03:49.413 [main] DEBUG io.restassured.internal.RestAssuredHttpBuilder - Parsed data to instance of: class org.apache.http.conn.EofSensorInputStream
+10:03:49.531 [main] DEBUG org.apache.http.wire -  << "{"status":"success","status_code":200,"message":"OTP sent successfully.","data":{"OTP":"337898"}}"
+10:03:49.542 [main] DEBUG org.apache.http.impl.conn.BasicClientConnectionManager - Releasing connection org.apache.http.impl.conn.ManagedClientConnectionImpl@5f8a29ca
+10:03:49.544 [main] DEBUG org.apache.http.impl.conn.BasicClientConnectionManager - Connection can be kept alive indefinitely
+10:03:49.676 [main] INFO  Signup_Login.services.OtpApiService - ℹ️ ✅ API Status: 200 (6359 ms)
+10:03:51.665 [main] INFO  base.BasePage - ℹ️ OtpPage → Type → 337898 → otpField (94 ms)
+10:03:51.754 [main] INFO  base.BasePage - ℹ️ OtpPage → Click → verifyBtn (55 ms)
+10:03:51.817 [main] INFO  base.BaseTest - ℹ️ 🚀 TEST STARTED on browser: chrome
+10:04:02.122 [main] INFO  zutilities.Screenshot - ℹ️ ✨ Screenshot saved to: H:\Automation\CarrierGuard\screenshots\logoutFlow_2026_02_24_10.04.01.png
+10:04:02.464 [main] INFO  zutilities.StartupCode - ℹ️ Browser Closed
+10:04:03.725 [main] INFO  zutilities.StartupCode - ℹ️  Extent report Loaded.
+10:15:02.711 [main] DEBUG org.testng.TestNG - suiteXmlPath: "H:\Automation\CarrierGuard\testng.xml"
+10:15:16.719 [main] INFO  base.BaseTest - ℹ️ 🚀 TEST STARTED on browser: chrome
+10:15:17.319 [main] INFO  base.BasePage - ℹ️ LoginPage → Click → loginBtn (94 ms)
+10:15:18.472 [main] INFO  base.BasePage - ℹ️ LoginPage → Click → signUpBtn (68 ms)
+10:15:19.054 [main] INFO  base.BasePage - ℹ️ SignupPage → Type → user1771908317109@yopmail.com → emailInput (531 ms)
+10:15:19.170 [main] INFO  base.BasePage - ℹ️ SignupPage → Click → createAccountBtn (73 ms)
+10:15:19.176 [main] INFO  Signup_Login.services.OtpApiService - ℹ️ 🚀 OTP API → Fetch OTP for → user1771908317109@yopmail.com
+10:15:41.040 [main] DEBUG org.apache.http.impl.conn.BasicClientConnectionManager - Get connection for route {}->http://192.168.1.103:8000
+10:15:41.237 [main] DEBUG org.apache.http.impl.conn.DefaultClientConnectionOperator - Connecting to 192.168.1.103:8000
+10:15:41.319 [main] DEBUG org.apache.http.client.protocol.RequestAddCookies - CookieSpec selected: ignoreCookies
+10:15:41.324 [main] DEBUG org.apache.http.client.protocol.RequestAuthCache - Auth cache not set in the context
+10:15:41.325 [main] DEBUG org.apache.http.client.protocol.RequestTargetAuthentication - Target auth state: UNCHALLENGED
+10:15:41.327 [main] DEBUG org.apache.http.client.protocol.RequestProxyAuthentication - Proxy auth state: UNCHALLENGED
+10:15:41.328 [main] DEBUG org.apache.http.impl.client.DefaultHttpClient - Attempt 1 to execute request
+10:15:41.329 [main] DEBUG org.apache.http.impl.conn.DefaultClientConnection - Sending request: POST /api/v1/auth/send-otp/ HTTP/1.1
+10:15:41.330 [main] DEBUG org.apache.http.wire -  >> "POST /api/v1/auth/send-otp/ HTTP/1.1[\r][\n]"
+10:15:41.334 [main] DEBUG org.apache.http.wire -  >> "Accept: */*[\r][\n]"
+10:15:41.335 [main] DEBUG org.apache.http.wire -  >> "Content-Type: application/json[\r][\n]"
+10:15:41.336 [main] DEBUG org.apache.http.wire -  >> "Content-Length: 67[\r][\n]"
+10:15:41.336 [main] DEBUG org.apache.http.wire -  >> "Host: 192.168.1.103:8000[\r][\n]"
+10:15:41.337 [main] DEBUG org.apache.http.wire -  >> "Connection: Keep-Alive[\r][\n]"
+10:15:41.337 [main] DEBUG org.apache.http.wire -  >> "User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.18)[\r][\n]"
+10:15:41.338 [main] DEBUG org.apache.http.wire -  >> "Accept-Encoding: gzip,deflate[\r][\n]"
+10:15:41.339 [main] DEBUG org.apache.http.wire -  >> "[\r][\n]"
+10:15:41.340 [main] DEBUG org.apache.http.headers - >> POST /api/v1/auth/send-otp/ HTTP/1.1
+10:15:41.340 [main] DEBUG org.apache.http.headers - >> Accept: */*
+10:15:41.341 [main] DEBUG org.apache.http.headers - >> Content-Type: application/json
+10:15:41.341 [main] DEBUG org.apache.http.headers - >> Content-Length: 67
+10:15:41.342 [main] DEBUG org.apache.http.headers - >> Host: 192.168.1.103:8000
+10:15:41.342 [main] DEBUG org.apache.http.headers - >> Connection: Keep-Alive
+10:15:41.343 [main] DEBUG org.apache.http.headers - >> User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.18)
+10:15:41.343 [main] DEBUG org.apache.http.headers - >> Accept-Encoding: gzip,deflate
+10:15:41.344 [main] DEBUG org.apache.http.wire -  >> "{ "email": "user1771908317109@yopmail.com", "auth_type": "signup" }"
+10:15:54.483 [main] DEBUG org.apache.http.wire -  << "HTTP/1.1 200 OK[\r][\n]"
+10:15:54.491 [main] DEBUG org.apache.http.wire -  << "date: Tue, 24 Feb 2026 04:44:07 GMT[\r][\n]"
+10:15:54.491 [main] DEBUG org.apache.http.wire -  << "server: uvicorn[\r][\n]"
+10:15:54.492 [main] DEBUG org.apache.http.wire -  << "content-length: 97[\r][\n]"
+10:15:54.493 [main] DEBUG org.apache.http.wire -  << "content-type: application/json[\r][\n]"
+10:15:54.494 [main] DEBUG org.apache.http.wire -  << "[\r][\n]"
+10:15:54.498 [main] DEBUG org.apache.http.impl.conn.DefaultClientConnection - Receiving response: HTTP/1.1 200 OK
+10:15:54.499 [main] DEBUG org.apache.http.headers - << HTTP/1.1 200 OK
+10:15:54.499 [main] DEBUG org.apache.http.headers - << date: Tue, 24 Feb 2026 04:44:07 GMT
+10:15:54.500 [main] DEBUG org.apache.http.headers - << server: uvicorn
+10:15:54.502 [main] DEBUG org.apache.http.headers - << content-length: 97
+10:15:54.502 [main] DEBUG org.apache.http.headers - << content-type: application/json
+10:15:54.552 [main] DEBUG org.apache.http.impl.client.DefaultHttpClient - Connection can be kept alive indefinitely
+10:15:54.598 [main] DEBUG io.restassured.internal.RestAssuredHttpBuilder - Parsing response as: application/json
+10:15:54.608 [main] DEBUG io.restassured.internal.RestAssuredHttpBuilder - Parsed data to instance of: class org.apache.http.conn.EofSensorInputStream
+10:15:54.752 [main] DEBUG org.apache.http.wire -  << "{"status":"success","status_code":200,"message":"OTP sent successfully.","data":{"OTP":"555925"}}"
+10:15:54.758 [main] DEBUG org.apache.http.impl.conn.BasicClientConnectionManager - Releasing connection org.apache.http.impl.conn.ManagedClientConnectionImpl@5d03df76
+10:15:54.759 [main] DEBUG org.apache.http.impl.conn.BasicClientConnectionManager - Connection can be kept alive indefinitely
+10:15:54.871 [main] INFO  Signup_Login.services.OtpApiService - ℹ️ ✅ API Status: 200 (35516 ms)
+10:15:57.528 [main] INFO  base.BasePage - ℹ️ OtpPage → Type → 555925 → otpField (69 ms)
+10:15:57.621 [main] INFO  base.BasePage - ℹ️ OtpPage → Click → verifyBtn (60 ms)
+10:15:58.018 [main] INFO  zutilities.StartupCode - ℹ️ Browser Closed
+10:15:59.220 [main] INFO  zutilities.CustomDriverListener - ℹ️ =========== SUITE FINISHED ===========
+10:16:09.406 [main] INFO  base.BasePage - ℹ️ LoginPage → Click → loginBtn (72 ms)
+10:16:10.546 [main] INFO  base.BasePage - ℹ️ LoginPage → Click → signUpBtn (62 ms)
+10:16:10.733 [main] INFO  base.BasePage - ℹ️ SignupPage → Type → user1771908368718@yopmail.com → emailInput (157 ms)
+10:16:10.847 [main] INFO  base.BasePage - ℹ️ SignupPage → Click → createAccountBtn (71 ms)
+10:16:10.855 [main] INFO  Signup_Login.services.OtpApiService - ℹ️ 🚀 OTP API → Fetch OTP for → user1771908368718@yopmail.com
+10:16:10.900 [main] DEBUG org.apache.http.impl.conn.BasicClientConnectionManager - Get connection for route {}->http://192.168.1.103:8000
+10:16:10.901 [main] DEBUG org.apache.http.impl.conn.DefaultClientConnectionOperator - Connecting to 192.168.1.103:8000
+10:16:10.904 [main] DEBUG org.apache.http.client.protocol.RequestAddCookies - CookieSpec selected: ignoreCookies
+10:16:10.905 [main] DEBUG org.apache.http.client.protocol.RequestAuthCache - Auth cache not set in the context
+10:16:10.906 [main] DEBUG org.apache.http.client.protocol.RequestTargetAuthentication - Target auth state: UNCHALLENGED
+10:16:10.906 [main] DEBUG org.apache.http.client.protocol.RequestProxyAuthentication - Proxy auth state: UNCHALLENGED
+10:16:10.907 [main] DEBUG org.apache.http.impl.client.DefaultHttpClient - Attempt 1 to execute request
+10:16:10.907 [main] DEBUG org.apache.http.impl.conn.DefaultClientConnection - Sending request: POST /api/v1/auth/send-otp/ HTTP/1.1
+10:16:10.908 [main] DEBUG org.apache.http.wire -  >> "POST /api/v1/auth/send-otp/ HTTP/1.1[\r][\n]"
+10:16:10.909 [main] DEBUG org.apache.http.wire -  >> "Accept: */*[\r][\n]"
+10:16:10.909 [main] DEBUG org.apache.http.wire -  >> "Content-Type: application/json[\r][\n]"
+10:16:10.910 [main] DEBUG org.apache.http.wire -  >> "Content-Length: 67[\r][\n]"
+10:16:10.915 [main] DEBUG org.apache.http.wire -  >> "Host: 192.168.1.103:8000[\r][\n]"
+10:16:10.916 [main] DEBUG org.apache.http.wire -  >> "Connection: Keep-Alive[\r][\n]"
+10:16:10.920 [main] DEBUG org.apache.http.wire -  >> "User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.18)[\r][\n]"
+10:16:10.921 [main] DEBUG org.apache.http.wire -  >> "Accept-Encoding: gzip,deflate[\r][\n]"
+10:16:10.922 [main] DEBUG org.apache.http.wire -  >> "[\r][\n]"
+10:16:10.922 [main] DEBUG org.apache.http.headers - >> POST /api/v1/auth/send-otp/ HTTP/1.1
+10:16:10.923 [main] DEBUG org.apache.http.headers - >> Accept: */*
+10:16:10.923 [main] DEBUG org.apache.http.headers - >> Content-Type: application/json
+10:16:10.924 [main] DEBUG org.apache.http.headers - >> Content-Length: 67
+10:16:10.924 [main] DEBUG org.apache.http.headers - >> Host: 192.168.1.103:8000
+10:16:10.925 [main] DEBUG org.apache.http.headers - >> Connection: Keep-Alive
+10:16:10.926 [main] DEBUG org.apache.http.headers - >> User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.18)
+10:16:10.926 [main] DEBUG org.apache.http.headers - >> Accept-Encoding: gzip,deflate
+10:16:10.927 [main] DEBUG org.apache.http.wire -  >> "{ "email": "user1771908368718@yopmail.com", "auth_type": "signup" }"
+10:16:20.183 [main] DEBUG org.apache.http.wire -  << "HTTP/1.1 200 OK[\r][\n]"
+10:16:20.185 [main] DEBUG org.apache.http.wire -  << "date: Tue, 24 Feb 2026 04:44:37 GMT[\r][\n]"
+10:16:20.186 [main] DEBUG org.apache.http.wire -  << "server: uvicorn[\r][\n]"
+10:16:20.187 [main] DEBUG org.apache.http.wire -  << "content-length: 97[\r][\n]"
+10:16:20.187 [main] DEBUG org.apache.http.wire -  << "content-type: application/json[\r][\n]"
+10:16:20.187 [main] DEBUG org.apache.http.wire -  << "[\r][\n]"
+10:16:20.189 [main] DEBUG org.apache.http.impl.conn.DefaultClientConnection - Receiving response: HTTP/1.1 200 OK
+10:16:20.189 [main] DEBUG org.apache.http.headers - << HTTP/1.1 200 OK
+10:16:20.190 [main] DEBUG org.apache.http.headers - << date: Tue, 24 Feb 2026 04:44:37 GMT
+10:16:20.191 [main] DEBUG org.apache.http.headers - << server: uvicorn
+10:16:20.192 [main] DEBUG org.apache.http.headers - << content-length: 97
+10:16:20.193 [main] DEBUG org.apache.http.headers - << content-type: application/json
+10:16:20.193 [main] DEBUG org.apache.http.impl.client.DefaultHttpClient - Connection can be kept alive indefinitely
+10:16:20.196 [main] DEBUG io.restassured.internal.RestAssuredHttpBuilder - Parsing response as: application/json
+10:16:20.197 [main] DEBUG io.restassured.internal.RestAssuredHttpBuilder - Parsed data to instance of: class org.apache.http.conn.EofSensorInputStream
+10:16:20.200 [main] DEBUG org.apache.http.wire -  << "{"status":"success","status_code":200,"message":"OTP sent successfully.","data":{"OTP":"312833"}}"
+10:16:20.201 [main] DEBUG org.apache.http.impl.conn.BasicClientConnectionManager - Releasing connection org.apache.http.impl.conn.ManagedClientConnectionImpl@7aac6d13
+10:16:20.201 [main] DEBUG org.apache.http.impl.conn.BasicClientConnectionManager - Connection can be kept alive indefinitely
+10:16:20.213 [main] INFO  Signup_Login.services.OtpApiService - ℹ️ ✅ API Status: 200 (9345 ms)
+10:16:20.371 [main] INFO  base.BasePage - ℹ️ OtpPage → Type → 312833 → otpField (61 ms)
+10:16:20.472 [main] INFO  base.BasePage - ℹ️ OtpPage → Click → verifyBtn (63 ms)
+10:16:20.473 [main] INFO  Write_a_review_flow.Test_Cases.Search_MC_DOT_Test - ℹ️ Signup completed with email: user1771908368718@yopmail.com
+10:16:20.484 [main] INFO  base.BaseTest - ℹ️ 🚀 TEST STARTED on browser: chrome
+10:16:20.926 [main] INFO  Write_a_review_flow.Test_Cases.Search_MC_DOT_Test - ℹ️ Navigated to Home Page 
+10:16:20.993 [main] INFO  Write_a_review_flow.Test_Cases.Search_MC_DOT_Test - ℹ️ ==== START FLOW FOR DOT: 123456 ====
+10:16:21.111 [main] INFO  base.BasePage - ℹ️ HomePage → Click → dropdown (86 ms)
+10:16:21.446 [main] INFO  base.BasePage - ℹ️ HomePage → Type → 123456 → searchBox (110 ms)
+10:16:24.069 [Finalizer] DEBUG org.apache.http.impl.conn.DefaultClientConnection - Connection 0.0.0.0:50076<->192.168.1.103:8000 closed
+10:16:24.155 [Finalizer] DEBUG org.apache.http.impl.conn.DefaultClientConnection - Connection 0.0.0.0:50033<->192.168.1.103:8000 closed
+10:16:32.248 [main] INFO  zutilities.Screenshot - ℹ️ ✨ Screenshot saved to: H:\Automation\CarrierGuard\screenshots\Search_and_Review_Flow_2026_02_24_10.16.32.png
+10:16:32.275 [main] INFO  base.BaseTest - ℹ️ 🚀 TEST STARTED on browser: chrome
+10:16:32.670 [main] INFO  Write_a_review_flow.Test_Cases.Search_MC_DOT_Test - ℹ️ Navigated to Home Page 
+10:16:32.692 [main] INFO  Write_a_review_flow.Test_Cases.Search_MC_DOT_Test - ℹ️ ==== START FLOW FOR DOT: 234567 ====
+10:16:32.807 [main] INFO  base.BasePage - ℹ️ HomePage → Click → dropdown (67 ms)
+10:16:33.056 [main] INFO  base.BasePage - ℹ️ HomePage → Type → 234567 → searchBox (113 ms)
+12:31:27.586 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+12:33:33.733 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+12:40:14.751 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+12:49:57.731 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+12:52:28.703 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+13:01:17.256 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+13:01:22.053 [main] INFO  ExcelDataVerifier - ℹ️ Total records loaded: 9
+13:02:20.796 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+13:02:36.762 [main] INFO  ExcelDataVerifier - ℹ️ Total records loaded: 9
+13:05:20.137 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+13:05:27.007 [main] INFO  ExcelDataVerifier - ℹ️ Total records loaded: 9
+13:09:27.538 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+13:09:35.325 [main] INFO  ExcelDataVerifier - ℹ️ Total records loaded: 9
+13:09:55.551 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+13:10:02.605 [main] INFO  ExcelDataVerifier - ℹ️ Total records loaded: 5
+13:12:41.345 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+13:20:26.828 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+13:21:31.719 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+13:22:38.764 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+14:13:12.305 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+14:14:56.780 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+14:15:50.959 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+14:18:44.391 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+14:20:12.577 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+14:27:06.217 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+14:31:33.175 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+14:33:53.119 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+14:35:02.147 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+14:38:02.259 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+14:41:14.343 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+14:42:35.889 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+14:43:55.388 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+14:48:06.895 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+14:48:53.370 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+14:49:56.456 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+14:56:37.500 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+14:57:45.921 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+15:02:23.000 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+15:02:38.703 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+15:05:40.733 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+15:08:03.471 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+15:11:27.237 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+15:13:59.453 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+15:16:47.712 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+15:45:22.238 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"

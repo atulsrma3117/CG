@@ -1,5 +1,7 @@
-/*package Write_a_review_flow.Test_Cases;
+package Write_a_review_flow.Test_Cases;
 
+import Signup_Login.Pages.SignupHelper;
+import Signup_Login.Test_Cases.SignupLoginTest;
 import base.BaseTest;
 import org.testng.annotations.*;
 import Write_a_review_flow.Pages.HomePage;
@@ -14,10 +16,18 @@ public class Search_MC_DOT_Test extends BaseTest {
 
     HomePage homePage;
     ReviewPage reviewPage;
+    private String email;
 
     @DataProvider(name = "dotReviewData")
     public Object[][] dotReviewData() {
         return new Object[][]{{"123456", 5, "Great broker, fast payments."}, {"234567", 8, "Good experience, timely payments."}, {"345678", 10, "Professional and reliable broker."}};
+    }
+
+    @BeforeClass
+    public void Emailgenerated() {
+        email = SignupHelper.signupNewUser(driver);
+
+        Logs.info(test, "Signup completed with email: " + email);
     }
 
     @BeforeMethod
@@ -52,4 +62,3 @@ public class Search_MC_DOT_Test extends BaseTest {
         Logs.info(test, "==== END FLOW FOR DOT: " + dotNumber + " ====");
     }
 }
-*/
