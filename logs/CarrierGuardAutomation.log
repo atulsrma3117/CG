@@ -5562,3 +5562,272 @@ Session ID: 1d1251d30ecf852fa2ce785733de1d09
 11:47:41.257 [main] INFO  base.BasePage - ℹ️ OtpPage → Click → changeEmailBtn (64 ms)
 11:47:41.496 [main] INFO  zutilities.StartupCode - ℹ️ Browser Closed
 11:47:42.586 [main] INFO  zutilities.StartupCode - ℹ️  Extent report Loaded.
+13:08:37.546 [main] INFO  base.BaseTest - ?? ? TEST STARTED on browser: chrome
+13:08:38.102 [main] INFO  zutilities.CustomDriverListener - ?? ? TEST STARTED: TC_01_signupFlow
+13:08:38.300 [main] INFO  base.BasePage - ?? LoginPage ? Click ? loginBtn (78 ms)
+13:08:39.440 [main] INFO  base.BasePage - ?? LoginPage ? Click ? signUpBtn (57 ms)
+13:08:39.653 [main] INFO  base.BasePage - ?? SignupPage ? Type ? user80055638154700_e254ea76@yopmail.com ? emailInput (181 ms)
+13:08:39.765 [main] INFO  base.BasePage - ?? SignupPage ? Click ? createAccountBtn (76 ms)
+13:08:39.772 [main] INFO  Signup_Login.services.OtpApiService - ?? ? OTP API ? Fetch OTP for ? user80055638154700_e254ea76@yopmail.com
+13:08:43.654 [main] DEBUG org.apache.http.impl.conn.BasicClientConnectionManager - Get connection for route {}->http://3.84.224.180:80
+13:08:43.686 [main] DEBUG org.apache.http.impl.conn.DefaultClientConnectionOperator - Connecting to 3.84.224.180:80
+13:08:44.085 [main] DEBUG org.apache.http.client.protocol.RequestAddCookies - CookieSpec selected: ignoreCookies
+13:08:44.090 [main] DEBUG org.apache.http.client.protocol.RequestAuthCache - Auth cache not set in the context
+13:08:44.092 [main] DEBUG org.apache.http.client.protocol.RequestTargetAuthentication - Target auth state: UNCHALLENGED
+13:08:44.095 [main] DEBUG org.apache.http.client.protocol.RequestProxyAuthentication - Proxy auth state: UNCHALLENGED
+13:08:44.096 [main] DEBUG org.apache.http.impl.client.DefaultHttpClient - Attempt 1 to execute request
+13:08:44.097 [main] DEBUG org.apache.http.impl.conn.DefaultClientConnection - Sending request: POST /backend/api/v1/auth/send-otp/ HTTP/1.1
+13:08:44.099 [main] DEBUG org.apache.http.wire -  >> "POST /backend/api/v1/auth/send-otp/ HTTP/1.1[\r][\n]"
+13:08:44.104 [main] DEBUG org.apache.http.wire -  >> "Accept: */*[\r][\n]"
+13:08:44.105 [main] DEBUG org.apache.http.wire -  >> "Content-Type: application/json[\r][\n]"
+13:08:44.106 [main] DEBUG org.apache.http.wire -  >> "Content-Length: 77[\r][\n]"
+13:08:44.107 [main] DEBUG org.apache.http.wire -  >> "Host: 3.84.224.180[\r][\n]"
+13:08:44.116 [main] DEBUG org.apache.http.wire -  >> "Connection: Keep-Alive[\r][\n]"
+13:08:44.118 [main] DEBUG org.apache.http.wire -  >> "User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.18)[\r][\n]"
+13:08:44.119 [main] DEBUG org.apache.http.wire -  >> "Accept-Encoding: gzip,deflate[\r][\n]"
+13:08:44.119 [main] DEBUG org.apache.http.wire -  >> "[\r][\n]"
+13:08:44.120 [main] DEBUG org.apache.http.headers - >> POST /backend/api/v1/auth/send-otp/ HTTP/1.1
+13:08:44.120 [main] DEBUG org.apache.http.headers - >> Accept: */*
+13:08:44.121 [main] DEBUG org.apache.http.headers - >> Content-Type: application/json
+13:08:44.122 [main] DEBUG org.apache.http.headers - >> Content-Length: 77
+13:08:44.125 [main] DEBUG org.apache.http.headers - >> Host: 3.84.224.180
+13:08:44.126 [main] DEBUG org.apache.http.headers - >> Connection: Keep-Alive
+13:08:44.127 [main] DEBUG org.apache.http.headers - >> User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.18)
+13:08:44.128 [main] DEBUG org.apache.http.headers - >> Accept-Encoding: gzip,deflate
+13:08:44.130 [main] DEBUG org.apache.http.wire -  >> "{ "email": "user80055638154700_e254ea76@yopmail.com", "auth_type": "signup" }"
+13:08:51.665 [main] DEBUG org.apache.http.wire -  << "HTTP/1.1 200 OK[\r][\n]"
+13:08:51.703 [main] DEBUG org.apache.http.wire -  << "Server: nginx/1.28.2[\r][\n]"
+13:08:51.704 [main] DEBUG org.apache.http.wire -  << "Date: Wed, 25 Feb 2026 07:37:18 GMT[\r][\n]"
+13:08:51.705 [main] DEBUG org.apache.http.wire -  << "Content-Type: application/json[\r][\n]"
+13:08:51.706 [main] DEBUG org.apache.http.wire -  << "Content-Length: 97[\r][\n]"
+13:08:51.706 [main] DEBUG org.apache.http.wire -  << "Connection: keep-alive[\r][\n]"
+13:08:51.707 [main] DEBUG org.apache.http.wire -  << "[\r][\n]"
+13:08:51.709 [main] DEBUG org.apache.http.impl.conn.DefaultClientConnection - Receiving response: HTTP/1.1 200 OK
+13:08:51.710 [main] DEBUG org.apache.http.headers - << HTTP/1.1 200 OK
+13:08:51.711 [main] DEBUG org.apache.http.headers - << Server: nginx/1.28.2
+13:08:51.711 [main] DEBUG org.apache.http.headers - << Date: Wed, 25 Feb 2026 07:37:18 GMT
+13:08:51.712 [main] DEBUG org.apache.http.headers - << Content-Type: application/json
+13:08:51.713 [main] DEBUG org.apache.http.headers - << Content-Length: 97
+13:08:51.713 [main] DEBUG org.apache.http.headers - << Connection: keep-alive
+13:08:51.728 [main] DEBUG org.apache.http.impl.client.DefaultHttpClient - Connection can be kept alive indefinitely
+13:08:51.756 [main] DEBUG io.restassured.internal.RestAssuredHttpBuilder - Parsing response as: application/json
+13:08:51.757 [main] DEBUG io.restassured.internal.RestAssuredHttpBuilder - Parsed data to instance of: class org.apache.http.conn.EofSensorInputStream
+13:08:51.872 [main] DEBUG org.apache.http.wire -  << "{"status":"success","status_code":200,"message":"OTP sent successfully.","data":{"OTP":"149495"}}"
+13:08:51.877 [main] DEBUG org.apache.http.impl.conn.BasicClientConnectionManager - Releasing connection org.apache.http.impl.conn.ManagedClientConnectionImpl@260fffec
+13:08:51.878 [main] DEBUG org.apache.http.impl.conn.BasicClientConnectionManager - Connection can be kept alive indefinitely
+13:08:51.976 [main] INFO  Signup_Login.services.OtpApiService - ?? ? Request JSON:<pre>{ "email": "user80055638154700_e254ea76@yopmail.com", "auth_type": "signup" }</pre>
+13:08:51.977 [main] INFO  Signup_Login.services.OtpApiService - ?? ? Response JSON:<pre>{
+    "status": "success",
+    "status_code": 200,
+    "message": "OTP sent successfully.",
+    "data": {
+        "OTP": "149495"
+    }
+}</pre>
+13:08:51.983 [main] INFO  Signup_Login.services.OtpApiService - ?? ? API Status: 200 (12055 ms)
+13:08:54.207 [main] INFO  base.BasePage - ?? OtpPage ? Type ? 149495 ? otpField (55 ms)
+13:08:54.308 [main] INFO  base.BasePage - ?? OtpPage ? Click ? verifyBtn (67 ms)
+13:08:54.325 [Finalizer] DEBUG org.apache.http.impl.conn.DefaultClientConnection - Connection 0.0.0.0:50738<->3.84.224.180:80 closed
+13:08:58.824 [main] INFO  zutilities.Screenshot - ?? ? Screenshot saved to: H:\Automation\CarrierGuard\screenshots\TC_01_signupFlow_2026_02_25_13.08.58.png
+13:08:58.826 [main] INFO  zutilities.CustomDriverListener - ? ? TEST PASSED: TC_01_signupFlow
+13:08:59.331 [main] INFO  zutilities.Screenshot - ?? ? Screenshot saved to: H:\Automation\CarrierGuard\screenshots\pass_2026_02_25_13.08.58.png
+13:08:59.388 [main] INFO  base.BaseTest - ?? ? TEST STARTED on browser: chrome
+13:08:59.394 [main] INFO  zutilities.CustomDriverListener - ?? ? TEST STARTED: TC_02_logoutFlow
+13:09:10.996 [main] INFO  zutilities.Screenshot - ?? ? Screenshot saved to: H:\Automation\CarrierGuard\screenshots\TC_02_logoutFlow_2026_02_25_13.09.10.png
+13:09:10.998 [main] INFO  zutilities.CustomDriverListener - ? ? TEST PASSED: TC_02_logoutFlow
+13:09:11.191 [main] INFO  zutilities.Screenshot - ?? ? Screenshot saved to: H:\Automation\CarrierGuard\screenshots\pass_2026_02_25_13.09.11.png
+13:09:11.213 [main] INFO  base.BaseTest - ?? ? TEST STARTED on browser: chrome
+13:09:11.220 [main] INFO  zutilities.CustomDriverListener - ?? ? TEST STARTED: TC_03_loginFlow
+13:09:13.223 [main] INFO  base.BasePage - ?? LoginPage ? Click ? loginBtn (58 ms)
+13:09:13.397 [main] INFO  base.BasePage - ?? LoginPage ? Type ? user80055638154700_e254ea76@yopmail.com ? emailInput (148 ms)
+13:09:13.501 [main] INFO  base.BasePage - ?? LoginPage ? Click ? sendCodeBtn (73 ms)
+13:09:13.503 [main] INFO  Signup_Login.services.OtpApiService - ?? ? OTP API ? Fetch OTP for ? user80055638154700_e254ea76@yopmail.com
+13:09:13.598 [main] DEBUG org.apache.http.impl.conn.BasicClientConnectionManager - Get connection for route {}->http://3.84.224.180:80
+13:09:13.605 [main] DEBUG org.apache.http.impl.conn.DefaultClientConnectionOperator - Connecting to 3.84.224.180:80
+13:09:13.937 [main] DEBUG org.apache.http.client.protocol.RequestAddCookies - CookieSpec selected: ignoreCookies
+13:09:13.938 [main] DEBUG org.apache.http.client.protocol.RequestAuthCache - Auth cache not set in the context
+13:09:13.938 [main] DEBUG org.apache.http.client.protocol.RequestTargetAuthentication - Target auth state: UNCHALLENGED
+13:09:13.939 [main] DEBUG org.apache.http.client.protocol.RequestProxyAuthentication - Proxy auth state: UNCHALLENGED
+13:09:13.939 [main] DEBUG org.apache.http.impl.client.DefaultHttpClient - Attempt 1 to execute request
+13:09:13.940 [main] DEBUG org.apache.http.impl.conn.DefaultClientConnection - Sending request: POST /backend/api/v1/auth/send-otp/ HTTP/1.1
+13:09:13.940 [main] DEBUG org.apache.http.wire -  >> "POST /backend/api/v1/auth/send-otp/ HTTP/1.1[\r][\n]"
+13:09:13.941 [main] DEBUG org.apache.http.wire -  >> "Accept: */*[\r][\n]"
+13:09:13.941 [main] DEBUG org.apache.http.wire -  >> "Content-Type: application/json[\r][\n]"
+13:09:13.942 [main] DEBUG org.apache.http.wire -  >> "Content-Length: 76[\r][\n]"
+13:09:13.943 [main] DEBUG org.apache.http.wire -  >> "Host: 3.84.224.180[\r][\n]"
+13:09:13.943 [main] DEBUG org.apache.http.wire -  >> "Connection: Keep-Alive[\r][\n]"
+13:09:13.944 [main] DEBUG org.apache.http.wire -  >> "User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.18)[\r][\n]"
+13:09:13.944 [main] DEBUG org.apache.http.wire -  >> "Accept-Encoding: gzip,deflate[\r][\n]"
+13:09:13.945 [main] DEBUG org.apache.http.wire -  >> "[\r][\n]"
+13:09:13.946 [main] DEBUG org.apache.http.headers - >> POST /backend/api/v1/auth/send-otp/ HTTP/1.1
+13:09:13.946 [main] DEBUG org.apache.http.headers - >> Accept: */*
+13:09:13.947 [main] DEBUG org.apache.http.headers - >> Content-Type: application/json
+13:09:13.947 [main] DEBUG org.apache.http.headers - >> Content-Length: 76
+13:09:13.948 [main] DEBUG org.apache.http.headers - >> Host: 3.84.224.180
+13:09:13.948 [main] DEBUG org.apache.http.headers - >> Connection: Keep-Alive
+13:09:13.951 [main] DEBUG org.apache.http.headers - >> User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.18)
+13:09:13.952 [main] DEBUG org.apache.http.headers - >> Accept-Encoding: gzip,deflate
+13:09:13.952 [main] DEBUG org.apache.http.wire -  >> "{ "email": "user80055638154700_e254ea76@yopmail.com", "auth_type": "login" }"
+13:09:19.305 [main] DEBUG org.apache.http.wire -  << "HTTP/1.1 200 OK[\r][\n]"
+13:09:19.306 [main] DEBUG org.apache.http.wire -  << "Server: nginx/1.28.2[\r][\n]"
+13:09:19.307 [main] DEBUG org.apache.http.wire -  << "Date: Wed, 25 Feb 2026 07:37:46 GMT[\r][\n]"
+13:09:19.308 [main] DEBUG org.apache.http.wire -  << "Content-Type: application/json[\r][\n]"
+13:09:19.309 [main] DEBUG org.apache.http.wire -  << "Content-Length: 97[\r][\n]"
+13:09:19.311 [main] DEBUG org.apache.http.wire -  << "Connection: keep-alive[\r][\n]"
+13:09:19.312 [main] DEBUG org.apache.http.wire -  << "[\r][\n]"
+13:09:19.312 [main] DEBUG org.apache.http.impl.conn.DefaultClientConnection - Receiving response: HTTP/1.1 200 OK
+13:09:19.313 [main] DEBUG org.apache.http.headers - << HTTP/1.1 200 OK
+13:09:19.314 [main] DEBUG org.apache.http.headers - << Server: nginx/1.28.2
+13:09:19.315 [main] DEBUG org.apache.http.headers - << Date: Wed, 25 Feb 2026 07:37:46 GMT
+13:09:19.315 [main] DEBUG org.apache.http.headers - << Content-Type: application/json
+13:09:19.316 [main] DEBUG org.apache.http.headers - << Content-Length: 97
+13:09:19.317 [main] DEBUG org.apache.http.headers - << Connection: keep-alive
+13:09:19.318 [main] DEBUG org.apache.http.impl.client.DefaultHttpClient - Connection can be kept alive indefinitely
+13:09:19.319 [main] DEBUG io.restassured.internal.RestAssuredHttpBuilder - Parsing response as: application/json
+13:09:19.320 [main] DEBUG io.restassured.internal.RestAssuredHttpBuilder - Parsed data to instance of: class org.apache.http.conn.EofSensorInputStream
+13:09:19.323 [main] DEBUG org.apache.http.wire -  << "{"status":"success","status_code":200,"message":"OTP sent successfully.","data":{"OTP":"823255"}}"
+13:09:19.324 [main] DEBUG org.apache.http.impl.conn.BasicClientConnectionManager - Releasing connection org.apache.http.impl.conn.ManagedClientConnectionImpl@1c0ec502
+13:09:19.325 [main] DEBUG org.apache.http.impl.conn.BasicClientConnectionManager - Connection can be kept alive indefinitely
+13:09:19.332 [main] INFO  Signup_Login.services.OtpApiService - ?? ? Request JSON:<pre>{ "email": "user80055638154700_e254ea76@yopmail.com", "auth_type": "login" }</pre>
+13:09:19.334 [main] INFO  Signup_Login.services.OtpApiService - ?? ? Response JSON:<pre>{
+    "status": "success",
+    "status_code": 200,
+    "message": "OTP sent successfully.",
+    "data": {
+        "OTP": "823255"
+    }
+}</pre>
+13:09:19.336 [main] INFO  Signup_Login.services.OtpApiService - ?? ? API Status: 200 (5820 ms)
+13:09:19.491 [main] INFO  base.BasePage - ?? OtpPage ? Type ? 823255 ? otpField (80 ms)
+13:09:19.579 [main] INFO  base.BasePage - ?? OtpPage ? Click ? verifyBtn (59 ms)
+13:09:19.802 [main] INFO  zutilities.Screenshot - ?? ? Screenshot saved to: H:\Automation\CarrierGuard\screenshots\TC_03_loginFlow_2026_02_25_13.09.19.png
+13:09:19.803 [main] INFO  zutilities.CustomDriverListener - ? ? TEST PASSED: TC_03_loginFlow
+13:09:19.995 [main] INFO  zutilities.Screenshot - ?? ? Screenshot saved to: H:\Automation\CarrierGuard\screenshots\pass_2026_02_25_13.09.19.png
+13:09:20.238 [main] INFO  zutilities.StartupCode - ?? Browser Closed
+13:09:23.375 [Finalizer] DEBUG org.apache.http.impl.conn.DefaultClientConnection - Connection 0.0.0.0:50764<->3.84.224.180:80 closed
+13:09:29.689 [main] INFO  base.BaseTest - ?? ? TEST STARTED on browser: chrome
+13:09:29.699 [main] INFO  zutilities.CustomDriverListener - ?? ? TEST STARTED: TC_01_signupValidationFlow
+13:09:29.700 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ?? Test Case Started: TC_01_signupValidationFlow
+13:09:30.369 [main] INFO  base.BasePage - ?? LoginPage ? Click ? loginBtn (76 ms)
+13:09:31.556 [main] INFO  base.BasePage - ?? LoginPage ? Click ? signUpBtn (80 ms)
+13:09:31.735 [main] INFO  Signup_Login.Pages.LoginPage - ?? Email validation for 'pnkj' is  ? Please include an '@' in the email address. 'pnkj' is missing an '@'.
+13:09:31.886 [main] INFO  Signup_Login.Pages.LoginPage - ?? Email validation for 'pnkj@' is  ? Please enter a part following '@'. 'pnkj@' is incomplete.
+13:09:32.015 [main] INFO  Signup_Login.Pages.LoginPage - ?? Email validation for 'pnkj@.com' is  ? '.' is used at a wrong position in '.com'.
+13:09:32.132 [main] INFO  Signup_Login.Pages.LoginPage - ?? Email validation for 'pnkj.com' is  ? Please include an '@' in the email address. 'pnkj.com' is missing an '@'.
+13:09:32.252 [main] INFO  Signup_Login.Pages.LoginPage - ?? Email validation for 'pnkj.com@' is  ? Please enter a part following '@'. 'pnkj.com@' is incomplete.
+13:09:32.425 [main] INFO  Signup_Login.Pages.LoginPage - ?? Email 'user1772005169687@yopmail.com' is accepted no validation message (Possibly valid email)
+13:09:39.316 [main] INFO  base.BasePage - ?? OtpPage ? Type ? 222222 ? otpField (65 ms)
+13:09:39.416 [main] INFO  base.BasePage - ?? OtpPage ? Click ? verifyBtn (68 ms)
+13:09:41.008 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ?? Invalid OTP Toast: Invalid or expired token.
+13:10:16.337 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ?? Resend OTP Toast: OTP sent successfully.
+13:10:16.430 [main] INFO  base.BasePage - ?? OtpPage ? Click ? changeEmailBtn (61 ms)
+13:10:16.747 [main] INFO  zutilities.Screenshot - ?? ? Screenshot saved to: H:\Automation\CarrierGuard\screenshots\TC_01_signupValidationFlow_2026_02_25_13.10.16.png
+13:10:16.748 [main] INFO  zutilities.CustomDriverListener - ? ? TEST PASSED: TC_01_signupValidationFlow
+13:10:17.039 [main] INFO  zutilities.Screenshot - ?? ? Screenshot saved to: H:\Automation\CarrierGuard\screenshots\pass_2026_02_25_13.10.16.png
+13:10:17.079 [main] INFO  base.BaseTest - ?? ? TEST STARTED on browser: chrome
+13:10:17.085 [main] INFO  zutilities.CustomDriverListener - ?? ? TEST STARTED: TC_02_loginValidationFlow
+13:10:17.088 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ?? Test Case Started: TC_02_loginValidationFlow
+13:10:17.358 [main] INFO  base.BasePage - ?? LoginPage ? Click ? loginBtn (234 ms)
+13:10:18.560 [main] INFO  Signup_Login.Pages.LoginPage - ?? Email validation for 'pnkj' is  ? Please include an '@' in the email address. 'pnkj' is missing an '@'.
+13:10:19.092 [main] INFO  Signup_Login.Pages.LoginPage - ?? Email validation for 'pnkj@' is  ? Please enter a part following '@'. 'pnkj@' is incomplete.
+13:10:19.239 [main] INFO  Signup_Login.Pages.LoginPage - ?? Email validation for 'pnkj@.com' is  ? A part following '@' should not contain the symbol '@'.
+13:10:19.353 [main] INFO  Signup_Login.Pages.LoginPage - ?? Email validation for 'pnkj.com' is  ? Please include an '@' in the email address. 'pnkj.com' is missing an '@'.
+13:10:19.467 [main] INFO  Signup_Login.Pages.LoginPage - ?? Email validation for 'pnkj.com@' is  ? Please enter a part following '@'. 'pnkj.com@' is incomplete.
+13:10:19.618 [main] INFO  Signup_Login.Pages.LoginPage - ?? Email 'user1772005169687@yopmail.com' is accepted no validation message (Possibly valid email)
+13:10:30.293 [main] INFO  zutilities.Screenshot - ?? ? Screenshot saved to: H:\Automation\CarrierGuard\screenshots\TC_02_loginValidationFlow_2026_02_25_13.10.30.png
+13:10:30.294 [main] ERROR zutilities.CustomDriverListener - ? ? TEST FAILED: org.openqa.selenium.TimeoutException: Expected condition failed: waiting for Signup_Login.Pages.LoginPage$$Lambda$1322/0x000001c58174e6d8@4eda5325
+(tried for 10 seconds with 500 milliseconds interval)
+13:10:30.408 [main] INFO  zutilities.Screenshot - ?? ? Screenshot saved to: H:\Automation\CarrierGuard\screenshots\fail_2026_02_25_13.10.30.png
+13:10:30.510 [main] INFO  zutilities.Screenshot - ?? ? Screenshot saved to: H:\Automation\CarrierGuard\screenshots\TC_02_loginValidationFlow_2026_02_25_13.10.30.png
+13:10:30.674 [main] INFO  zutilities.StartupCode - ?? Browser Closed
+13:10:38.303 [main] INFO  base.BasePage - ?? LoginPage ? Click ? loginBtn (84 ms)
+13:10:39.444 [main] INFO  base.BasePage - ?? LoginPage ? Click ? signUpBtn (60 ms)
+13:10:39.666 [main] INFO  base.BasePage - ?? SignupPage ? Type ? user80175143918500_6a071ac2@yopmail.com ? emailInput (193 ms)
+13:10:39.767 [main] INFO  base.BasePage - ?? SignupPage ? Click ? createAccountBtn (69 ms)
+13:10:39.769 [main] INFO  Signup_Login.services.OtpApiService - ?? ? OTP API ? Fetch OTP for ? user80175143918500_6a071ac2@yopmail.com
+13:10:39.822 [main] DEBUG org.apache.http.impl.conn.BasicClientConnectionManager - Get connection for route {}->http://3.84.224.180:80
+13:10:39.823 [main] DEBUG org.apache.http.impl.conn.DefaultClientConnectionOperator - Connecting to 3.84.224.180:80
+13:10:40.139 [main] DEBUG org.apache.http.client.protocol.RequestAddCookies - CookieSpec selected: ignoreCookies
+13:10:40.140 [main] DEBUG org.apache.http.client.protocol.RequestAuthCache - Auth cache not set in the context
+13:10:40.141 [main] DEBUG org.apache.http.client.protocol.RequestTargetAuthentication - Target auth state: UNCHALLENGED
+13:10:40.141 [main] DEBUG org.apache.http.client.protocol.RequestProxyAuthentication - Proxy auth state: UNCHALLENGED
+13:10:40.142 [main] DEBUG org.apache.http.impl.client.DefaultHttpClient - Attempt 1 to execute request
+13:10:40.142 [main] DEBUG org.apache.http.impl.conn.DefaultClientConnection - Sending request: POST /backend/api/v1/auth/send-otp/ HTTP/1.1
+13:10:40.143 [main] DEBUG org.apache.http.wire -  >> "POST /backend/api/v1/auth/send-otp/ HTTP/1.1[\r][\n]"
+13:10:40.143 [main] DEBUG org.apache.http.wire -  >> "Accept: */*[\r][\n]"
+13:10:40.144 [main] DEBUG org.apache.http.wire -  >> "Content-Type: application/json[\r][\n]"
+13:10:40.145 [main] DEBUG org.apache.http.wire -  >> "Content-Length: 77[\r][\n]"
+13:10:40.146 [main] DEBUG org.apache.http.wire -  >> "Host: 3.84.224.180[\r][\n]"
+13:10:40.147 [main] DEBUG org.apache.http.wire -  >> "Connection: Keep-Alive[\r][\n]"
+13:10:40.147 [main] DEBUG org.apache.http.wire -  >> "User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.18)[\r][\n]"
+13:10:40.148 [main] DEBUG org.apache.http.wire -  >> "Accept-Encoding: gzip,deflate[\r][\n]"
+13:10:40.148 [main] DEBUG org.apache.http.wire -  >> "[\r][\n]"
+13:10:40.149 [main] DEBUG org.apache.http.headers - >> POST /backend/api/v1/auth/send-otp/ HTTP/1.1
+13:10:40.150 [main] DEBUG org.apache.http.headers - >> Accept: */*
+13:10:40.151 [main] DEBUG org.apache.http.headers - >> Content-Type: application/json
+13:10:40.151 [main] DEBUG org.apache.http.headers - >> Content-Length: 77
+13:10:40.152 [main] DEBUG org.apache.http.headers - >> Host: 3.84.224.180
+13:10:40.152 [main] DEBUG org.apache.http.headers - >> Connection: Keep-Alive
+13:10:40.153 [main] DEBUG org.apache.http.headers - >> User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.18)
+13:10:40.155 [main] DEBUG org.apache.http.headers - >> Accept-Encoding: gzip,deflate
+13:10:40.157 [main] DEBUG org.apache.http.wire -  >> "{ "email": "user80175143918500_6a071ac2@yopmail.com", "auth_type": "signup" }"
+13:10:45.750 [main] DEBUG org.apache.http.wire -  << "HTTP/1.1 200 OK[\r][\n]"
+13:10:45.751 [main] DEBUG org.apache.http.wire -  << "Server: nginx/1.28.2[\r][\n]"
+13:10:45.751 [main] DEBUG org.apache.http.wire -  << "Date: Wed, 25 Feb 2026 07:39:12 GMT[\r][\n]"
+13:10:45.752 [main] DEBUG org.apache.http.wire -  << "Content-Type: application/json[\r][\n]"
+13:10:45.752 [main] DEBUG org.apache.http.wire -  << "Content-Length: 97[\r][\n]"
+13:10:45.753 [main] DEBUG org.apache.http.wire -  << "Connection: keep-alive[\r][\n]"
+13:10:45.754 [main] DEBUG org.apache.http.wire -  << "[\r][\n]"
+13:10:45.754 [main] DEBUG org.apache.http.impl.conn.DefaultClientConnection - Receiving response: HTTP/1.1 200 OK
+13:10:45.755 [main] DEBUG org.apache.http.headers - << HTTP/1.1 200 OK
+13:10:45.755 [main] DEBUG org.apache.http.headers - << Server: nginx/1.28.2
+13:10:45.756 [main] DEBUG org.apache.http.headers - << Date: Wed, 25 Feb 2026 07:39:12 GMT
+13:10:45.756 [main] DEBUG org.apache.http.headers - << Content-Type: application/json
+13:10:45.757 [main] DEBUG org.apache.http.headers - << Content-Length: 97
+13:10:45.757 [main] DEBUG org.apache.http.headers - << Connection: keep-alive
+13:10:45.758 [main] DEBUG org.apache.http.impl.client.DefaultHttpClient - Connection can be kept alive indefinitely
+13:10:45.759 [main] DEBUG io.restassured.internal.RestAssuredHttpBuilder - Parsing response as: application/json
+13:10:45.759 [main] DEBUG io.restassured.internal.RestAssuredHttpBuilder - Parsed data to instance of: class org.apache.http.conn.EofSensorInputStream
+13:10:45.763 [main] DEBUG org.apache.http.wire -  << "{"status":"success","status_code":200,"message":"OTP sent successfully.","data":{"OTP":"859197"}}"
+13:10:45.767 [main] DEBUG org.apache.http.impl.conn.BasicClientConnectionManager - Releasing connection org.apache.http.impl.conn.ManagedClientConnectionImpl@221383c9
+13:10:45.768 [main] DEBUG org.apache.http.impl.conn.BasicClientConnectionManager - Connection can be kept alive indefinitely
+13:10:45.774 [main] INFO  Signup_Login.services.OtpApiService - ?? ? Request JSON:<pre>{ "email": "user80175143918500_6a071ac2@yopmail.com", "auth_type": "signup" }</pre>
+13:10:45.775 [main] INFO  Signup_Login.services.OtpApiService - ?? ? Response JSON:<pre>{
+    "status": "success",
+    "status_code": 200,
+    "message": "OTP sent successfully.",
+    "data": {
+        "OTP": "859197"
+    }
+}</pre>
+13:10:45.777 [main] INFO  Signup_Login.services.OtpApiService - ?? ? API Status: 200 (5992 ms)
+13:10:46.054 [main] INFO  base.BasePage - ?? OtpPage ? Type ? 859197 ? otpField (93 ms)
+13:10:46.192 [main] INFO  base.BasePage - ?? OtpPage ? Click ? verifyBtn (78 ms)
+13:10:48.937 [main] INFO  Write_a_review_flow.Test_Cases.Search_MC_DOT_Test - ?? Signup completed with email: user80175143918500_6a071ac2@yopmail.com
+13:10:49.079 [main] INFO  zutilities.CustomDriverListener - ?? ? TEST STARTED: Search_and_Review_Flow
+13:10:49.103 [main] INFO  zutilities.CustomDriverListener - ?? ? TEST STARTED: Search_and_Review_Flow
+13:10:49.142 [main] INFO  zutilities.CustomDriverListener - ?? ? TEST STARTED: Search_and_Review_Flow
+13:10:56.908 [main] INFO  base.BaseTest - ?? ? TEST STARTED on browser: chrome
+13:10:56.942 [main] INFO  zutilities.CustomDriverListener - ?? ? TEST STARTED: TC_01_Search_and_Review_Flow
+13:10:56.948 [main] INFO  Write_a_review_flow.Test_Cases.Without_Login_Write_a_Review_Flow_Test - ?? ==== START FLOW FOR DOT: 1234567 ====
+13:10:57.137 [main] INFO  base.BasePage - ?? HomePage ? Type ? 1234567 ? searchBox (139 ms)
+13:10:59.896 [main] INFO  Write_a_review_flow.Test_Cases.Without_Login_Write_a_Review_Flow_Test - ? DOT filter selected and DOT number searched: 1234567
+13:11:00.121 [Finalizer] DEBUG org.apache.http.impl.conn.DefaultClientConnection - Connection 0.0.0.0:50876<->3.84.224.180:80 closed
+13:11:00.181 [main] INFO  zutilities.Screenshot - ?? ? Screenshot saved to: H:\Automation\CarrierGuard\screenshots\pass_2026_02_25_13.10.59.png
+13:11:00.308 [main] INFO  zutilities.Screenshot - ?? ? Screenshot saved to: H:\Automation\CarrierGuard\screenshots\TC_01_Search_and_Review_Flow_2026_02_25_13.11.00.png
+13:11:00.309 [main] INFO  zutilities.CustomDriverListener - ? ? TEST PASSED: TC_01_Search_and_Review_Flow
+13:11:00.425 [main] INFO  zutilities.Screenshot - ?? ? Screenshot saved to: H:\Automation\CarrierGuard\screenshots\pass_2026_02_25_13.11.00.png
+13:11:00.447 [main] INFO  base.BaseTest - ?? ? TEST STARTED on browser: chrome
+13:11:00.456 [main] INFO  zutilities.CustomDriverListener - ?? ? TEST STARTED: TC_02_Click_on_Write_a_Review
+13:11:01.166 [main] INFO  base.BasePage - ?? ReviewPage ? Click ? writeReviewBtn (100 ms)
+13:11:01.775 [main] INFO  Write_a_review_flow.Test_Cases.Without_Login_Write_a_Review_Flow_Test - ?? POP-UP Titile: Sign in to write a review
+13:11:01.834 [main] INFO  Write_a_review_flow.Test_Cases.Without_Login_Write_a_Review_Flow_Test - ?? POP-UP Message: You need to sign in or create an account to submit a review for this carrier.
+13:11:01.876 [main] INFO  Write_a_review_flow.Test_Cases.Without_Login_Write_a_Review_Flow_Test - ?? isCancelButtonDisplayed: true
+13:11:01.914 [main] INFO  Write_a_review_flow.Test_Cases.Without_Login_Write_a_Review_Flow_Test - ?? isContinueButtonDisplayed: true
+13:11:01.933 [main] INFO  Write_a_review_flow.Test_Cases.Without_Login_Write_a_Review_Flow_Test - ? Sign-in popup validated successfully!
+13:11:02.130 [main] INFO  zutilities.Screenshot - ?? ? Screenshot saved to: H:\Automation\CarrierGuard\screenshots\pass_2026_02_25_13.11.01.png
+13:11:02.284 [main] INFO  zutilities.Screenshot - ?? ? Screenshot saved to: H:\Automation\CarrierGuard\screenshots\TC_02_Click_on_Write_a_Review_2026_02_25_13.11.02.png
+13:11:02.285 [main] INFO  zutilities.CustomDriverListener - ? ? TEST PASSED: TC_02_Click_on_Write_a_Review
+13:11:02.422 [main] INFO  zutilities.Screenshot - ?? ? Screenshot saved to: H:\Automation\CarrierGuard\screenshots\pass_2026_02_25_13.11.02.png
+13:11:02.601 [main] INFO  zutilities.StartupCode - ?? Browser Closed
+13:11:04.037 [main] INFO  zutilities.CustomDriverListener - ?? =========== SUITE FINISHED ===========
