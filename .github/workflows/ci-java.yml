@@ -48,7 +48,8 @@ jobs:
         # Ensure Allure TestNG adapter writes to the repository-level "allure-results" directory
         run: |
           set -o pipefail
-          mvn clean test -Dsurefire.suiteXmlFiles=testng.xml -Dallure.results.directory=allure-results | tee mvn-output.log
+          mvn clean test -Dsurefire.suiteXmlFiles=testng.xml
+          allure generate allure-results --clean -o allure-report --verbose
         continue-on-error: true
 
       # 5.1️⃣ List generated allure-results (if any) for debugging
