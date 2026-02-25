@@ -57,7 +57,22 @@
             <artifactId>ashot</artifactId>
             <version>1.5.4</version>
             <scope>compile</scope>
+            <exclusions>
+                <!-- exclude transitive gson which is flagged for CVE; we provide a patched version explicitly -->
+                <exclusion>
+                    <groupId>com.google.code.gson</groupId>
+                    <artifactId>gson</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+
+        <!-- Explicit, updated gson to avoid known CVEs in older transitive versions -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
+
 
         <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl -->
         <dependency>
@@ -169,8 +184,6 @@
                     <systemPropertyVariables>
                         <allure.results.directory>${allure.results.directory}</allure.results.directory>
                     </systemPropertyVariables>
-                    <!-- ensure child JVMs receive the property via argLine -->
-                    <argLine>${argLine} -Dallure.results.directory=${allure.results.directory}</argLine>
                 </configuration>
             </plugin>
 

@@ -48,7 +48,7 @@ jobs:
         # Ensure Allure TestNG adapter writes to the repository-level "allure-results" directory
         run: |
           set -o pipefail
-          mvn clean test -Dsurefire.suiteXmlFiles=testng.xml -Dallure.results.directory=allure-results 2>&1 | tee mvn-output.log || true
+          mvn clean test -Dsurefire.suiteXmlFiles=testng.xml 2>&1 | tee mvn-output.log || true
 
           # Immediately parse mvn-output.log for test summary and persist to /tmp/test-summary.env
           SUMMARY_LINE=$(grep "Tests run:" mvn-output.log | tail -n 1 || true)
