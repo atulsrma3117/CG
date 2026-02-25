@@ -41,7 +41,8 @@ jobs:
 
       # 5️⃣ Build and run tests (with debug)
       - name: Build and run tests
-        run: mvn clean test -Dsurefire.suiteXmlFiles=testng.xml
+        # Ensure Allure TestNG adapter writes to the repository-level "allure-results" directory
+        run: mvn clean test -Dsurefire.suiteXmlFiles=testng.xml -Dallure.results.directory=allure-results
         continue-on-error: true
 
       # 5.1️⃣ List generated allure-results (if any) for debugging
@@ -50,6 +51,8 @@ jobs:
           echo "== allure-results contents =="
           if [ -d "allure-results" ]; then
             ls -la allure-results || true
+            # show a few representative files for debugging
+            head -n 200 allure-results/* 2>/dev/null || true
           else
             echo "no allure-results directory"
           fi
@@ -96,11 +99,14 @@ jobs:
           if [ -d "allure-results" ] && [ "$(ls -A allure-results 2>/dev/null)" ]; then
             echo "Generating Allure report from allure-results"
             allure generate allure-results --clean -o allure-report --verbose || true
+            echo "== allure-report contents =="
+            ls -la allure-report || true
           elif [ -d "target/surefire-reports" ] && [ "$(ls -A target/surefire-reports 2>/dev/null)" ]; then
             echo "No allure-results; attempting to generate from surefire reports copied into allure-results (best-effort)"
             mkdir -p allure-results
             cp target/surefire-reports/*.xml allure-results/ || true
             allure generate allure-results --clean -o allure-report --verbose || true
+            ls -la allure-report || true
           else
             echo "No allure results or test reports found, creating placeholder report."
             mkdir -p allure-report
@@ -121,7 +127,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./allure-report   # Path to the directory where the report is generated
 
-      # 1️⃣3️⃣ Parse test results (safe defaults when reports are missing)
+      # 1️⃣3️⃣ Parse test results (safe defaults when reports are missing, fallback to Allure JSONs)
       - name: Parse test results
         id: results
         run: |
@@ -132,12 +138,24 @@ jobs:
           PASSED=0
           FAILED_TESTS="None"
 
+          # Primary: parse Surefire XMLs if present
           if ls target/surefire-reports/*.xml 1> /dev/null 2>&1; then
             TOTAL=$(grep -c "<testcase" target/surefire-reports/*.xml 2>/dev/null | awk '{s+=$1} END {print s+0}')
             FAILED=$(grep -c "<failure" target/surefire-reports/*.xml 2>/dev/null | awk '{s+=$1} END {print s+0}')
             SKIPPED=$(grep -c "<skipped" target/surefire-reports/*.xml 2>/dev/null | awk '{s+=$1} END {print s+0}')
             PASSED=$((TOTAL - FAILED - SKIPPED))
             FAILED_TESTS=$(grep "<testcase" target/surefire-reports/*.xml 2>/dev/null | grep "<failure" | sed 's/.*classname="\([^"]*\)".*/\1/' | tr '\n' ', ' || echo "None")
+
+          # Fallback: parse Allure JSON results (best-effort)
+          elif ls allure-results/*.json 1> /dev/null 2>&1; then
+            echo "No surefire XMLs found; parsing allure-results JSON files for statuses"
+            # Count status occurrences in JSON result files
+            FAILED=$(grep -rho "\"status\"\s*:\s*\"failed\"" allure-results | wc -l | tr -d ' ')
+            PASSED=$(grep -rho "\"status\"\s*:\s*\"passed\"" allure-results | wc -l | tr -d ' ')
+            SKIPPED=$(grep -rho "\"status\"\s*:\s*\"skipped\"" allure-results | wc -l | tr -d ' ')
+            TOTAL=$((FAILED + PASSED + SKIPPED))
+            # Attempt to get failed test names
+            FAILED_TESTS=$(grep -rho "\"status\"\s*:\s*\"failed\".*\"name\"\s*:\s*\"[^"]\+\"" allure-results | sed -E 's/.*\"name\"\s*:\s*\"([^\"]*)\".*/\1/' | tr '\n' ', ' || echo "None")
           fi
 
           echo "TOTAL=$TOTAL" >> $GITHUB_ENV
@@ -150,9 +168,22 @@ jobs:
       - name: Send Teams Notification
         if: always()
         run: |
-          # Use env vars written to GITHUB_ENV by the previous step
+          # Build JSON payload using printf to avoid heredoc/indentation issues
+          TOTAL=${TOTAL:-0}
+          PASSED=${PASSED:-0}
+          FAILED=${FAILED:-0}
+          SKIPPED=${SKIPPED:-0}
+          FAILED_TESTS=${FAILED_TESTS:-None}
+          RUN_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+
+          # Compose JSON safely (printf will handle variable insertion)
+          payload=$(printf '{"title":"CI/CD Test Results","text":"**Total:** %s\\n**Passed:** %s\\n**Failed:** %s\\n**Skipped:** %s\\n**Failed Tests:** %s\\n**Allure Report:** [Download Report](%s)"}' \
+            "$TOTAL" "$PASSED" "$FAILED" "$SKIPPED" "$FAILED_TESTS" "$RUN_URL")
+
+          if [ -z "$TEAMS_WEBHOOK_URL" ]; then
+            echo "TEAMS_WEBHOOK_URL not set, skipping notification"
+            exit 0
+          fi
+
           echo "Sending Teams notification: Total=$TOTAL, Passed=$PASSED, Failed=$FAILED, Skipped=$SKIPPED"
-          curl -H 'Content-Type: application/json' -d "{
-            \"title\": \"CI/CD Test Results\",
-            \"text\": \"**Total:** $TOTAL\n**Passed:** $PASSED\n**Failed:** $FAILED\n**Skipped:** $SKIPPED\n**Failed Tests:** $FAILED_TESTS\n**Allure Report:** [Download Report]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID)\"
-          }" $TEAMS_WEBHOOK_URL
+          curl -H 'Content-Type: application/json' -d "$payload" "$TEAMS_WEBHOOK_URL"
