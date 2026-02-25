@@ -7,6 +7,10 @@ on:
   repository_dispatch:
     types: [frontend_push]
 
+# Give the workflow explicit write permission so actions that push (gh-pages) can work
+permissions:
+  contents: write
+
 jobs:
   Carrier_Guard:
     runs-on: ubuntu-latest
@@ -42,7 +46,9 @@ jobs:
       # 5️⃣ Build and run tests (with debug)
       - name: Build and run tests
         # Ensure Allure TestNG adapter writes to the repository-level "allure-results" directory
-        run: mvn clean test -Dsurefire.suiteXmlFiles=testng.xml -Dallure.results.directory=allure-results
+        run: |
+          set -o pipefail
+          mvn clean test -Dsurefire.suiteXmlFiles=testng.xml -Dallure.results.directory=allure-results | tee mvn-output.log
         continue-on-error: true
 
       # 5.1️⃣ List generated allure-results (if any) for debugging
@@ -124,13 +130,22 @@ jobs:
       - name: Push Allure Report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.AUTOMATION_REPO_TOKEN }}
           publish_dir: ./allure-report   # Path to the directory where the report is generated
 
       # 1️⃣3️⃣ Parse test results (safe defaults when reports are missing, fallback to Allure JSONs)
       - name: Parse test results
         id: results
         run: |
+          set -x
+          # Debug listing before parsing
+          echo "-- DEBUG: listing target/surefire-reports --"
+          ls -la target/surefire-reports || true
+          echo "-- DEBUG: listing allure-results --"
+          ls -la allure-results || true
+          echo "-- DEBUG: show mvn-output.log head --"
+          head -n 200 mvn-output.log || true
+
           # Default values
           TOTAL=0
           FAILED=0
@@ -138,25 +153,71 @@ jobs:
           PASSED=0
           FAILED_TESTS="None"
 
-          # Primary: parse Surefire XMLs if present
-          if ls target/surefire-reports/*.xml 1> /dev/null 2>&1; then
-            TOTAL=$(grep -c "<testcase" target/surefire-reports/*.xml 2>/dev/null | awk '{s+=$1} END {print s+0}')
-            FAILED=$(grep -c "<failure" target/surefire-reports/*.xml 2>/dev/null | awk '{s+=$1} END {print s+0}')
-            SKIPPED=$(grep -c "<skipped" target/surefire-reports/*.xml 2>/dev/null | awk '{s+=$1} END {print s+0}')
-            PASSED=$((TOTAL - FAILED - SKIPPED))
-            FAILED_TESTS=$(grep "<testcase" target/surefire-reports/*.xml 2>/dev/null | grep "<failure" | sed 's/.*classname="\([^"]*\)".*/\1/' | tr '\n' ', ' || echo "None")
+          # Primary: parse Maven console summary from mvn-output.log (most reliable when files are missing)
+          if [ -f mvn-output.log ]; then
+            echo "Parsing test summary from mvn-output.log (primary)"
+            SUMMARY_LINE=$(grep "Tests run:" mvn-output.log | tail -n 1 || true)
+            echo "Found summary line: $SUMMARY_LINE"
+            if [ -n "$SUMMARY_LINE" ]; then
+              # Extract numbers robustly (handle varying spacing or [INFO] prefix)
+              TR=$(echo "$SUMMARY_LINE" | sed -n 's/.*Tests run: *\([0-9]*\).*/\1/p')
+              FAIL=$(echo "$SUMMARY_LINE" | sed -n 's/.*Failures: *\([0-9]*\).*/\1/p')
+              ERR=$(echo "$SUMMARY_LINE" | sed -n 's/.*Errors: *\([0-9]*\).*/\1/p')
+              SKIP=$(echo "$SUMMARY_LINE" | sed -n 's/.*Skipped: *\([0-9]*\).*/\1/p')
 
-          # Fallback: parse Allure JSON results (best-effort)
+              TOTAL=${TR:-0}
+              ERR=${ERR:-0}
+              FAILED=$(( (FAIL:-0) + (ERR:-0) ))
+              SKIPPED=${SKIP:-0}
+              PASSED=$((TOTAL - FAILED - SKIPPED))
+              echo "Parsed from mvn-output -> TOTAL=$TOTAL, FAIL=$FAIL, ERR=$ERR, SKIPPED=$SKIPPED, PASSED=$PASSED"
+            else
+              echo "No summary line present in mvn-output.log"
+            fi
+
+          # Secondary: parse Surefire XMLs if present
+          elif ls target/surefire-reports/*.xml 1> /dev/null 2>&1; then
+            echo "Parsing surefire XMLs..."
+            # show which files and sample
+            echo "Found files: "
+            ls -la target/surefire-reports/*.xml || true
+            sed -n '1,120p' target/surefire-reports/*.xml | sed -n '1,200p' || true
+
+            # Sum attributes from testsuite elements: tests, failures, errors, skipped
+            TOTAL_RAW=$(grep -rho "tests=\"[0-9]\+\"" target/surefire-reports | sed 's/[^0-9]//g' | awk '{s+=$1} END {print s+0}')
+            FAILED_RAW=$(grep -rho "failures=\"[0-9]\+\"" target/surefire-reports | sed 's/[^0-9]//g' | awk '{s+=$1} END {print s+0}')
+            ERR_RAW=$(grep -rho "errors=\"[0-9]\+\"" target/surefire-reports | sed 's/[^0-9]//g' | awk '{s+=$1} END {print s+0}')
+            SKIPPED_RAW=$(grep -rho "skipped=\"[0-9]\+\"" target/surefire-reports | sed 's/[^0-9]//g' | awk '{s+=$1} END {print s+0}')
+
+            echo "attribute counts -> TOTAL_RAW=$TOTAL_RAW, FAILED_RAW=$FAILED_RAW, ERR_RAW=$ERR_RAW, SKIPPED_RAW=$SKIPPED_RAW"
+
+            TOTAL=$(echo "$TOTAL_RAW" | awk '{print $1+0}')
+            FAILED=$(( ( $(echo "$FAILED_RAW" | awk '{print $1+0}') ) + ( $(echo "$ERR_RAW" | awk '{print $1+0}') ) ))
+            SKIPPED=$(echo "$SKIPPED_RAW" | awk '{print $1+0}')
+            PASSED=$((TOTAL - FAILED - SKIPPED))
+
+            # Get failed test names if failures present
+            if [ "$FAILED" -gt 0 ]; then
+              FAILED_TESTS=$(grep -rho "<testcase" target/surefire-reports/*.xml 2>/dev/null | grep "<failure" -n || true)
+              FAILED_TESTS=$(echo "$FAILED_TESTS" | sed -n '1,200p' | tr '\n' ', ' || echo "None")
+            fi
+
+          # Tertiary: parse Allure JSON results (best-effort)
           elif ls allure-results/*.json 1> /dev/null 2>&1; then
-            echo "No surefire XMLs found; parsing allure-results JSON files for statuses"
+            echo "No mvn summary or surefire XMLs; parsing allure-results JSON files for statuses"
             # Count status occurrences in JSON result files
             FAILED=$(grep -rho "\"status\"\s*:\s*\"failed\"" allure-results | wc -l | tr -d ' ')
             PASSED=$(grep -rho "\"status\"\s*:\s*\"passed\"" allure-results | wc -l | tr -d ' ')
             SKIPPED=$(grep -rho "\"status\"\s*:\s*\"skipped\"" allure-results | wc -l | tr -d ' ')
             TOTAL=$((FAILED + PASSED + SKIPPED))
             # Attempt to get failed test names
-            FAILED_TESTS=$(grep -rho "\"status\"\s*:\s*\"failed\".*\"name\"\s*:\s*\"[^"]\+\"" allure-results | sed -E 's/.*\"name\"\s*:\s*\"([^\"]*)\".*/\1/' | tr '\n' ', ' || echo "None")
+            FAILED_TESTS=$(grep -rho "\"status\"\s*:\s*\"failed\".*\"name\"\s*:\s*\"[^\"]\+\"" allure-results | sed -E 's/.*\"name\"\s*:\s*\"([^\"]*)\".*/\1/' | tr '\n' ', ' || echo "None")
+
+          else
+            echo "No test report files found in mvn-output.log, surefire, or allure-results"
           fi
+
+          echo "FINAL COUNTS -> TOTAL=$TOTAL, PASSED=$PASSED, FAILED=$FAILED, SKIPPED=$SKIPPED, FAILED_TESTS=$FAILED_TESTS"
 
           echo "TOTAL=$TOTAL" >> $GITHUB_ENV
           echo "PASSED=$PASSED" >> $GITHUB_ENV
@@ -168,6 +229,16 @@ jobs:
       - name: Send Teams Notification
         if: always()
         run: |
+          # Debug: show environment variables that will be sent (non-secret)
+          echo "-- DEBUG ENV VARS (non-secret) --"
+          echo "TOTAL=$TOTAL"
+          echo "PASSED=$PASSED"
+          echo "FAILED=$FAILED"
+          echo "SKIPPED=$SKIPPED"
+          echo "FAILED_TESTS=$FAILED_TESTS"
+          echo "-- mvn-output.log tail --"
+          tail -n 50 mvn-output.log || true
+
           # Build JSON payload using printf to avoid heredoc/indentation issues
           TOTAL=${TOTAL:-0}
           PASSED=${PASSED:-0}
@@ -177,7 +248,7 @@ jobs:
           RUN_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
 
           # Compose JSON safely (printf will handle variable insertion)
-          payload=$(printf '{"title":"CI/CD Test Results","text":"**Total:** %s\\n**Passed:** %s\\n**Failed:** %s\\n**Skipped:** %s\\n**Failed Tests:** %s\\n**Allure Report:** [Download Report](%s)"}' \
+          payload=$(printf '{"title":"CI/CD Test Results","text":"**Total:** %s\n**Passed:** %s\n**Failed:** %s\n**Skipped:** %s\n**Failed Tests:** %s\n**Allure Report:** [Download Report](%s)"}' \
             "$TOTAL" "$PASSED" "$FAILED" "$SKIPPED" "$FAILED_TESTS" "$RUN_URL")
 
           if [ -z "$TEAMS_WEBHOOK_URL" ]; then
