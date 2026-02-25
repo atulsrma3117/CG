@@ -14,9 +14,11 @@ jobs:
       TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
 
     steps:
+      # 1️⃣ Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # 2️⃣ Cache Maven packages
       - name: Cache Maven packages
         uses: actions/cache@v3
         with:
@@ -25,6 +27,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
+      # 3️⃣ Set up Java
       - name: Set up Java
         uses: actions/setup-java@v3
         with:
@@ -32,23 +35,28 @@ jobs:
           java-version: 17
           cache: maven
 
+      # 4️⃣ List test files for debugging
       - name: List test files
         run: ls -R src/test/java
 
+      # 5️⃣ Build and run tests (with debug)
       - name: Build and run tests
         run: mvn clean test -Dsurefire.suiteXmlFiles=testng.xml -X
         continue-on-error: true
 
+      # 6️⃣ List Surefire reports for debugging
       - name: List Surefire reports
         run: |
           ls -R target/surefire-reports
           cat target/surefire-reports/* || echo "No test reports found."
 
+      # 7️⃣ Copy Surefire results to allure-results (optional)
       - name: Copy Surefire results to allure-results
         run: |
           mkdir -p allure-results
           cp target/surefire-reports/*.xml allure-results/
 
+      # 8️⃣ Install Allure CLI
       - name: Install Allure CLI
         run: |
           ALLURE_VERSION=2.27.0
@@ -56,29 +64,40 @@ jobs:
           tar -zxvf allure-$ALLURE_VERSION.tgz -C /opt/
           echo "/opt/allure-$ALLURE_VERSION/bin" >> $GITHUB_PATH
 
+      # 9️⃣ Check Allure version
       - name: Check Allure version
         run: allure --version
 
-      - name: Generate Allure Report
+      # 🔟 Generate Allure Report with verbose logging
+      - name: Generate Allure Report (with verbose logging)
         run: |
           if [ -d "allure-results" ] && [ "$(ls -A allure-results 2>/dev/null)" ]; then
-            allure generate allure-results --clean -o allure-report
+            allure generate allure-results --clean -o allure-report --verbose
           elif [ -d "target/surefire-reports" ] && [ "$(ls -A target/surefire-reports 2>/dev/null)" ]; then
             mkdir -p allure-results
             cp target/surefire-reports/*.xml allure-results/
-            allure generate allure-results --clean -o allure-report
+            allure generate allure-results --clean -o allure-report --verbose
           else
             echo "No allure results or test reports found, creating placeholder report."
             mkdir -p allure-report
             echo "<html><body><h1>No tests executed</h1></body></html>" > allure-report/index.html
           fi
 
+      # 1️⃣1️⃣ Upload Allure Report Artifact (for download)
       - name: Upload Allure Report Artifact
         uses: actions/upload-artifact@v4
         with:
           name: Allure-Report
           path: allure-report
 
+      # 1️⃣2️⃣ Push Allure Report to GitHub Pages (for viewing online)
+      - name: Push Allure Report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./allure-report   # Path to the directory where the report is generated
+
+      # 1️⃣3️⃣ Parse test results
       - name: Parse test results
         id: results
         run: |
@@ -94,17 +113,11 @@ jobs:
           echo "SKIPPED=$SKIPPED" >> $GITHUB_ENV
           echo "FAILED_TESTS=$FAILED_TESTS" >> $GITHUB_ENV
 
-      - name: Debug Teams Notification variables
-        run: |
-          echo "Total: $TOTAL"
-          echo "Passed: $PASSED"
-          echo "Failed: $FAILED"
-          echo "Skipped: $SKIPPED"
-          echo "Failed Tests: $FAILED_TESTS"
-
+      # 1️⃣4️⃣ Send Teams Notification (always runs, even on failure)
       - name: Send Teams Notification
         if: always()
         run: |
           curl -H 'Content-Type: application/json' -d "{
-            \"title\": \"GitHub Actions Test Results\",
-            \"text\": \"**Total:** $TOTAL\n**Passed:** $PASSED\n**Failed:** $FAILED\n**Skipped:** $SKIPPED\n**Failed Tests:** $FAILED_TESTS\n**Allure Report:** [Download Report]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$
+            \"title\": \"CI/CD Test Results\",
+            \"text\": \"**Total:** $TOTAL\n**Passed:** $PASSED\n**Failed:** $FAILED\n**Skipped:** $SKIPPED\n**Failed Tests:** $FAILED_TESTS\n**Allure Report:** [Download Report]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID)\"
+          }" $TEAMS_WEBHOOK_URL
