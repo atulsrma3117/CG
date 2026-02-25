@@ -26,7 +26,7 @@ public class SignupLoginTest extends BaseTest {
         new HeaderComponent(driver).logout();
 }
 
-    @Test(priority = 3, dependsOnMethods = "logoutFlow")
+    @Test(priority = 3, dependsOnMethods = "TC_02_logoutFlow")
     public void TC_03_loginFlow() {
 
         LoginHelper.loginWithEmail(driver, email);

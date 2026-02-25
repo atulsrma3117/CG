@@ -126,10 +126,20 @@ jobs:
           name: Allure-Report
           path: allure-report
 
+      # Upload ExtentReport artifact (if generated)
+      - name: Upload Extent Report Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Extent-Report
+          path: |
+            test-output/*.html
+            test-output/**/*.html
+
       # 1️⃣2️⃣ Push Allure Report to GitHub Pages (for viewing online)
       - name: Push Allure Report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
+          # prefer a PAT stored in secrets.AUTOMATION_REPO_TOKEN for write access
           github_token: ${{ secrets.AUTOMATION_REPO_TOKEN }}
           publish_dir: ./allure-report   # Path to the directory where the report is generated
 
@@ -225,6 +235,14 @@ jobs:
           echo "SKIPPED=$SKIPPED" >> $GITHUB_ENV
           echo "FAILED_TESTS=$FAILED_TESTS" >> $GITHUB_ENV
 
+          # expose an extent report path if present
+          if ls test-output/*.html 1> /dev/null 2>&1; then
+            EXTENT_PATH=$(ls test-output/*.html | head -n1)
+            echo "EXTENT_REPORT=$EXTENT_PATH" >> $GITHUB_ENV
+          else
+            echo "EXTENT_REPORT=None" >> $GITHUB_ENV
+          fi
+
       # 1️⃣4️⃣ Send Teams Notification (always runs, even on failure)
       - name: Send Teams Notification
         if: always()
@@ -247,9 +265,17 @@ jobs:
           FAILED_TESTS=${FAILED_TESTS:-None}
           RUN_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
 
-          # Compose JSON safely (printf will handle variable insertion)
-          payload=$(printf '{"title":"CI/CD Test Results","text":"**Total:** %s\n**Passed:** %s\n**Failed:** %s\n**Skipped:** %s\n**Failed Tests:** %s\n**Allure Report:** [Download Report](%s)"}' \
-            "$TOTAL" "$PASSED" "$FAILED" "$SKIPPED" "$FAILED_TESTS" "$RUN_URL")
+          # include Extent report link when available
+          EXTENT_REPORT=${EXTENT_REPORT:-None}
+          if [ "$EXTENT_REPORT" != "None" ]; then
+            EXTENT_URL="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/-/suites/${GITHUB_RUN_ID}/artifacts" # best-effort link to artifacts page
+            # Add Extent link text to the message
+            payload=$(printf '{"title":"CI/CD Test Results","text":"**Total:** %s\n**Passed:** %s\n**Failed:** %s\n**Skipped:** %s\n**Failed Tests:** %s\n**Allure Report:** [Download Allure Report](%s)\n**Extent Report (artifact):** [Download Extent Report](%s)"}' \
+              "$TOTAL" "$PASSED" "$FAILED" "$SKIPPED" "$FAILED_TESTS" "$RUN_URL" "$EXTENT_URL")
+          else
+            payload=$(printf '{"title":"CI/CD Test Results","text":"**Total:** %s\n**Passed:** %s\n**Failed:** %s\n**Skipped:** %s\n**Failed Tests:** %s\n**Allure Report:** [Download Allure Report](%s)"}' \
+              "$TOTAL" "$PASSED" "$FAILED" "$SKIPPED" "$FAILED_TESTS" "$RUN_URL")
+          fi
 
           if [ -z "$TEAMS_WEBHOOK_URL" ]; then
             echo "TEAMS_WEBHOOK_URL not set, skipping notification"

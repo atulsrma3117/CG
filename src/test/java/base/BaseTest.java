@@ -10,6 +10,7 @@ import zutilities.*;
 import java.lang.reflect.Method;
 import java.time.Duration;
 
+@Listeners({io.qameta.allure.testng.AllureTestNg.class})
 public class BaseTest extends StartupCode {
     protected static WebDriverWait wait;
     protected final String HOME_PAGE_URL = Config.get("base.url");
@@ -38,7 +39,13 @@ public class BaseTest extends StartupCode {
         String className = this.getClass().getSimpleName();
         String methodName = method.getName();
 
-        test = extent.createTest("Test Name - " + className + " - Test Case - " + methodName);
+        // If listener already created the Extent test, reuse it; otherwise create a fallback test
+        if (StartupCode.test == null) {
+            test = extent.createTest("Test Name - " + className + " - Test Case - " + methodName);
+            StartupCode.test = test;
+        } else {
+            test = StartupCode.test;
+        }
 
         Logs.info(test, "🚀 TEST STARTED on browser: " + (browser.isEmpty() ? Config.get("browser") : browser));
     }
