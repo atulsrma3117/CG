@@ -21,9 +21,16 @@ public class HomePage extends BasePage {
     }
 
     public void clickSkipForNow() {
-        WebElement skipBtn = wait.until(
-                ExpectedConditions.elementToBeClickable(skipLocator)
-        );
-        skipBtn.click();
+        try {
+            // Only attempt to click if the element is visible/present to avoid timeouts when it's already gone
+            if (isDisplayed(skipLocator)) {
+                WebElement skipBtn = wait.until(
+                        ExpectedConditions.elementToBeClickable(skipLocator)
+                );
+                skipBtn.click();
+            }
+        } catch (Exception ignored) {
+            // No-op: caller shouldn't fail if skip button is not present
+        }
     }
 }

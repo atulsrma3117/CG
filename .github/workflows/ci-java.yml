@@ -37,24 +37,46 @@ jobs:
 
       # 4️⃣ List test files for debugging
       - name: List test files
-        run: ls -R src/test/java
+        run: ls -R src/test/java || true
 
       # 5️⃣ Build and run tests (with debug)
       - name: Build and run tests
-        run: mvn clean test -Dsurefire.suiteXmlFiles=testng.xml -X
+        run: mvn clean test -Dsurefire.suiteXmlFiles=testng.xml
         continue-on-error: true
 
-      # 6️⃣ List Surefire reports for debugging
+      # 5.1️⃣ List generated allure-results (if any) for debugging
+      - name: List allure-results (if present)
+        run: |
+          echo "== allure-results contents =="
+          if [ -d "allure-results" ]; then
+            ls -la allure-results || true
+          else
+            echo "no allure-results directory"
+          fi
+
+      # 6️⃣ List Surefire reports for debugging (if present)
       - name: List Surefire reports
         run: |
-          ls -R target/surefire-reports
-          cat target/surefire-reports/* || echo "No test reports found."
+          echo "== surefire-reports contents =="
+          if [ -d "target/surefire-reports" ]; then
+            ls -la target/surefire-reports || true
+            sed -n '1,200p' target/surefire-reports/*.xml || true
+          else
+            echo "no surefire reports found"
+          fi
 
-      # 7️⃣ Copy Surefire results to allure-results (optional)
-      - name: Copy Surefire results to allure-results
+      # 7️⃣ (fallback) Copy Surefire results to allure-results only if there are no real allure-results
+      - name: Copy Surefire results to allure-results (fallback)
         run: |
-          mkdir -p allure-results
-          cp target/surefire-reports/*.xml allure-results/
+          if [ -d "allure-results" ] && [ "$(ls -A allure-results 2>/dev/null)" ]; then
+            echo "allure-results already present, skipping copy of surefire reports"
+          elif [ -d "target/surefire-reports" ] && [ "$(ls -A target/surefire-reports 2>/dev/null)" ]; then
+            echo "No allure-results found; copying surefire XMLs into allure-results as a fallback"
+            mkdir -p allure-results
+            cp target/surefire-reports/*.xml allure-results/ || true
+          else
+            echo "No test report files found to copy"
+          fi
 
       # 8️⃣ Install Allure CLI
       - name: Install Allure CLI
@@ -68,15 +90,17 @@ jobs:
       - name: Check Allure version
         run: allure --version
 
-      # 🔟 Generate Allure Report with verbose logging
+      # 🔟 Generate Allure Report with verbose logging (prefer real allure-results)
       - name: Generate Allure Report (with verbose logging)
         run: |
           if [ -d "allure-results" ] && [ "$(ls -A allure-results 2>/dev/null)" ]; then
-            allure generate allure-results --clean -o allure-report --verbose
+            echo "Generating Allure report from allure-results"
+            allure generate allure-results --clean -o allure-report --verbose || true
           elif [ -d "target/surefire-reports" ] && [ "$(ls -A target/surefire-reports 2>/dev/null)" ]; then
+            echo "No allure-results; attempting to generate from surefire reports copied into allure-results (best-effort)"
             mkdir -p allure-results
-            cp target/surefire-reports/*.xml allure-results/
-            allure generate allure-results --clean -o allure-report --verbose
+            cp target/surefire-reports/*.xml allure-results/ || true
+            allure generate allure-results --clean -o allure-report --verbose || true
           else
             echo "No allure results or test reports found, creating placeholder report."
             mkdir -p allure-report
@@ -97,15 +121,24 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./allure-report   # Path to the directory where the report is generated
 
-      # 1️⃣3️⃣ Parse test results
+      # 1️⃣3️⃣ Parse test results (safe defaults when reports are missing)
       - name: Parse test results
         id: results
         run: |
-          TOTAL=$(grep -c "<testcase" target/surefire-reports/*.xml 2>/dev/null | awk '{s+=$1} END {print s+0}')
-          FAILED=$(grep -c "<failure" target/surefire-reports/*.xml 2>/dev/null | awk '{s+=$1} END {print s+0}')
-          SKIPPED=$(grep -c "<skipped" target/surefire-reports/*.xml 2>/dev/null | awk '{s+=$1} END {print s+0}')
-          PASSED=$((TOTAL - FAILED - SKIPPED))
-          FAILED_TESTS=$(grep "<testcase" target/surefire-reports/*.xml 2>/dev/null | grep "<failure" | sed 's/.*classname="\([^"]*\)".*/\1/' | tr '\n' ', ' || echo "None")
+          # Default values
+          TOTAL=0
+          FAILED=0
+          SKIPPED=0
+          PASSED=0
+          FAILED_TESTS="None"
+
+          if ls target/surefire-reports/*.xml 1> /dev/null 2>&1; then
+            TOTAL=$(grep -c "<testcase" target/surefire-reports/*.xml 2>/dev/null | awk '{s+=$1} END {print s+0}')
+            FAILED=$(grep -c "<failure" target/surefire-reports/*.xml 2>/dev/null | awk '{s+=$1} END {print s+0}')
+            SKIPPED=$(grep -c "<skipped" target/surefire-reports/*.xml 2>/dev/null | awk '{s+=$1} END {print s+0}')
+            PASSED=$((TOTAL - FAILED - SKIPPED))
+            FAILED_TESTS=$(grep "<testcase" target/surefire-reports/*.xml 2>/dev/null | grep "<failure" | sed 's/.*classname="\([^"]*\)".*/\1/' | tr '\n' ', ' || echo "None")
+          fi
 
           echo "TOTAL=$TOTAL" >> $GITHUB_ENV
           echo "PASSED=$PASSED" >> $GITHUB_ENV
@@ -117,6 +150,8 @@ jobs:
       - name: Send Teams Notification
         if: always()
         run: |
+          # Use env vars written to GITHUB_ENV by the previous step
+          echo "Sending Teams notification: Total=$TOTAL, Passed=$PASSED, Failed=$FAILED, Skipped=$SKIPPED"
           curl -H 'Content-Type: application/json' -d "{
             \"title\": \"CI/CD Test Results\",
             \"text\": \"**Total:** $TOTAL\n**Passed:** $PASSED\n**Failed:** $FAILED\n**Skipped:** $SKIPPED\n**Failed Tests:** $FAILED_TESTS\n**Allure Report:** [Download Report]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID)\"
