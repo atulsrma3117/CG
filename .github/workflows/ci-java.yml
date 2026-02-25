@@ -40,7 +40,9 @@ jobs:
         continue-on-error: true
 
       - name: List Surefire reports
-        run: ls -R target/surefire-reports
+        run: |
+          ls -R target/surefire-reports
+          cat target/surefire-reports/* || echo "No test reports found."
 
       - name: Copy Surefire results to allure-results
         run: |
@@ -61,8 +63,12 @@ jobs:
         run: |
           if [ -d "allure-results" ] && [ "$(ls -A allure-results 2>/dev/null)" ]; then
             allure generate allure-results --clean -o allure-report
+          elif [ -d "target/surefire-reports" ] && [ "$(ls -A target/surefire-reports 2>/dev/null)" ]; then
+            mkdir -p allure-results
+            cp target/surefire-reports/*.xml allure-results/
+            allure generate allure-results --clean -o allure-report
           else
-            echo "No allure results found, creating placeholder report."
+            echo "No allure results or test reports found, creating placeholder report."
             mkdir -p allure-report
             echo "<html><body><h1>No tests executed</h1></body></html>" > allure-report/index.html
           fi
@@ -95,3 +101,10 @@ jobs:
           echo "Failed: $FAILED"
           echo "Skipped: $SKIPPED"
           echo "Failed Tests: $FAILED_TESTS"
+
+      - name: Send Teams Notification
+        if: always()
+        run: |
+          curl -H 'Content-Type: application/json' -d "{
+            \"title\": \"GitHub Actions Test Results\",
+            \"text\": \"**Total:** $TOTAL\n**Passed:** $PASSED\n**Failed:** $FAILED\n**Skipped:** $SKIPPED\n**Failed Tests:** $FAILED_TESTS\n**Allure Report:** [Download Report]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$

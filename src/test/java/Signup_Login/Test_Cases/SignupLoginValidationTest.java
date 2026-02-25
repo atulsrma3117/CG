@@ -8,13 +8,15 @@ import org.testng.annotations.Test;
 import zutilities.Logs;
 
 public class SignupLoginValidationTest extends BaseTest {
+
     @BeforeClass
     public void generateEmail() {
         email = "user" + System.currentTimeMillis() + "@yopmail.com";
     }
+
     @Test(priority = 1)
     public void TC_01_signupValidationFlow() throws InterruptedException {
-
+        Logs.info(test, "Test Case Started: TC_01_signupValidationFlow");
         LoginPage login = new LoginPage(driver);
         login.clickLogin();
         login.clickSignUp();
@@ -36,6 +38,7 @@ public class SignupLoginValidationTest extends BaseTest {
 
     @Test(priority = 2)
     public void TC_02_loginValidationFlow() {
+        Logs.info(test, "Test Case Started: TC_02_loginValidationFlow");
 
         LoginPage login = new LoginPage(driver);
         login.clickLogin();
