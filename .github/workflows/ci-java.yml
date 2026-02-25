@@ -166,14 +166,19 @@ jobs:
           # Primary: parse Maven console summary from mvn-output.log (most reliable when files are missing)
           if [ -f mvn-output.log ]; then
             echo "Parsing test summary from mvn-output.log (primary)"
+            # show all matching lines for debugging
+            echo "-- ALL lines matching 'Tests run:' --"
+            grep -n "Tests run:" mvn-output.log || true
             SUMMARY_LINE=$(grep "Tests run:" mvn-output.log | tail -n 1 || true)
             echo "Found summary line: $SUMMARY_LINE"
             if [ -n "$SUMMARY_LINE" ]; then
-              # Extract numbers robustly (handle varying spacing or [INFO] prefix)
-              TR=$(echo "$SUMMARY_LINE" | sed -n 's/.*Tests run: *\([0-9]*\).*/\1/p')
-              FAIL=$(echo "$SUMMARY_LINE" | sed -n 's/.*Failures: *\([0-9]*\).*/\1/p')
-              ERR=$(echo "$SUMMARY_LINE" | sed -n 's/.*Errors: *\([0-9]*\).*/\1/p')
-              SKIP=$(echo "$SUMMARY_LINE" | sed -n 's/.*Skipped: *\([0-9]*\).*/\1/p')
+              # Robust extraction using awk: split by comma and strip non-digits
+              TR=$(echo "$SUMMARY_LINE" | awk -F',' '{gsub(/[^0-9]/,"",$1); print $1}')
+              FAIL=$(echo "$SUMMARY_LINE" | awk -F',' '{gsub(/[^0-9]/,"",$2); print $2}')
+              ERR=$(echo "$SUMMARY_LINE" | awk -F',' '{gsub(/[^0-9]/,"",$3); print $3}')
+              SKIP=$(echo "$SUMMARY_LINE" | awk -F',' '{gsub(/[^0-9]/,"",$4); print $4}')
+
+              echo "EXTRACTED -> TR='$TR' FAIL='$FAIL' ERR='$ERR' SKIP='$SKIP'"
 
               TOTAL=${TR:-0}
               ERR=${ERR:-0}
@@ -229,11 +234,23 @@ jobs:
 
           echo "FINAL COUNTS -> TOTAL=$TOTAL, PASSED=$PASSED, FAILED=$FAILED, SKIPPED=$SKIPPED, FAILED_TESTS=$FAILED_TESTS"
 
-          echo "TOTAL=$TOTAL" >> $GITHUB_ENV
-          echo "PASSED=$PASSED" >> $GITHUB_ENV
-          echo "FAILED=$FAILED" >> $GITHUB_ENV
-          echo "SKIPPED=$SKIPPED" >> $GITHUB_ENV
-          echo "FAILED_TESTS=$FAILED_TESTS" >> $GITHUB_ENV
+          # write to a temp env file for visibility and robustness
+          SUMMARY_FILE=/tmp/test-summary.env
+          printf "TOTAL=%s\n" "$TOTAL" > $SUMMARY_FILE
+          printf "PASSED=%s\n" "$PASSED" >> $SUMMARY_FILE
+          printf "FAILED=%s\n" "$FAILED" >> $SUMMARY_FILE
+          printf "SKIPPED=%s\n" "$SKIPPED" >> $SUMMARY_FILE
+          printf "FAILED_TESTS=%s\n" "$FAILED_TESTS" >> $SUMMARY_FILE
+
+          echo "-- DEBUG: test-summary.env content --"
+          cat $SUMMARY_FILE || true
+
+          # append to GITHUB_ENV so following steps can read
+          cat $SUMMARY_FILE >> $GITHUB_ENV || true
+
+          # debug: show persisted GITHUB_ENV entries
+          echo "-- DEBUG: persisted GITHUB_ENV (last 50 lines) --"
+          tail -n 50 $GITHUB_ENV || true
 
           # expose an extent report path if present
           if ls test-output/*.html 1> /dev/null 2>&1; then
@@ -247,6 +264,22 @@ jobs:
       - name: Send Teams Notification
         if: always()
         run: |
+          # Ensure variables written to GITHUB_ENV in previous step are loaded into this shell
+          if [ -f "$GITHUB_ENV" ]; then
+            echo "Sourcing GITHUB_ENV: $GITHUB_ENV"
+            # shell portability: use set -a to export variables from file
+            set -o allexport
+            source "$GITHUB_ENV"
+            set +o allexport
+          fi
+          # Also source the explicit summary file if present
+          if [ -f /tmp/test-summary.env ]; then
+            echo "Sourcing /tmp/test-summary.env"
+            set -o allexport
+            source /tmp/test-summary.env
+            set +o allexport
+          fi
+
           # Debug: show environment variables that will be sent (non-secret)
           echo "-- DEBUG ENV VARS (non-secret) --"
           echo "TOTAL=$TOTAL"

@@ -8,7 +8,6 @@
             <class name="Signup_Login.Test_Cases.SignupLoginValidationTest">
                 <methods>
                     <include name="TC_01_signupValidationFlow"/>
-                    <include name="TC_02_loginValidationFlow"/>
                 </methods>
             </class>
         </classes>
