@@ -13,7 +13,7 @@ public class OtpPage extends BasePage {
     private By resendBtn = By.xpath("//button[normalize-space()='Resend Code']");
     private By invalidOtpToast = By.xpath("//div[contains(text(),'Invalid or expired token.')]");
     private By resendToast = By.xpath("//div[contains(text(),'OTP sent successfully.')]");
-    private By changeEmailBtn = By.xpath("//button[normalize-space()='Change Emaill']");
+    private By changeEmailBtn = By.xpath("//button[normalize-space()='Change Email']");
 
     public OtpPage(WebDriver driver) {
         super(driver);

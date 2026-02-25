@@ -169,6 +169,8 @@
                     <systemPropertyVariables>
                         <allure.results.directory>${allure.results.directory}</allure.results.directory>
                     </systemPropertyVariables>
+                    <!-- ensure child JVMs receive the property via argLine -->
+                    <argLine>${argLine} -Dallure.results.directory=${allure.results.directory}</argLine>
                 </configuration>
             </plugin>
 

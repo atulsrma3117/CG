@@ -98,6 +98,16 @@ jobs:
             echo "no allure-results directory"
           fi
 
+      # 5.2️⃣ Upload raw allure-results so they are available for download and local reproduction
+      - name: Upload Allure Results (raw)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: |
+            allure-results
+            mvn-output.log
+
       # 6️⃣ List Surefire reports for debugging (if present)
       - name: List Surefire reports
         run: |
