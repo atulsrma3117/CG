@@ -1,8 +1,0 @@
-{
-    "status": "success",
-    "status_code": 200,
-    "message": "OTP sent successfully.",
-    "data": {
-        "OTP": "365844"
-    }
-}

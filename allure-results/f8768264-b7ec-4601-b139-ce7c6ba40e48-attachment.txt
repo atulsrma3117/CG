@@ -1,1 +1,0 @@
-{ "email": "user1771933579179@yopmail.com", "auth_type": "login" }
