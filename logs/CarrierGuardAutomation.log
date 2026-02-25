@@ -5389,3 +5389,6 @@ Session ID: 1d1251d30ecf852fa2ce785733de1d09
 17:53:15.214 [main] INFO  base.BasePage - ℹ️ LoginPage → Click → loginBtn (89 ms)
 17:53:15.216 [main] ERROR base.BasePage - ❌ LoginPage → Click → loginBtn ❌ Cannot invoke "com.aventstack.extentreports.ExtentTest.info(String)" because "test" is null
 17:53:17.575 [main] INFO  zutilities.CustomDriverListener - ℹ️ =========== SUITE FINISHED ===========
+09:05:35.354 [main] DEBUG org.testng.TestNG - suiteXmlPath: "H:\Automation\CarrierGuard\testng.xml"
+09:05:47.091 [main] INFO  base.BaseTest - ℹ️ 🚀 TEST STARTED on browser: chrome
+09:06:00.045 [main] INFO  zutilities.StartupCode - ℹ️  Extent report Loaded.
