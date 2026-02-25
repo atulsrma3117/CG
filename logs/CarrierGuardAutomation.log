@@ -5544,3 +5544,21 @@ Session ID: 1d1251d30ecf852fa2ce785733de1d09
 11:39:44.106 [main] INFO  zutilities.Screenshot - ℹ️ ✨ Screenshot saved to: H:\Automation\CarrierGuard\screenshots\TC_01_signupValidationFlow_2026_02_25_11.39.43.png
 11:39:44.339 [main] INFO  zutilities.StartupCode - ℹ️ Browser Closed
 11:39:45.735 [main] INFO  zutilities.StartupCode - ℹ️  Extent report Loaded.
+11:46:38.738 [main] DEBUG org.testng.TestNG - suiteXmlPath: "H:\Automation\CarrierGuard\testng.xml"
+11:46:54.941 [main] INFO  base.BaseTest - ℹ️ 🚀 TEST STARTED on browser: chrome
+11:46:55.279 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ℹ️ Test Case Started: TC_01_signupValidationFlow
+11:46:55.523 [main] INFO  base.BasePage - ℹ️ LoginPage → Click → loginBtn (80 ms)
+11:46:56.677 [main] INFO  base.BasePage - ℹ️ LoginPage → Click → signUpBtn (70 ms)
+11:46:56.864 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj' is  → Please include an '@' in the email address. 'pnkj' is missing an '@'.
+11:46:57.023 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj@' is  → Please enter a part following '@'. 'pnkj@' is incomplete.
+11:46:57.162 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj@.com' is  → '.' is used at a wrong position in '.com'.
+11:46:57.303 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj.com' is  → Please include an '@' in the email address. 'pnkj.com' is missing an '@'.
+11:46:57.435 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj.com@' is  → Please enter a part following '@'. 'pnkj.com@' is incomplete.
+11:46:57.616 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email 'user1772000214870@yopmail.com' is accepted no validation message (Possibly valid email)
+11:47:06.108 [main] INFO  base.BasePage - ℹ️ OtpPage → Type → 222222 → otpField (60 ms)
+11:47:06.202 [main] INFO  base.BasePage - ℹ️ OtpPage → Click → verifyBtn (59 ms)
+11:47:07.828 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ℹ️ Invalid OTP Toast: Invalid or expired token.
+11:47:41.150 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ℹ️ Resend OTP Toast: OTP sent successfully.
+11:47:41.257 [main] INFO  base.BasePage - ℹ️ OtpPage → Click → changeEmailBtn (64 ms)
+11:47:41.496 [main] INFO  zutilities.StartupCode - ℹ️ Browser Closed
+11:47:42.586 [main] INFO  zutilities.StartupCode - ℹ️  Extent report Loaded.

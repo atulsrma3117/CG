@@ -336,6 +336,34 @@ jobs:
           echo "-- mvn-output.log tail --"
           tail -n 50 mvn-output.log || true
 
+          # If totals look empty (TOTAL is 0) but mvn printed a summary, re-parse mvn-output.log now and override
+          # Always re-parse mvn-output.log summary here (use sed for robustness) and override variables
+          if [ -f mvn-output.log ]; then
+            MVN_SUMMARY=$(grep "Tests run:" mvn-output.log | tail -n 1 || true)
+            if [ -n "$MVN_SUMMARY" ]; then
+              MVN_TOTAL=$(echo "$MVN_SUMMARY" | sed -n 's/.*Tests run: *\([0-9]*\).*/\1/p' || true)
+              MVN_FAIL=$(echo "$MVN_SUMMARY" | sed -n 's/.*Failures: *\([0-9]*\).*/\1/p' || true)
+              MVN_ERR=$(echo "$MVN_SUMMARY" | sed -n 's/.*Errors: *\([0-9]*\).*/\1/p' || true)
+              MVN_SKIP=$(echo "$MVN_SUMMARY" | sed -n 's/.*Skipped: *\([0-9]*\).*/\1/p' || true)
+
+              MVN_TOTAL=${MVN_TOTAL:-0}
+              MVN_FAIL=${MVN_FAIL:-0}
+              MVN_ERR=${MVN_ERR:-0}
+              MVN_SKIP=${MVN_SKIP:-0}
+
+              echo "Parsed mvn summary: total=$MVN_TOTAL, fail=$MVN_FAIL, err=$MVN_ERR, skip=$MVN_SKIP"
+
+              # Always prefer mvn values when present (they are authoritative)
+              if [ "$MVN_TOTAL" -gt 0 ]; then
+                TOTAL=$MVN_TOTAL
+                FAILED=$((MVN_FAIL + MVN_ERR))
+                SKIPPED=$MVN_SKIP
+                PASSED=$((TOTAL - FAILED - SKIPPED))
+                FAILED_TESTS="None"
+              fi
+            fi
+          fi
+
           # Build JSON payload in shell using values from /tmp/test-summary.env (preferred) or fallback vars
           # Ensure summary values are loaded (we sourced /tmp/test-summary.env earlier)
           TOTAL=${TOTAL:-0}
