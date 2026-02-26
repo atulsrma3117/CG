@@ -182,11 +182,13 @@ jobs:
 
       # 1️⃣2️⃣ Push Allure Report to GitHub Pages (for viewing online)
       - name: Push Allure Report to GitHub Pages
+        if : always()  # we want to attempt this even if report generation fails, to show placeholder
         uses: peaceiris/actions-gh-pages@v3
         with:
           # prefer a PAT stored in secrets.AUTOMATION_REPO_TOKEN for write access
           github_token: ${{ secrets.AUTOMATION_REPO_TOKEN }}
-          publish_dir: ./allure-report   # Path to the directory where the report is generated
+          publish_branch: gh.pages   # Path to the directory where the report is generated
+          publish_dir: allure-history
 
       # 1️⃣3️⃣ Parse test results (safe defaults when reports are missing, fallback to Allure JSONs)
       - name: Parse test results

@@ -35,27 +35,14 @@ public class BaseTest extends StartupCode {
     @BeforeMethod
     @Parameters("browser")
     public void initTest(Method method, @Optional("") String browser) {
-
         String className = this.getClass().getSimpleName();
         String methodName = method.getName();
 
-        // If listener already created the Extent test, reuse it; otherwise create a fallback test
-        if (StartupCode.test == null) {
-            test = extent.createTest("Test Name - " + className + " - Test Case - " + methodName);
-            StartupCode.test = test;
-        } else {
-            test = StartupCode.test;
-        }
+        test = extent.createTest("Test Name - " + className + " - Test Case - " + methodName);
 
-        Logs.info(test, "🚀 TEST STARTED on browser: " + (browser.isEmpty() ? Config.get("browser") : browser));
-    }
+        Logs.info(test, "🚀 TEST STARTED on browser: " +
+                (browser.isEmpty() ? Config.get("browser") : browser));
 
-    @AfterMethod(alwaysRun = true)
-    public void takeScreenshot(ITestResult result) throws Exception {
-
-        if (result.getStatus() == ITestResult.FAILURE) {
-            Screenshot.tearDown(result);
-        }
     }
 
     @AfterClass

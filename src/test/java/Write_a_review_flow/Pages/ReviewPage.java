@@ -15,7 +15,8 @@ public class ReviewPage extends BasePage {
     private By daysInput = By.xpath("//input[@type='number']");
 
     private By reviewBox = By.xpath("//textarea[contains(@placeholder,'Share details')]");
-
+    private By mc_popup = By.xpath("//input[@placeholder='MC No.']");
+    private By verify = By.xpath("//button[normalize-space()='Verify & Continue']");
     private By submitBtn = By.xpath("//button[normalize-space()='Submit Review']");
     private By signInpopup = By.cssSelector("div[role='dialog'][data-state='open']");
     private By popupTitle = By.xpath("//div[@role='dialog']//h2[text()='Sign in to write a review']");
@@ -31,7 +32,15 @@ public class ReviewPage extends BasePage {
         scroll(350);
         click(writeReviewBtn);
     }
+    public void enterMCNumber(String mcNumber) {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(mc_popup)).clear();
+        driver.findElement(mc_popup).sendKeys(mcNumber);
+    }
 
+    public void clickVerify() {
+        wait.until(ExpectedConditions.elementToBeClickable(verify)).click();
+
+    }
     public void fillReview(int overallRating, int sliderRating, int paymentDays, String reviewText, String dotNumber) {
 
         click(By.xpath("//button[@aria-label='" + overallRating + " stars']"));

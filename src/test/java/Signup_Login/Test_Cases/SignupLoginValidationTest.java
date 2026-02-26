@@ -2,6 +2,7 @@ package Signup_Login.Test_Cases;
 
 import Signup_Login.Pages.LoginPage;
 import Signup_Login.Pages.OtpPage;
+import Signup_Login.Pages.SignupPage;
 import base.BaseTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -15,22 +16,17 @@ public class SignupLoginValidationTest extends BaseTest {
     }
 
     @Test(priority = 1)
-    public void TC_01_signupValidationFlow() throws InterruptedException {
+    public void TC_01_signupValidationFlow() {
         Logs.info(test, "Test Case Started: TC_01_signupValidationFlow");
         LoginPage login = new LoginPage(driver);
         login.clickLogin();
-        login.clickSignUp();
-
+       login.clickSignUp();
         String[] invalidEmails = {"pnkj", "pnkj@", "pnkj@.com", "pnkj.com", "pnkj.com@", email};
-
         login.validateInvalidEmails(invalidEmails);
-
         OtpPage otp = new OtpPage(driver);
         otp.enterOtp("222222");
         otp.clickVerify();
-
         Logs.info(test, "Invalid OTP Toast: " + otp.getInvalidOtpMessage());
-        otp.clearOtpField();
         otp.clickResend();
         Logs.info(test, "Resend OTP Toast: " + otp.getResendMessage());
         otp.clickChangeEmail();
@@ -41,12 +37,10 @@ public class SignupLoginValidationTest extends BaseTest {
         Logs.info(test, "Test Case Started: TC_02_loginValidationFlow");
 
         LoginPage login = new LoginPage(driver);
-        login.clickLogin();
+        login.clickLogintab();
 
         String[] invalidEmails = {"pnkj", "pnkj@", "pnkj@.com", "pnkj.com", "pnkj.com@", email};
-
         login.validateInvalidEmails(invalidEmails);
-
         Logs.info(test, "User Not Found Message: " + login.getUserNotFoundMessage());
     }
 }

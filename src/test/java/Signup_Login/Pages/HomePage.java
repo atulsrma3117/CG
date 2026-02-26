@@ -22,7 +22,6 @@ public class HomePage extends BasePage {
 
     public void clickSkipForNow() {
         try {
-            // Only attempt to click if the element is visible/present to avoid timeouts when it's already gone
             if (isDisplayed(skipLocator)) {
                 WebElement skipBtn = wait.until(
                         ExpectedConditions.elementToBeClickable(skipLocator)
@@ -30,7 +29,6 @@ public class HomePage extends BasePage {
                 skipBtn.click();
             }
         } catch (Exception ignored) {
-            // No-op: caller shouldn't fail if skip button is not present
         }
     }
 }

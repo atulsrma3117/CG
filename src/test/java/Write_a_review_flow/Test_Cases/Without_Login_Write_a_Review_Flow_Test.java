@@ -27,7 +27,7 @@ public class Without_Login_Write_a_Review_Flow_Test extends BaseTest {
         reviewPage = new ReviewPage(driver);
        // homePage.selectDOTFilter();
         homePage.searchDOT(dotNumber);
-        Logs.pass(driver, test, "DOT filter selected and DOT number searched: " + dotNumber);
+        Logs.pass(driver, test, "MC number searched: " + dotNumber);
 
     }
 

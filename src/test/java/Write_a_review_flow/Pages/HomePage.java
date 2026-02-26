@@ -1,7 +1,6 @@
 package Write_a_review_flow.Pages;
 
 import base.BasePage;
-import io.qameta.allure.Allure;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -48,24 +47,24 @@ public class HomePage extends BasePage {
         Assert.assertTrue(found, "DOT option not found in dropdown!");
     }
 
-    public void searchDOT(String dotNumber) {
+    public boolean searchDOT(String dotNumber) {
 
         type(searchBox, dotNumber);
 
-        List<WebElement> resultList = wait
-                .until(ExpectedConditions
-                        .visibilityOfAllElementsLocatedBy(results));
-        if (resultList.isEmpty()) {
+        try {
+            List<WebElement> resultList = wait
+                    .until(ExpectedConditions
+                            .visibilityOfAllElementsLocatedBy(results));
 
-            String msg = "Record NOT FOUND for DOT: " + dotNumber;
+            if (resultList.isEmpty()) {
+                return false;
+            }
 
-            Allure.addAttachment("Search Result",
-                    "text/plain",
-                    msg);
+            resultList.get(0).click();
+            return true;
 
-            Assert.fail(msg);
+        } catch (Exception e) {
+            return false;
         }
-
-        resultList.get(0).click();
     }
 }

@@ -4,7 +4,15 @@ import base.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import zutilities.Logs;
+
+import java.time.Duration;
+import java.util.List;
+
+import static zutilities.StartupCode.test;
 
 public class OtpPage extends BasePage {
 
@@ -20,7 +28,8 @@ public class OtpPage extends BasePage {
     }
 
     public void enterOtp(String otp) {
-        type(otpField, otp);
+
+            type(otpField, otp);
     }
 
     public void clickVerify() {
@@ -31,8 +40,8 @@ public class OtpPage extends BasePage {
         return wait.until(d -> d.findElement(invalidOtpToast)).getText();
     }
 
-    public void clickResend() throws InterruptedException {
-        clickWhenReady(resendBtn, 35);
+    public void clickResend() {
+        clickWhenReady(resendBtn, 30);
     }
 
     public String getResendMessage() {
@@ -44,6 +53,26 @@ public class OtpPage extends BasePage {
     }
 
     public void clearOtpField() {
-        driver.findElement(otpField).clear();
+        try {
+            WebElement e = driver.findElement(otpField);
+            e.clear();
+            return;
+        } catch (Exception ignored) {
+        }
+
+        List<WebElement> digits = driver.findElements(By.xpath("//input[@maxlength='1' or contains(@class,'otp')]"));
+        for (WebElement d : digits) {
+            try {
+                d.clear();
+            } catch (Exception ignored) {
+            }
+        }
+
+        // Clear tel input
+        try {
+            WebElement t = driver.findElement(By.cssSelector("input[type='tel']"));
+            t.clear();
+        } catch (Exception ignored) {
+        }
     }
 }
