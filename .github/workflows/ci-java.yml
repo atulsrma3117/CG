@@ -11,11 +11,11 @@ permissions:
   contents: write
 
 jobs:
-  # 1️⃣ Run Tests and Upload Artifacts
+  # 1️⃣ Run Tests
   run-tests:
     runs-on: ubuntu-latest
     outputs:
-      test-job-run-id: ${{ github.run_id }}
+      run-id: ${{ github.run_id }}
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v3
@@ -32,19 +32,20 @@ jobs:
           set -o pipefail
           mvn clean test -Dsurefire.suiteXmlFiles=testng.xml 2>&1 | tee mvn-output.log
 
+      # Upload Maven output and Allure results temporarily for next job
       - name: Upload Maven Output
         uses: actions/upload-artifact@v4
         with:
           name: mvn-output
           path: mvn-output.log
-          retention-days: 7
+          retention-days: 1
 
       - name: Upload Allure Results
         uses: actions/upload-artifact@v4
         with:
           name: allure-results
           path: allure-results
-          retention-days: 7
+          retention-days: 1
 
   # 2️⃣ Generate Allure Report
   generate-report:
@@ -67,7 +68,7 @@ jobs:
           name: allure-results
           path: allure-results
 
-      - name: Generate Allure Single-File Report
+      - name: Generate Single-File Allure Report
         run: |
           export PATH=/opt/allure-2.27.0/bin:$PATH
           if [ -d "allure-results" ]; then
@@ -93,6 +94,7 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v3
 
+      # Download Maven output for summary counts
       - name: Download Maven Output
         uses: actions/download-artifact@v4
         with:
@@ -137,7 +139,7 @@ jobs:
           FAILED=${FAILED:-0}
           SKIPPED=${SKIPPED:-0}
 
-          RUN_URL="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${{ needs.run-tests.outputs.test-job-run-id }}"
+          RUN_URL="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${{ needs.run-tests.outputs['test-job-run-id'] || github.run_id }}"
 
           TEXT="**Carrier Guard CI/CD Test Results**\n\n**Total:** ${TOTAL}\n**Passed:** ${PASSED}\n**Failed:** ${FAILED}\n**Skipped:** ${SKIPPED}\n\n**Allure Report (7-day retention):** [View and Download](${RUN_URL})"
 
