@@ -99,17 +99,19 @@ jobs:
       # 8️⃣ Get Artifact URL (GitHub Actions page)
       - name: Get Artifact URL
         id: artifact-url
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           ARTIFACT_NAME="allure-report-${GITHUB_RUN_ID}"
           ARTIFACT_ID=$(gh api -H "Accept: application/vnd.github+json" \
             /repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/artifacts \
             | jq -r ".artifacts[] | select(.name==\"$ARTIFACT_NAME\") | .id")
-
+          
           if [ -z "$ARTIFACT_ID" ]; then
             echo "Artifact ID not found!"
             exit 1
           fi
-
+          
           ARTIFACT_URL="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/artifacts/${ARTIFACT_ID}"
           echo "ARTIFACT_URL=$ARTIFACT_URL" >> $GITHUB_ENV
 
