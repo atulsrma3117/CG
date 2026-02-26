@@ -34,13 +34,13 @@ jobs:
       - name: Build Project & Run Tests
         run: |
           set -o pipefail
-          mvn clean test -Dsurefire.suiteXmlFiles=testng.xml 2>&1 | tee mvn-output.log || true
+          mvn clean test -Dsurefire.suiteXmlFiles=testng.xml
 
       # 4️⃣ Install Allure CLI
       - name: Install Allure CLI
         run: |
           ALLURE_VERSION=2.27.0
-          wget https://github.com/allure-framework/allure2/releases/download/$ALLURE_VERSION/allure-$ALLURE_VERSION.tgz
+          wget -q https://github.com/allure-framework/allure2/releases/download/$ALLURE_VERSION/allure-$ALLURE_VERSION.tgz
           tar -zxvf allure-$ALLURE_VERSION.tgz -C /opt/
           echo "/opt/allure-$ALLURE_VERSION/bin" >> $GITHUB_PATH
 
@@ -63,9 +63,38 @@ jobs:
           publish_dir: allure-report
           destination_dir: ${{ github.run_id }}
 
-      # 7️⃣ Parse Test Summary From Maven Output
+      # 7️⃣ Cleanup Reports Older Than 30 Days
+      - name: Cleanup Old Reports (30 Days Retention)
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+
+          git clone --depth=1 --branch gh-pages \
+            https://x-access-token:${{ secrets.AUTOMATION_REPO_TOKEN }}@github.com/${{ github.repository }}.git gh-pages
+
+          cd gh-pages
+
+          CURRENT_TIME=$(date +%s)
+          THIRTY_DAYS=$((30*24*60*60))
+
+          for dir in */ ; do
+            if [ -d "$dir" ]; then
+              LAST_COMMIT_TIME=$(git log -1 --format="%ct" -- "$dir" || echo 0)
+              AGE=$((CURRENT_TIME - LAST_COMMIT_TIME))
+
+              if [ "$AGE" -gt "$THIRTY_DAYS" ]; then
+                echo "Deleting old report folder: $dir"
+                rm -rf "$dir"
+              fi
+            fi
+          done
+
+          git add .
+          git commit -m "Cleanup reports older than 30 days" || echo "No old reports to delete"
+          git push
+
+      # 8️⃣ Parse Test Summary
       - name: Parse Test Summary
-        id: results
         run: |
           TOTAL=0
           FAILED=0
@@ -95,7 +124,7 @@ jobs:
           echo "FAILED=$FAILED" >> $GITHUB_ENV
           echo "SKIPPED=$SKIPPED" >> $GITHUB_ENV
 
-      # 8️⃣ Send Microsoft Teams Notification
+      # 9️⃣ Send Microsoft Teams Notification
       - name: Send Microsoft Teams Notification
         if: always()
         run: |
@@ -106,7 +135,7 @@ jobs:
 
           PAGES_URL="https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/${GITHUB_RUN_ID}/"
 
-          TEXT="**CI/CD Test Results**\\n\\n**Total:** ${TOTAL}\\n**Passed:** ${PASSED}\\n**Failed:** ${FAILED}\\n**Skipped:** ${SKIPPED}\\n\\n**Allure Report:** [View Report](${PAGES_URL})"
+          TEXT="**CI/CD Test Results**\\n\\n**Total:** ${TOTAL}\\n**Passed:** ${PASSED}\\n**Failed:** ${FAILED}\\n**Skipped:** ${SKIPPED}\\n\\n**Allure Report (Available 30 Days):** [View Report](${PAGES_URL})"
 
           JSON_PAYLOAD=$(printf '{"title":"Carrier Guard Automation","text":"%s"}' "${TEXT}")
 
