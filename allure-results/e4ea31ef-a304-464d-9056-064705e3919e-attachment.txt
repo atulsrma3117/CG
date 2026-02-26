@@ -1,0 +1,1 @@
+{ "email": "user154345594712400_d01fed5f@yopmail.com", "auth_type": "signup" }
