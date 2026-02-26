@@ -115,6 +115,7 @@ jobs:
             mkdir -p empty-report
             echo "<html><body><h1>No tests executed</h1></body></html>" > empty-report/index.html
             zip -r allure-report.zip empty-report
+          fi
 
       - name: Upload Allure Report Artifact
         uses: actions/upload-artifact@v4
