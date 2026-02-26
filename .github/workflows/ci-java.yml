@@ -11,19 +11,17 @@ permissions:
   contents: write
 
 jobs:
-
-  # 1️⃣ Run Tests
-  run-tests:
+  carrier-guard:
     runs-on: ubuntu-latest
-    outputs:
-      total: ${{ steps.parse.outputs.total }}
-      passed: ${{ steps.parse.outputs.passed }}
-      failed: ${{ steps.parse.outputs.failed }}
-      skipped: ${{ steps.parse.outputs.skipped }}
+    env:
+      TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+
     steps:
+      # 1️⃣ Checkout Source Code
       - name: Checkout Source Code
         uses: actions/checkout@v3
 
+      # 2️⃣ Set Up Java 17
       - name: Set Up Java 17
         uses: actions/setup-java@v3
         with:
@@ -31,32 +29,60 @@ jobs:
           java-version: 17
           cache: maven
 
+      # 3️⃣ Build Project & Run Tests (generate Allure results)
       - name: Build Project & Run Tests
         run: |
           set -o pipefail
           mvn clean test -Dsurefire.suiteXmlFiles=testng.xml 2>&1 | tee mvn-output.log
 
+      # 4️⃣ Install Allure CLI
+      - name: Install Allure CLI
+        run: |
+          ALLURE_VERSION=2.27.0
+          wget -q https://github.com/allure-framework/allure2/releases/download/$ALLURE_VERSION/allure-$ALLURE_VERSION.tgz
+          tar -zxvf allure-$ALLURE_VERSION.tgz -C /opt/
+          echo "/opt/allure-$ALLURE_VERSION/bin" >> $GITHUB_PATH
+
+      # 5️⃣ Generate Allure Single-File Report
+      - name: Generate Single-File Allure Report
+        run: |
+          if [ -d "allure-results" ]; then
+            allure generate --clean allure-results -o allure-report.zip --single-file
+          else
+            echo "No allure-results found, creating empty report"
+            mkdir -p empty-report
+            echo "<html><body><h1>No tests executed</h1></body></html>" > empty-report/index.html
+            zip -r allure-report.zip empty-report
+          fi
+
+      # 6️⃣ Upload Allure Report Artifact
+      - name: Upload Allure Report Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report-${{ github.run_id }}
+          path: allure-report.zip
+          retention-days: 7   # 7-day retention
+
+      # 7️⃣ Parse Test Summary from Maven output
       - name: Parse Test Summary
-        id: parse
+        id: results
         run: |
           TOTAL=0
-          PASSED=0
           FAILED=0
           SKIPPED=0
+          PASSED=0
 
           if [ -f mvn-output.log ]; then
-            # Take the last line containing summary
             SUMMARY=$(grep "Tests run:" mvn-output.log | tail -n 1 || true)
             if [ -n "$SUMMARY" ]; then
-              TOTAL=$(echo "$SUMMARY" | grep -oP 'Tests run:\s*\K[0-9]+')
-              FAIL=$(echo "$SUMMARY" | grep -oP 'Failures:\s*\K[0-9]+')
-              ERR=$(echo "$SUMMARY" | grep -oP 'Errors:\s*\K[0-9]+')
-              SKIPPED=$(echo "$SUMMARY" | grep -oP 'Skipped:\s*\K[0-9]+')
+              TOTAL=$(echo "$SUMMARY" | sed -n 's/.*Tests run: *\([0-9]*\).*/\1/p')
+              FAIL=$(echo "$SUMMARY" | sed -n 's/.*Failures: *\([0-9]*\).*/\1/p')
+              ERR=$(echo "$SUMMARY" | sed -n 's/.*Errors: *\([0-9]*\).*/\1/p')
+              SKIPPED=$(echo "$SUMMARY" | sed -n 's/.*Skipped: *\([0-9]*\).*/\1/p')
 
-              # Default to 0 if any value is missing
-              TOTAL=${TOTAL:-0}
               FAIL=${FAIL:-0}
               ERR=${ERR:-0}
+              TOTAL=${TOTAL:-0}
               SKIPPED=${SKIPPED:-0}
 
               FAILED=$((FAIL + ERR))
@@ -64,83 +90,21 @@ jobs:
             fi
           fi
 
-          echo "total=$TOTAL" >> $GITHUB_OUTPUT
-          echo "passed=$PASSED" >> $GITHUB_OUTPUT
-          echo "failed=$FAILED" >> $GITHUB_OUTPUT
-          echo "skipped=$SKIPPED" >> $GITHUB_OUTPUT
+          echo "TOTAL=$TOTAL" >> $GITHUB_ENV
+          echo "PASSED=$PASSED" >> $GITHUB_ENV
+          echo "FAILED=$FAILED" >> $GITHUB_ENV
+          echo "SKIPPED=$SKIPPED" >> $GITHUB_ENV
 
-      - name: Upload Allure Results Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-results
-          path: allure-results
-          retention-days: 7
-
-  # 2️⃣ Generate Allure Report
-  generate-report:
-    runs-on: ubuntu-latest
-    needs: run-tests
-    steps:
-      - name: Checkout Source Code
-        uses: actions/checkout@v3
-
-      - name: Restore Allure CLI from Cache
-        uses: actions/cache@v3
-        id: allure-cache
-        with:
-          path: /opt/allure-2.27.0
-          key: allure-2.27.0
-
-      - name: Install Allure CLI if not cached
-        if: steps.allure-cache.outputs.cache-hit != 'true'
-        run: |
-          ALLURE_VERSION=2.27.0
-          wget -q https://github.com/allure-framework/allure2/releases/download/$ALLURE_VERSION/allure-$ALLURE_VERSION.tgz
-          tar -zxvf allure-$ALLURE_VERSION.tgz -C /opt/
-          echo "/opt/allure-$ALLURE_VERSION/bin" >> $GITHUB_PATH
-
-      - name: Download Allure Results
-        uses: actions/download-artifact@v4
-        with:
-          name: allure-results
-          path: allure-results
-
-      - name: Generate Allure Report
-        run: |
-          export PATH=/opt/allure-2.27.0/bin:$PATH
-          
-          rm -rf allure-report allure-report.html
-          
-          if [ -d "allure-results" ] && [ "$(ls -A allure-results)" ]; then
-            allure generate allure-results --clean --single-file -o .
-            mv index.html allure-report.html
-          else
-            echo "<html><body><h1>No tests executed</h1></body></html>" > allure-report.html
-          fi
-
-      - name: Upload Allure Report Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-report
-          path: allure-report.html
-          retention-days: 7
-
-  # 3️⃣ Send Microsoft Teams Notification
-  send-teams:
-    runs-on: ubuntu-latest
-    needs:
-      - run-tests
-      - generate-report
-    steps:
+      # 8️⃣ Send Microsoft Teams Notification (link to GitHub Actions run)
       - name: Send Teams Notification
-        env:
-          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+        if: always()
         run: |
-          TOTAL=${{ needs.run-tests.outputs.total }}
-          PASSED=${{ needs.run-tests.outputs.passed }}
-          FAILED=${{ needs.run-tests.outputs.failed }}
-          SKIPPED=${{ needs.run-tests.outputs.skipped }}
+          TOTAL=${TOTAL:-0}
+          PASSED=${PASSED:-0}
+          FAILED=${FAILED:-0}
+          SKIPPED=${SKIPPED:-0}
 
+          # Redirect Teams link to GitHub Actions run page
           RUN_URL="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
 
           TEXT="**Carrier Guard CI/CD Test Results**\n\n**Total:** ${TOTAL}\n**Passed:** ${PASSED}\n**Failed:** ${FAILED}\n**Skipped:** ${SKIPPED}\n\n**Allure Report (7-day retention):** [View and Download](${RUN_URL})"
