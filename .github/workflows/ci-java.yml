@@ -15,7 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # needed to create/delete releases
 
     steps:
       # 1️⃣ Checkout Source Code
@@ -30,7 +29,7 @@ jobs:
           java-version: 17
           cache: maven
 
-      # 3️⃣ Build Project & Run Tests
+      # 3️⃣ Build Project & Run Tests (generate Allure results)
       - name: Build Project & Run Tests
         run: |
           set -o pipefail
@@ -44,37 +43,25 @@ jobs:
           tar -zxvf allure-$ALLURE_VERSION.tgz -C /opt/
           echo "/opt/allure-$ALLURE_VERSION/bin" >> $GITHUB_PATH
 
-      # 5️⃣ Generate Single-File Allure Report
-      - name: Generate Allure Single-File Report
+      # 5️⃣ Generate Allure Single-File Report
+      - name: Generate Single-File Allure Report
         run: |
           if [ -d "allure-results" ]; then
-            allure generate allure-results --clean --single-file -o allure-report.zip
+            allure generate --clean allure-results -o allure-report.zip --single-file
           else
-            echo "No tests executed, creating empty report"
-            echo "<html><body><h1>No tests executed</h1></body></html>" > index.html
-            zip -r allure-report.zip index.html
+            echo "No allure-results found, creating empty report"
+            mkdir -p empty-report
+            echo "<html><body><h1>No tests executed</h1></body></html>" > empty-report/index.html
+            zip -r allure-report.zip empty-report
           fi
 
-      # 6️⃣ Create GitHub Release for Allure Report
-      - name: Create Release with Allure Report
-        id: create_release
-        run: |
-          TAG="run-${GITHUB_RUN_ID}"
-          RELEASE_RESPONSE=$(curl -s -X POST \
-            -H "Authorization: token $GITHUB_TOKEN" \
-            -H "Content-Type: application/json" \
-            -d "{\"tag_name\":\"$TAG\",\"name\":\"Allure Report $GITHUB_RUN_ID\",\"draft\":false,\"prerelease\":false}" \
-            https://api.github.com/repos/${GITHUB_REPOSITORY}/releases)
-          
-          RELEASE_ID=$(echo "$RELEASE_RESPONSE" | jq -r '.id')
-          echo "RELEASE_ID=$RELEASE_ID" >> $GITHUB_ENV
-
-          # Upload artifact to release
-          curl -s -X POST \
-            -H "Authorization: token $GITHUB_TOKEN" \
-            -H "Content-Type: application/zip" \
-            --data-binary @allure-report.zip \
-            "https://uploads.github.com/repos/${GITHUB_REPOSITORY}/releases/$RELEASE_ID/assets?name=allure-report-${GITHUB_RUN_ID}.zip"
+      # 6️⃣ Upload Allure Report Artifact
+      - name: Upload Allure Report Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report-${{ github.run_id }}
+          path: allure-report.zip
+          retention-days: 30
 
       # 7️⃣ Parse Test Summary from Maven output
       - name: Parse Test Summary
@@ -108,7 +95,7 @@ jobs:
           echo "FAILED=$FAILED" >> $GITHUB_ENV
           echo "SKIPPED=$SKIPPED" >> $GITHUB_ENV
 
-      # 8️⃣ Send Microsoft Teams Notification
+      # 8️⃣ Send Microsoft Teams Notification with Artifact Link
       - name: Send Teams Notification
         if: always()
         run: |
@@ -116,11 +103,11 @@ jobs:
           PASSED=${PASSED:-0}
           FAILED=${FAILED:-0}
           SKIPPED=${SKIPPED:-0}
-          RELEASE_ID=${RELEASE_ID:-0}
 
-          DOWNLOAD_URL="https://github.com/${GITHUB_REPOSITORY}/releases/download/run-${GITHUB_RUN_ID}/allure-report-${GITHUB_RUN_ID}.zip"
+          ARTIFACT_NAME="allure-report-${GITHUB_RUN_ID}"
+          ARTIFACT_URL="https://github.com/${GITHUB_REPOSITORY}/suites/${GITHUB_RUN_ID}/artifacts?artifact_name=${ARTIFACT_NAME}"
 
-          TEXT="**Carrier Guard CI/CD Test Results**\n\n**Total:** ${TOTAL}\n**Passed:** ${PASSED}\n**Failed:** ${FAILED}\n**Skipped:** ${SKIPPED}\n\n**Allure Report (7-day retention):** [Download](${DOWNLOAD_URL})"
+          TEXT="**Carrier Guard CI/CD Test Results**\n\n**Total:** ${TOTAL}\n**Passed:** ${PASSED}\n**Failed:** ${FAILED}\n**Skipped:** ${SKIPPED}\n\n**Allure Report (ZIP, 30-day retention):** [Download](${ARTIFACT_URL})"
 
           JSON_PAYLOAD=$(printf '{"title":"Carrier Guard Automation","text":"%s"}' "${TEXT}")
 
@@ -131,23 +118,3 @@ jobs:
 
           echo "Sending Teams notification..."
           curl -H 'Content-Type: application/json' -d "$JSON_PAYLOAD" "$TEAMS_WEBHOOK_URL"
-
-      # 9️⃣ Delete Old Releases (7 Days Retention)
-      - name: Delete Old Releases
-        run: |
-          CURRENT_TIME=$(date +%s)
-          SEVEN_DAYS=$((7*24*60*60))
-
-          RELEASES=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-            "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases")
-
-          echo "$RELEASES" | jq -r '.[] | "\(.id) \(.created_at)"' | while read ID CREATED_AT; do
-            RELEASE_TIME=$(date -d "$CREATED_AT" +%s)
-            AGE=$((CURRENT_TIME - RELEASE_TIME))
-
-            if [ "$AGE" -gt "$SEVEN_DAYS" ]; then
-              echo "Deleting release $ID created at $CREATED_AT"
-              curl -s -X DELETE -H "Authorization: token $GITHUB_TOKEN" \
-                "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/$ID"
-            fi
-          done
