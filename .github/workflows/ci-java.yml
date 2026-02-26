@@ -29,33 +29,41 @@ jobs:
           java-version: 17
           cache: maven
 
-      # 3️⃣ Build Project & Run Tests (generate Extent reports)
+      # 3️⃣ Build Project & Run Tests (generate Allure results)
       - name: Build Project & Run Tests
         run: |
           set -o pipefail
           mvn clean test -Dsurefire.suiteXmlFiles=testng.xml 2>&1 | tee mvn-output.log
 
-      # 4️⃣ Create GitHub Release for This Run
-      - name: Create Release
-        id: create_release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ci-run-${{ github.run_id }}
-          name: "Extent Report Run ${{ github.run_id }}"
-          body: "Automated CI/CD Extent Report for run ${{ github.run_id }}"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # 4️⃣ Install Allure CLI
+      - name: Install Allure CLI
+        run: |
+          ALLURE_VERSION=2.27.0
+          wget -q https://github.com/allure-framework/allure2/releases/download/$ALLURE_VERSION/allure-$ALLURE_VERSION.tgz
+          tar -zxvf allure-$ALLURE_VERSION.tgz -C /opt/
+          echo "/opt/allure-$ALLURE_VERSION/bin" >> $GITHUB_PATH
 
-      # 5️⃣ Upload Extent Report as Release Asset
-      - name: Upload Extent Report to Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: test-output/**/*.html
-          tag_name: ci-run-${{ github.run_id }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # 5️⃣ Generate Allure Single-File Report
+      - name: Generate Single-File Allure Report
+        run: |
+          if [ -d "allure-results" ]; then
+            allure generate --clean allure-results -o allure-report.zip --single-file
+          else
+            echo "No allure-results found, creating empty report"
+            mkdir -p empty-report
+            echo "<html><body><h1>No tests executed</h1></body></html>" > empty-report/index.html
+            zip -r allure-report.zip empty-report
+          fi
 
-      # 6️⃣ Parse Test Summary from Maven output
+      # 6️⃣ Upload Allure Report Artifact
+      - name: Upload Allure Report Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report-${{ github.run_id }}
+          path: allure-report.zip
+          retention-days: 30
+
+      # 7️⃣ Parse Test Summary from Maven output
       - name: Parse Test Summary
         id: results
         run: |
@@ -87,7 +95,7 @@ jobs:
           echo "FAILED=$FAILED" >> $GITHUB_ENV
           echo "SKIPPED=$SKIPPED" >> $GITHUB_ENV
 
-      # 7️⃣ Send Microsoft Teams Notification with Release Download Link
+      # 8️⃣ Send Microsoft Teams Notification with Artifact Link
       - name: Send Teams Notification
         if: always()
         run: |
@@ -96,10 +104,10 @@ jobs:
           FAILED=${FAILED:-0}
           SKIPPED=${SKIPPED:-0}
 
-          # Release download link (HTML report files uploaded as assets)
-          RELEASE_URL="https://github.com/${GITHUB_REPOSITORY}/releases/tag/ci-run-${GITHUB_RUN_ID}"
+          ARTIFACT_NAME="allure-report-${GITHUB_RUN_ID}"
+          ARTIFACT_URL="https://github.com/${GITHUB_REPOSITORY}/suites/${GITHUB_RUN_ID}/artifacts?artifact_name=${ARTIFACT_NAME}"
 
-          TEXT="**Carrier Guard CI/CD Test Results**\n\n**Total:** ${TOTAL}\n**Passed:** ${PASSED}\n**Failed:** ${FAILED}\n**Skipped:** ${SKIPPED}\n\n**Extent Report:** [Download from Release](${RELEASE_URL})"
+          TEXT="**Carrier Guard CI/CD Test Results**\n\n**Total:** ${TOTAL}\n**Passed:** ${PASSED}\n**Failed:** ${FAILED}\n**Skipped:** ${SKIPPED}\n\n**Allure Report (ZIP, 30-day retention):** [Download](${ARTIFACT_URL})"
 
           JSON_PAYLOAD=$(printf '{"title":"Carrier Guard Automation","text":"%s"}' "${TEXT}")
 
