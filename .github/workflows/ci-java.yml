@@ -63,36 +63,35 @@ jobs:
           publish_dir: allure-report
           destination_dir: ${{ github.run_id }}
 
-      # 7️⃣ Cleanup Reports Older Than 30 Days
       - name: Cleanup Old Reports (30 Days Retention)
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "actions@github.com"
-
-          git clone --depth=1 --branch gh-pages \
-            https://x-access-token:${{ secrets.AUTOMATION_REPO_TOKEN }}@github.com/${{ github.repository }}.git gh-pages
-
+          
+          # Checkout gh-pages branch to local folder
+          git clone --depth=1 --branch gh-pages https://github.com/${GITHUB_REPOSITORY}.git gh-pages
           cd gh-pages
-
+          
           CURRENT_TIME=$(date +%s)
           THIRTY_DAYS=$((30*24*60*60))
-
+          
           for dir in */ ; do
-            if [ -d "$dir" ]; then
-              LAST_COMMIT_TIME=$(git log -1 --format="%ct" -- "$dir" || echo 0)
-              AGE=$((CURRENT_TIME - LAST_COMMIT_TIME))
-
-              if [ "$AGE" -gt "$THIRTY_DAYS" ]; then
-                echo "Deleting old report folder: $dir"
-                rm -rf "$dir"
-              fi
-            fi
+          if [ -d "$dir" ]; then
+           LAST_COMMIT_TIME=$(git log -1 --format="%ct" -- "$dir" || echo 0)
+           AGE=$((CURRENT_TIME - LAST_COMMIT_TIME))
+           if [ "$AGE" -gt "$THIRTY_DAYS" ]; then
+             echo "Deleting old report folder: $dir"
+             rm -rf "$dir"
+           fi
+          fi
           done
-
+          
           git add .
           git commit -m "Cleanup reports older than 30 days" || echo "No old reports to delete"
-          git push
-
+          
+          # Push using token
+          git remote set-url origin https://x-access-token:${{ secrets.AUTOMATION_REPO_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git
+          git push origin gh-pages
       # 8️⃣ Parse Test Summary
       - name: Parse Test Summary
         run: |
@@ -123,27 +122,89 @@ jobs:
           echo "PASSED=$PASSED" >> $GITHUB_ENV
           echo "FAILED=$FAILED" >> $GITHUB_ENV
           echo "SKIPPED=$SKIPPED" >> $GITHUB_ENV
-
-      # 9️⃣ Send Microsoft Teams Notification
-      - name: Send Microsoft Teams Notification
+          
+          # 1️⃣4️⃣ Send Teams Notification (always runs, even on failure)
+      - name: Send Teams Notification
         if: always()
         run: |
+          # If /tmp/test-summary.env exists, use it directly to build payload (most reliable)
+          if [ -f /tmp/test-summary.env ]; then
+            echo "Loading /tmp/test-summary.env for payload values"
+            set -o allexport
+            source /tmp/test-summary.env
+            set +o allexport
+          fi
+          # Ensure variables written to GITHUB_ENV in previous step are loaded into this shell
+          if [ -f "$GITHUB_ENV" ]; then
+            echo "Sourcing GITHUB_ENV: $GITHUB_ENV"
+            # shell portability: use set -a to export variables from file
+            set -o allexport
+            source "$GITHUB_ENV"
+            set +o allexport
+          fi
+          # Also source the explicit summary file if present
+          if [ -f /tmp/test-summary.env ]; then
+            echo "Sourcing /tmp/test-summary.env"
+            set -o allexport
+            source /tmp/test-summary.env
+            set +o allexport
+          fi
+
+          # Debug: show environment variables that will be sent (non-secret)
+          echo "-- DEBUG ENV VARS (non-secret) --"
+          echo "TOTAL=$TOTAL"
+          echo "PASSED=$PASSED"
+          echo "FAILED=$FAILED"
+          echo "SKIPPED=$SKIPPED"
+          echo "FAILED_TESTS=$FAILED_TESTS"
+          echo "-- mvn-output.log tail --"
+          tail -n 50 mvn-output.log || true
+
+          # If totals look empty (TOTAL is 0) but mvn printed a summary, re-parse mvn-output.log now and override
+          # Always re-parse mvn-output.log summary here (use sed for robustness) and override variables
+          if [ -f mvn-output.log ]; then
+            MVN_SUMMARY=$(grep "Tests run:" mvn-output.log | tail -n 1 || true)
+            if [ -n "$MVN_SUMMARY" ]; then
+              MVN_TOTAL=$(echo "$MVN_SUMMARY" | sed -n 's/.*Tests run: *\([0-9]*\).*/\1/p' || true)
+              MVN_FAIL=$(echo "$MVN_SUMMARY" | sed -n 's/.*Failures: *\([0-9]*\).*/\1/p' || true)
+              MVN_ERR=$(echo "$MVN_SUMMARY" | sed -n 's/.*Errors: *\([0-9]*\).*/\1/p' || true)
+              MVN_SKIP=$(echo "$MVN_SUMMARY" | sed -n 's/.*Skipped: *\([0-9]*\).*/\1/p' || true)
+
+              MVN_TOTAL=${MVN_TOTAL:-0}
+              MVN_FAIL=${MVN_FAIL:-0}
+              MVN_ERR=${MVN_ERR:-0}
+              MVN_SKIP=${MVN_SKIP:-0}
+
+              echo "Parsed mvn summary: total=$MVN_TOTAL, fail=$MVN_FAIL, err=$MVN_ERR, skip=$MVN_SKIP"
+
+              # Always prefer mvn values when present (they are authoritative)
+              if [ "$MVN_TOTAL" -gt 0 ]; then
+                TOTAL=$MVN_TOTAL
+                FAILED=$((MVN_FAIL + MVN_ERR))
+                SKIPPED=$MVN_SKIP
+                PASSED=$((TOTAL - FAILED - SKIPPED))
+                FAILED_TESTS="None"
+              fi
+            fi
+          fi
+
+          # Build JSON payload in shell using values from /tmp/test-summary.env (preferred) or fallback vars
+          # Ensure summary values are loaded (we sourced /tmp/test-summary.env earlier)
           TOTAL=${TOTAL:-0}
           PASSED=${PASSED:-0}
           FAILED=${FAILED:-0}
           SKIPPED=${SKIPPED:-0}
+          FAILED_TESTS=${FAILED_TESTS:-None}
+          RUN_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
 
-          PAGES_URL="https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/${GITHUB_RUN_ID}/"
-
-          TEXT="**CI/CD Test Results**\\n\\n**Total:** ${TOTAL}\\n**Passed:** ${PASSED}\\n**Failed:** ${FAILED}\\n**Skipped:** ${SKIPPED}\\n\\n**Allure Report (Available 30 Days):** [View Report](${PAGES_URL})"
-
-          JSON_PAYLOAD=$(printf '{"title":"Carrier Guard Automation","text":"%s"}' "${TEXT}")
+          # Build the text with explicit \n escapes so JSON contains escaped newlines
+          TEXT="**Total:** ${TOTAL}\\n**Passed:** ${PASSED}\\n**Failed:** ${FAILED}\\n**Skipped:** ${SKIPPED}\\n**Failed Tests:** ${FAILED_TESTS}\\n**Allure Report:** [Download Allure Report](${RUN_URL})"
+          JSON_PAYLOAD=$(printf '{"title":"CI/CD Test Results","text":"%s"}' "${TEXT}")
 
           if [ -z "$TEAMS_WEBHOOK_URL" ]; then
-            echo "TEAMS_WEBHOOK_URL not set"
+            echo "TEAMS_WEBHOOK_URL not set, skipping notification"
             exit 0
           fi
 
-          curl -H 'Content-Type: application/json' \
-               -d "$JSON_PAYLOAD" \
-               "$TEAMS_WEBHOOK_URL"
+          echo "Sending Teams notification (payload preview): $JSON_PAYLOAD"
+          curl -H 'Content-Type: application/json' -d "$JSON_PAYLOAD" "$TEAMS_WEBHOOK_URL"
