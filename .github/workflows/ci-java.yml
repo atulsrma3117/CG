@@ -11,20 +11,17 @@ permissions:
   contents: write
 
 jobs:
-
-  checkout:
+  carrier-guard:
     runs-on: ubuntu-latest
+    env:
+      TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+
     steps:
+      # 1️⃣ Checkout Source Code
       - name: Checkout Source Code
         uses: actions/checkout@v3
 
-  setup-java:
-    runs-on: ubuntu-latest
-    needs: checkout
-    steps:
-      - name: Checkout Source Code
-        uses: actions/checkout@v3
-
+      # 2️⃣ Set Up Java 17
       - name: Set Up Java 17
         uses: actions/setup-java@v3
         with:
@@ -32,60 +29,26 @@ jobs:
           java-version: 17
           cache: maven
 
-  build-test:
-    runs-on: ubuntu-latest
-    needs: setup-java
-    steps:
-      - name: Checkout Source Code
-        uses: actions/checkout@v3
-
+      # 3️⃣ Build Project & Run Tests (generate Allure results)
       - name: Build Project & Run Tests
         run: |
           set -o pipefail
           mvn clean test -Dsurefire.suiteXmlFiles=testng.xml 2>&1 | tee mvn-output.log
 
-      - name: Upload Test Logs
-        uses: actions/upload-artifact@v4
-        with:
-          name: mvn-output
-          path: mvn-output.log
-          retention-days: 7
-
-  install-allure:
-    runs-on: ubuntu-latest
-    needs: build-test
-    steps:
-      - name: Cache Allure CLI
-        uses: actions/cache@v3
-        id: allure-cache
-        with:
-          path: /opt/allure-2.27.0
-          key: allure-2.27.0
-
-      - name: Install Allure CLI if cache missed
-        if: steps.allure-cache.outputs.cache-hit != 'true'
+      # 4️⃣ Install Allure CLI
+      - name: Install Allure CLI
         run: |
           ALLURE_VERSION=2.27.0
           wget -q https://github.com/allure-framework/allure2/releases/download/$ALLURE_VERSION/allure-$ALLURE_VERSION.tgz
           tar -zxvf allure-$ALLURE_VERSION.tgz -C /opt/
+          echo "/opt/allure-$ALLURE_VERSION/bin" >> $GITHUB_PATH
 
-      - name: Add Allure to PATH
-        run: echo "/opt/allure-2.27.0/bin" >> $GITHUB_PATH
-
-  generate-allure:
-    runs-on: ubuntu-latest
-    needs: install-allure
-    steps:
-      - name: Checkout Source Code
-        uses: actions/checkout@v3
-
-      - name: Download Test Logs
-        uses: actions/download-artifact@v4
-        with:
-          name: mvn-output
-
+      # 5️⃣ Generate Allure Single-File Report
       - name: Generate Single-File Allure Report
         run: |
+          # Ensure allure binary is in PATH
+          export PATH=/opt/allure-2.27.0/bin:$PATH
+
           if [ -d "allure-results" ]; then
             allure generate --clean allure-results -o allure-report.zip --single-file
           else
@@ -95,25 +58,15 @@ jobs:
             zip -r allure-report.zip empty-report
           fi
 
+      # 6️⃣ Upload Allure Report Artifact (7-day retention)
       - name: Upload Allure Report Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: allure-report
+          name: allure-report-${{ github.run_id }}
           path: allure-report.zip
           retention-days: 7
 
-  parse-summary:
-    runs-on: ubuntu-latest
-    needs: build-test
-    steps:
-      - name: Checkout Source Code
-        uses: actions/checkout@v3
-
-      - name: Download Test Logs
-        uses: actions/download-artifact@v4
-        with:
-          name: mvn-output
-
+      # 7️⃣ Parse Test Summary from Maven output
       - name: Parse Test Summary
         id: results
         run: |
@@ -121,6 +74,7 @@ jobs:
           FAILED=0
           SKIPPED=0
           PASSED=0
+
           if [ -f mvn-output.log ]; then
             SUMMARY=$(grep "Tests run:" mvn-output.log | tail -n 1 || true)
             if [ -n "$SUMMARY" ]; then
@@ -128,27 +82,23 @@ jobs:
               FAIL=$(echo "$SUMMARY" | sed -n 's/.*Failures: *\([0-9]*\).*/\1/p')
               ERR=$(echo "$SUMMARY" | sed -n 's/.*Errors: *\([0-9]*\).*/\1/p')
               SKIPPED=$(echo "$SUMMARY" | sed -n 's/.*Skipped: *\([0-9]*\).*/\1/p')
+
               FAIL=${FAIL:-0}
               ERR=${ERR:-0}
               TOTAL=${TOTAL:-0}
               SKIPPED=${SKIPPED:-0}
+
               FAILED=$((FAIL + ERR))
               PASSED=$((TOTAL - FAILED - SKIPPED))
             fi
           fi
+
           echo "TOTAL=$TOTAL" >> $GITHUB_ENV
           echo "PASSED=$PASSED" >> $GITHUB_ENV
           echo "FAILED=$FAILED" >> $GITHUB_ENV
           echo "SKIPPED=$SKIPPED" >> $GITHUB_ENV
 
-  notify-teams:
-    runs-on: ubuntu-latest
-    needs:
-      - parse-summary
-      - generate-allure
-    env:
-      TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
-    steps:
+      # 8️⃣ Send Microsoft Teams Notification with GitHub Run Link
       - name: Send Teams Notification
         if: always()
         run: |
@@ -156,11 +106,18 @@ jobs:
           PASSED=${PASSED:-0}
           FAILED=${FAILED:-0}
           SKIPPED=${SKIPPED:-0}
+
+          # Link directly to the GitHub Actions run (artifact downloadable for 7 days)
           RUN_URL="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-          TEXT="**Carrier Guard CI/CD Test Results**\n\n**Total:** ${TOTAL}\n**Passed:** ${PASSED}\n**Failed:** ${FAILED}\n**Skipped:** ${SKIPPED}\n\n**Allure Report (7-day retention):** [View and Download](${RUN_URL})"
+
+          TEXT="**Carrier Guard CI/CD Test Results**\n\n**Total:** ${TOTAL}\n**Passed:** ${PASSED}\n**Failed:** ${FAILED}\n**Skipped:** ${SKIPPED}\n\n**Allure Report (ZIP, 7-day retention):** [Download](${RUN_URL})"
+
           JSON_PAYLOAD=$(printf '{"title":"Carrier Guard Automation","text":"%s"}' "${TEXT}")
+
           if [ -z "$TEAMS_WEBHOOK_URL" ]; then
             echo "TEAMS_WEBHOOK_URL not set, skipping notification"
             exit 0
           fi
+
+          echo "Sending Teams notification..."
           curl -H 'Content-Type: application/json' -d "$JSON_PAYLOAD" "$TEAMS_WEBHOOK_URL"
