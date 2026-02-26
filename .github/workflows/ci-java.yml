@@ -42,7 +42,7 @@ jobs:
           PASSED=0
           FAILED=0
           SKIPPED=0
-
+          
           if [ -f mvn-output.log ]; then
             SUMMARY=$(grep "Tests run:" mvn-output.log | tail -n 1 || true)
             if [ -n "$SUMMARY" ]; then
@@ -64,11 +64,12 @@ jobs:
           echo "failed=$FAILED" >> $GITHUB_OUTPUT
           echo "skipped=$SKIPPED" >> $GITHUB_OUTPUT
 
-      - name: Upload Allure Results for Next Job
+      - name: Upload Allure Results Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results-temp
+          name: allure-results
           path: allure-results
+          retention-days: 7
 
   # 2️⃣ Generate Allure Report
   generate-report:
@@ -78,7 +79,15 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v3
 
-      - name: Install Allure CLI
+      - name: Restore Allure CLI from Cache
+        uses: actions/cache@v3
+        id: allure-cache
+        with:
+          path: /opt/allure-2.27.0
+          key: allure-2.27.0
+
+      - name: Install Allure CLI if not cached
+        if: steps.allure-cache.outputs.cache-hit != 'true'
         run: |
           ALLURE_VERSION=2.27.0
           wget -q https://github.com/allure-framework/allure2/releases/download/$ALLURE_VERSION/allure-$ALLURE_VERSION.tgz
@@ -88,20 +97,22 @@ jobs:
       - name: Download Allure Results
         uses: actions/download-artifact@v4
         with:
-          name: allure-results-temp
+          name: allure-results
           path: allure-results
 
-      - name: Generate Single-File Allure Report
+      - name: Generate Allure Report
         run: |
           export PATH=/opt/allure-2.27.0/bin:$PATH
-          if [ -d "allure-results" ]; then
-            allure generate --clean allure-results -o allure-report.zip --single-file
+          if [ -d "allure-results" ] && [ "$(ls -A allure-results)" ]; then
+            allure generate --clean allure-results -o allure-report
+            zip -r allure-report.zip allure-report
           else
             mkdir -p empty-report
             echo "<html><body><h1>No tests executed</h1></body></html>" > empty-report/index.html
             zip -r allure-report.zip empty-report
+          fi
 
-      - name: Upload Allure Report
+      - name: Upload Allure Report Artifact
         uses: actions/upload-artifact@v4
         with:
           name: allure-report
