@@ -35,15 +35,27 @@ jobs:
           set -o pipefail
           mvn clean test -Dsurefire.suiteXmlFiles=testng.xml 2>&1 | tee mvn-output.log
 
-      # 4️⃣ Upload Extent Report Artifact
-      - name: Upload Extent Report Artifact
-        uses: actions/upload-artifact@v4
+      # 4️⃣ Create GitHub Release for This Run
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
         with:
-          name: extent-report-${{ github.run_id }}
-          path: test-output/**/*.html
-          retention-days: 30
+          tag_name: ci-run-${{ github.run_id }}
+          name: "Extent Report Run ${{ github.run_id }}"
+          body: "Automated CI/CD Extent Report for run ${{ github.run_id }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # 5️⃣ Parse Test Summary from Maven output
+      # 5️⃣ Upload Extent Report as Release Asset
+      - name: Upload Extent Report to Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: test-output/**/*.html
+          tag_name: ci-run-${{ github.run_id }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 6️⃣ Parse Test Summary from Maven output
       - name: Parse Test Summary
         id: results
         run: |
@@ -75,7 +87,7 @@ jobs:
           echo "FAILED=$FAILED" >> $GITHUB_ENV
           echo "SKIPPED=$SKIPPED" >> $GITHUB_ENV
 
-      # 6️⃣ Send Microsoft Teams Notification with Artifact Download Link
+      # 7️⃣ Send Microsoft Teams Notification with Release Download Link
       - name: Send Teams Notification
         if: always()
         run: |
@@ -84,10 +96,10 @@ jobs:
           FAILED=${FAILED:-0}
           SKIPPED=${SKIPPED:-0}
 
-          ARTIFACT_NAME="extent-report-${GITHUB_RUN_ID}"
-          ARTIFACT_URL="https://github.com/${GITHUB_REPOSITORY}/suites/${GITHUB_RUN_ID}/artifacts?artifact_name=${ARTIFACT_NAME}"
+          # Release download link (HTML report files uploaded as assets)
+          RELEASE_URL="https://github.com/${GITHUB_REPOSITORY}/releases/tag/ci-run-${GITHUB_RUN_ID}"
 
-          TEXT="**Carrier Guard CI/CD Test Results**\n\n**Total:** ${TOTAL}\n**Passed:** ${PASSED}\n**Failed:** ${FAILED}\n**Skipped:** ${SKIPPED}\n\n**Extent Report (ZIP, 30-day retention):** [Download](${ARTIFACT_URL})"
+          TEXT="**Carrier Guard CI/CD Test Results**\n\n**Total:** ${TOTAL}\n**Passed:** ${PASSED}\n**Failed:** ${FAILED}\n**Skipped:** ${SKIPPED}\n\n**Extent Report:** [Download from Release](${RELEASE_URL})"
 
           JSON_PAYLOAD=$(printf '{"title":"Carrier Guard Automation","text":"%s"}' "${TEXT}")
 
