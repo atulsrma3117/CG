@@ -11,8 +11,7 @@ permissions:
   contents: write
 
 jobs:
-
-  # 1️⃣ Checkout & Set Up Java
+  # 1️⃣ Checkout & Setup Java
   setup-java:
     runs-on: ubuntu-latest
     outputs:
@@ -22,15 +21,17 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set Up Java 17
-        id: java-path
         uses: actions/setup-java@v3
         with:
           distribution: temurin
           java-version: 17
           cache: maven
+
+      - name: Output Java Path
+        id: java-path
         run: echo "path=$JAVA_HOME" >> $GITHUB_OUTPUT
 
-  # 2️⃣ Build Project & Run Tests
+  # 2️⃣ Run Tests & Upload Maven Output + allure-results
   run-tests:
     runs-on: ubuntu-latest
     needs: setup-java
@@ -43,20 +44,18 @@ jobs:
           set -o pipefail
           mvn clean test -Dsurefire.suiteXmlFiles=testng.xml 2>&1 | tee mvn-output.log
 
-      # ✅ Upload Allure results for downstream jobs
-      - name: Upload Allure Results
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-results
-          path: target/allure-results
-          retention-days: 7
-
-      # Upload Maven output for test summary
       - name: Upload Maven Output
         uses: actions/upload-artifact@v4
         with:
-          name: mvn-output
+          name: mvn-output-${{ github.run_id }}
           path: mvn-output.log
+          retention-days: 7
+
+      - name: Upload Allure Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-${{ github.run_id }}
+          path: allure-results
           retention-days: 7
 
   # 3️⃣ Install Allure CLI
@@ -64,15 +63,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: run-tests
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
       - name: Install Allure CLI
         run: |
           ALLURE_VERSION=2.27.0
           wget -q https://github.com/allure-framework/allure2/releases/download/$ALLURE_VERSION/allure-$ALLURE_VERSION.tgz
           tar -zxvf allure-$ALLURE_VERSION.tgz -C /opt/
           echo "/opt/allure-$ALLURE_VERSION/bin" >> $GITHUB_PATH
+          export PATH=/opt/allure-$ALLURE_VERSION/bin:$PATH
+          allure --version
 
   # 4️⃣ Generate Single-File Allure Report
   generate-report:
@@ -82,11 +80,10 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # ✅ Download Allure results from run-tests
       - name: Download Allure Results
         uses: actions/download-artifact@v4
         with:
-          name: allure-results
+          name: allure-results-${{ github.run_id }}
           path: allure-results
 
       - name: Generate Allure Report
@@ -103,7 +100,7 @@ jobs:
       - name: Upload Allure Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: allure-report
+          name: allure-report-${{ github.run_id }}
           path: allure-report.zip
           retention-days: 7
 
@@ -117,13 +114,10 @@ jobs:
       failed: ${{ steps.summary.outputs.failed }}
       skipped: ${{ steps.summary.outputs.skipped }}
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
       - name: Download Maven Output
         uses: actions/download-artifact@v4
         with:
-          name: mvn-output
+          name: mvn-output-${{ github.run_id }}
           path: mvn-output.log
 
       - id: summary
@@ -170,7 +164,7 @@ jobs:
           FAILED=${{ needs.parse-summary.outputs.failed }}
           SKIPPED=${{ needs.parse-summary.outputs.skipped }}
 
-          # Link to GitHub Actions run where artifact is downloadable for 7 days
+          # GitHub Actions run link (artifact downloadable for 7 days)
           RUN_URL="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
 
           TEXT="**Carrier Guard CI/CD Test Results**\n\n**Total:** ${TOTAL}\n**Passed:** ${PASSED}\n**Failed:** ${FAILED}\n**Skipped:** ${SKIPPED}\n\n**Allure Report (ZIP, 7-day retention):** [Download](${RUN_URL})"
