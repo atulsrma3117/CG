@@ -45,13 +45,15 @@ jobs:
           SKIPPED=0
 
           if [ -f mvn-output.log ]; then
+            # Take the last line containing summary
             SUMMARY=$(grep "Tests run:" mvn-output.log | tail -n 1 || true)
             if [ -n "$SUMMARY" ]; then
-              TOTAL=$(echo "$SUMMARY" | sed -n 's/.*Tests run: *\([0-9]*\).*/\1/p')
-              FAIL=$(echo "$SUMMARY" | sed -n 's/.*Failures: *\([0-9]*\).*/\1/p')
-              ERR=$(echo "$SUMMARY" | sed -n 's/.*Errors: *\([0-9]*\).*/\1/p')
-              SKIPPED=$(echo "$SUMMARY" | sed -n 's/.*Skips: *\([0-9]*\).*/\1/p')
+              TOTAL=$(echo "$SUMMARY" | grep -oP 'Tests run:\s*\K[0-9]+')
+              FAIL=$(echo "$SUMMARY" | grep -oP 'Failures:\s*\K[0-9]+')
+              ERR=$(echo "$SUMMARY" | grep -oP 'Errors:\s*\K[0-9]+')
+              SKIPPED=$(echo "$SUMMARY" | grep -oP 'Skipped:\s*\K[0-9]+')
 
+              # Default to 0 if any value is missing
               TOTAL=${TOTAL:-0}
               FAIL=${FAIL:-0}
               ERR=${ERR:-0}
@@ -113,7 +115,6 @@ jobs:
             mkdir -p empty-report
             echo "<html><body><h1>No tests executed</h1></body></html>" > empty-report/index.html
             zip -r allure-report.zip empty-report
-          fi
 
       - name: Upload Allure Report Artifact
         uses: actions/upload-artifact@v4
