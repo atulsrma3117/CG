@@ -55,14 +55,13 @@ jobs:
             zip -r allure-report.zip empty-report
           fi
 
-      # 6️⃣ Upload Allure Report Artifact (7-day retention)
+      # 6️⃣ Upload Allure Report Artifact
       - name: Upload Allure Report Artifact
-        id: upload-artifact
         uses: actions/upload-artifact@v4
         with:
           name: allure-report-${{ github.run_id }}
           path: allure-report.zip
-          retention-days: 7
+          retention-days: 7   # 7-day retention
 
       # 7️⃣ Parse Test Summary from Maven output
       - name: Parse Test Summary
@@ -96,26 +95,7 @@ jobs:
           echo "FAILED=$FAILED" >> $GITHUB_ENV
           echo "SKIPPED=$SKIPPED" >> $GITHUB_ENV
 
-      # 8️⃣ Get Artifact URL (GitHub Actions page)
-      - name: Get Artifact URL
-        id: artifact-url
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          ARTIFACT_NAME="allure-report-${GITHUB_RUN_ID}"
-          ARTIFACT_ID=$(gh api -H "Accept: application/vnd.github+json" \
-            /repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/artifacts \
-            | jq -r ".artifacts[] | select(.name==\"$ARTIFACT_NAME\") | .id")
-          
-          if [ -z "$ARTIFACT_ID" ]; then
-            echo "Artifact ID not found!"
-            exit 1
-          fi
-          
-          ARTIFACT_URL="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/artifacts/${ARTIFACT_ID}"
-          echo "ARTIFACT_URL=$ARTIFACT_URL" >> $GITHUB_ENV
-
-      # 9️⃣ Send Microsoft Teams Notification with Artifact Link
+      # 8️⃣ Send Microsoft Teams Notification (link to GitHub Actions run)
       - name: Send Teams Notification
         if: always()
         run: |
@@ -124,7 +104,10 @@ jobs:
           FAILED=${FAILED:-0}
           SKIPPED=${SKIPPED:-0}
 
-          TEXT="**Carrier Guard CI/CD Test Results**\n\n**Total:** ${TOTAL}\n**Passed:** ${PASSED}\n**Failed:** ${FAILED}\n**Skipped:** ${SKIPPED}\n\n**Allure Report (ZIP, 7-day retention):** [Download](${ARTIFACT_URL})"
+          # Redirect Teams link to GitHub Actions run page
+          RUN_URL="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+
+          TEXT="**Carrier Guard CI/CD Test Results**\n\n**Total:** ${TOTAL}\n**Passed:** ${PASSED}\n**Failed:** ${FAILED}\n**Skipped:** ${SKIPPED}\n\n**Allure Report (ZIP, 7-day retention):** [View and Download](${RUN_URL})"
 
           JSON_PAYLOAD=$(printf '{"title":"Carrier Guard Automation","text":"%s"}' "${TEXT}")
 
