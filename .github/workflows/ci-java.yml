@@ -61,7 +61,7 @@ jobs:
         with:
           name: allure-report-${{ github.run_id }}
           path: allure-report.zip
-          retention-days: 30
+          retention-days: 7
 
       # 7️⃣ Parse Test Summary from Maven output
       - name: Parse Test Summary
@@ -104,14 +104,14 @@ jobs:
           FAILED=${FAILED:-0}
           SKIPPED=${SKIPPED:-0}
 
-          ARTIFACT_NAME="allure-report-${GITHUB_RUN_ID}"
-          ARTIFACT_URL="https://github.com/${GITHUB_REPOSITORY}/suites/${GITHUB_RUN_ID}/artifacts?artifact_name=${ARTIFACT_NAME}"
+          # Link to the GitHub Actions run artifacts page
+          ARTIFACT_URL="https://github.com/${GITHUB_REPOSITORY}/suites/${GITHUB_RUN_ID}/artifacts"
 
-          TEXT="**Carrier Guard CI/CD Test Results**\n\n**Total:** ${TOTAL}\n**Passed:** ${PASSED}\n**Failed:** ${FAILED}\n**Skipped:** ${SKIPPED}\n\n**Allure Report (ZIP, 30-day retention):** [Download](${ARTIFACT_URL})"
+          TEXT="**Carrier Guard CI/CD Test Results**\n\n**Total:** ${TOTAL}\n**Passed:** ${PASSED}\n**Failed:** ${FAILED}\n**Skipped:** ${SKIPPED}\n\n**Allure Report (ZIP, 7-day retention):** [Download from GitHub Actions](${ARTIFACT_URL})"
 
           JSON_PAYLOAD=$(printf '{"title":"Carrier Guard Automation","text":"%s"}' "${TEXT}")
 
-          if [ -z "$TEAMS_WEBHOOK_URL" ]; then
+            if [ -z "$TEAMS_WEBHOOK_URL" ]; then
             echo "TEAMS_WEBHOOK_URL not set, skipping notification"
             exit 0
           fi
