@@ -109,24 +109,13 @@ jobs:
         run: |
           export PATH=/opt/allure-2.27.0/bin:$PATH
           
-           # Clean old files if any
-          rm -rf allure-report allure-report.zip allure-report.html
-
+          rm -rf allure-report allure-report.html
+          
           if [ -d "allure-results" ] && [ "$(ls -A allure-results)" ]; then
-            echo "Generating Allure single HTML report..."
-
-            # Generate as single HTML file
             allure generate allure-results --clean --single-file -o .
-
-            # The file will be index.html → rename it
             mv index.html allure-report.html
-
-            # Zip only the single html file
-            zip allure-report.zip allure-report.html
           else
-            echo "No results found, creating empty report..."
             echo "<html><body><h1>No tests executed</h1></body></html>" > allure-report.html
-            zip allure-report.zip allure-report.html
           fi
 
       - name: Upload Allure Report Artifact
