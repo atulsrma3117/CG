@@ -11,11 +11,11 @@ permissions:
   contents: write
 
 jobs:
-  # 1️⃣ Checkout & Setup Java
-  setup-java:
+  # 1️⃣ Checkout & Build/Run Tests
+  run-tests:
     runs-on: ubuntu-latest
     outputs:
-      java-path: ${{ steps.java-path.outputs.path }}
+      mvn-output-artifact: mvn-output-${{ github.run_id }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -27,19 +27,7 @@ jobs:
           java-version: 17
           cache: maven
 
-      - name: Output Java Path
-        id: java-path
-        run: echo "path=$JAVA_HOME" >> $GITHUB_OUTPUT
-
-  # 2️⃣ Run Tests & Upload Maven Output + allure-results
-  run-tests:
-    runs-on: ubuntu-latest
-    needs: setup-java
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Build & Test
+      - name: Build & Run Tests
         run: |
           set -o pipefail
           mvn clean test -Dsurefire.suiteXmlFiles=testng.xml 2>&1 | tee mvn-output.log
@@ -58,24 +46,10 @@ jobs:
           path: allure-results
           retention-days: 7
 
-  # 3️⃣ Install Allure CLI
-  install-allure:
+  # 2️⃣ Install Allure & Generate Report (merged job)
+  generate-allure-report:
     runs-on: ubuntu-latest
     needs: run-tests
-    steps:
-      - name: Install Allure CLI
-        run: |
-          ALLURE_VERSION=2.27.0
-          wget -q https://github.com/allure-framework/allure2/releases/download/$ALLURE_VERSION/allure-$ALLURE_VERSION.tgz
-          tar -zxvf allure-$ALLURE_VERSION.tgz -C /opt/
-          echo "/opt/allure-$ALLURE_VERSION/bin" >> $GITHUB_PATH
-          export PATH=/opt/allure-$ALLURE_VERSION/bin:$PATH
-          allure --version
-
-  # 4️⃣ Generate Single-File Allure Report
-  generate-report:
-    runs-on: ubuntu-latest
-    needs: [run-tests, install-allure]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -83,19 +57,24 @@ jobs:
       - name: Download Allure Results
         uses: actions/download-artifact@v4
         with:
-          name: allure-results-${{ github.run_id }}
+          name: allure-results-${{ needs.run-tests.outputs.maven-output-artifact }}
           path: allure-results
 
-      - name: Generate Allure Report
+      - name: Install & Generate Allure Report
         run: |
-          export PATH=/opt/allure-2.27.0/bin:$PATH
+          ALLURE_VERSION=2.27.0
+          wget -q https://github.com/allure-framework/allure2/releases/download/$ALLURE_VERSION/allure-$ALLURE_VERSION.tgz
+          tar -zxvf allure-$ALLURE_VERSION.tgz -C /opt/
+          export PATH=/opt/allure-$ALLURE_VERSION/bin:$PATH
+          allure --version
+
           if [ -d "allure-results" ]; then
             allure generate --clean allure-results -o allure-report.zip --single-file
           else
+            echo "No allure-results found, creating empty report"
             mkdir -p empty-report
             echo "<html><body><h1>No tests executed</h1></body></html>" > empty-report/index.html
             zip -r allure-report.zip empty-report
-          fi
 
       - name: Upload Allure Artifact
         uses: actions/upload-artifact@v4
@@ -104,7 +83,7 @@ jobs:
           path: allure-report.zip
           retention-days: 7
 
-  # 5️⃣ Parse Test Summary
+  # 3️⃣ Parse Test Summary
   parse-summary:
     runs-on: ubuntu-latest
     needs: run-tests
@@ -114,10 +93,13 @@ jobs:
       failed: ${{ steps.summary.outputs.failed }}
       skipped: ${{ steps.summary.outputs.skipped }}
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
       - name: Download Maven Output
         uses: actions/download-artifact@v4
         with:
-          name: mvn-output-${{ github.run_id }}
+          name: mvn-output-${{ needs.run-tests.outputs.maven-output-artifact }}
           path: mvn-output.log
 
       - id: summary
@@ -150,10 +132,10 @@ jobs:
           echo "failed=$FAILED" >> $GITHUB_OUTPUT
           echo "skipped=$SKIPPED" >> $GITHUB_OUTPUT
 
-  # 6️⃣ Send Microsoft Teams Notification
+  # 4️⃣ Send Microsoft Teams Notification
   send-teams:
     runs-on: ubuntu-latest
-    needs: [generate-report, parse-summary]
+    needs: [generate-allure-report, parse-summary]
     steps:
       - name: Send Teams Notification
         env:
