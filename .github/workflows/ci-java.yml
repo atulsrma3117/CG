@@ -35,13 +35,9 @@ jobs:
           set -o pipefail
           mvn clean test -Dsurefire.suiteXmlFiles=testng.xml 2>&1 | tee mvn-output.log
 
-      # 4️⃣ Install Allure Report 3 (Correct Repository)
+      # 4️⃣ Install Allure Report 3 (Official Way)
       - name: Install Allure Report 3
-        run: |
-          ALLURE_VERSION=3.1.0
-          wget -q https://github.com/allure-framework/allure3/releases/download/$ALLURE_VERSION/allure-$ALLURE_VERSION.tgz
-          tar -zxvf allure-$ALLURE_VERSION.tgz -C /opt/
-          echo "/opt/allure-$ALLURE_VERSION/bin" >> $GITHUB_PATH
+        run: npm install -g allure-commandline
 
       # 5️⃣ Create Dynamic Allure Executor File
       - name: Create Allure Executor File
@@ -115,7 +111,7 @@ jobs:
           echo "FAILED=$FAILED" >> $GITHUB_ENV
           echo "SKIPPED=$SKIPPED" >> $GITHUB_ENV
 
-      # 🔟 Send Teams Notification
+      # 🔟 Send Microsoft Teams Notification
       - name: Send Teams Notification
         if: always()
         run: |
