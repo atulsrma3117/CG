@@ -30,11 +30,11 @@ public class BaseTest extends StartupCode {
             Logs.info("🚀 TEST STARTED on browser: " + (browser.isEmpty() ? Config.get("browser") : browser));
     }
 
-    @AfterMethod
-    public void takescreenshot(ITestResult result) throws IOException {
-        tearDown(result);
+ @AfterMethod
+  public void takescreenshot(ITestResult result) throws IOException {
+       tearDown(result);
 
-    }
+   }
 
     @AfterClass
     public void quitBrowser() {

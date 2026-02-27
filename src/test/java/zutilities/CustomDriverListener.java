@@ -16,17 +16,17 @@ public class CustomDriverListener implements WebDriverListener, ITestListener {
         Logs.info("🚀 TEST STARTED: " + result.getMethod().getMethodName());
     }
 
-    @Override
+  /*  @Override
     public void onTestFailure(ITestResult result) {
-        if (retryCount < maxRetryCount) {
-            retryCount++;
-            Logs.warn("🔁 RETRYING TEST: " + result.getMethod().getMethodName() + " (Attempt " + retryCount + " of " + maxRetryCount + ")");
-            result.setStatus(ITestResult.SKIP); // Skip current execution, will retry
-        } else {
-            Throwable throwable = result.getThrowable();
-            Logs.fail(driver, "❌ TEST FAILED: " + result.getMethod().getMethodName() + (throwable != null ? " | Reason: " + throwable.getMessage() : ""));
+        try {
+            if (driver != null) {
+                Logs.fail(driver, "❌ TEST FAILED: " + result.getMethod().getMethodName() +
+                        (result.getThrowable() != null ? " | Reason: " + result.getThrowable().getMessage() : ""));
+            }
+        } catch (Exception e) {
+           Logs.info("Screenshot capture failed: " + e.getMessage());
         }
-    }
+    }*/
 
     @Override
     public void onTestSkipped(ITestResult result) {
