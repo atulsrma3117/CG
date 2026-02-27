@@ -27,6 +27,6 @@ public class SignupHelper {
         } catch (Exception ignored) {
         }
 
-        return email; // return email for reuse
+        return email;
     }
 }

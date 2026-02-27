@@ -1,0 +1,4 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"Verify that a registered user can login successfully using email","9299","TC_03_loginFlow","Default Suite","2026-02-27","passed","2026-02-27","Signup_Login.Test_Cases.SignupLoginTest","CarrierGuard","Signup_Login.Test_Cases.SignupLoginTest","TC_03_loginFlow"
+"Verify that a new user can sign up successfully and login is confirmed","21788","TC_01_signupFlow","Default Suite","2026-02-27","passed","2026-02-27","Signup_Login.Test_Cases.SignupLoginTest","CarrierGuard","Signup_Login.Test_Cases.SignupLoginTest","TC_01_signupFlow"
+"Verify that the user can logout successfully","13225","TC_02_logoutFlow","Default Suite","2026-02-27","passed","2026-02-27","Signup_Login.Test_Cases.SignupLoginTest","CarrierGuard","Signup_Login.Test_Cases.SignupLoginTest","TC_02_logoutFlow"

@@ -35,35 +35,59 @@ jobs:
           set -o pipefail
           mvn clean test -Dsurefire.suiteXmlFiles=testng.xml 2>&1 | tee mvn-output.log
 
-      # 4️⃣ Install Allure CLI
-      - name: Install Allure CLI
+      # 4️⃣ Install Allure 3 CLI
+      - name: Install Allure 3 CLI
         run: |
-          ALLURE_VERSION=2.27.0
+          ALLURE_VERSION=3.1.0
           wget -q https://github.com/allure-framework/allure2/releases/download/$ALLURE_VERSION/allure-$ALLURE_VERSION.tgz
           tar -zxvf allure-$ALLURE_VERSION.tgz -C /opt/
           echo "/opt/allure-$ALLURE_VERSION/bin" >> $GITHUB_PATH
 
-      # 5️⃣ Generate Allure Single-File Report
+      # 4️⃣.5️⃣ Create Dynamic Allure Executor File
+      - name: Create Allure Executor File
+        run: |
+          mkdir -p allure-results
+          echo '{
+            "name": "GitHub Actions",
+            "type": "github",
+            "url": "https://github.com/'"${GITHUB_REPOSITORY}"'",
+            "buildName": "Run #'"${GITHUB_RUN_NUMBER}"' - '"${GITHUB_REF_NAME}"'",
+            "buildUrl": "https://github.com/'"${GITHUB_REPOSITORY}"'/actions/runs/'"${GITHUB_RUN_ID}"'"
+          }' > allure-results/executor.json
+
+      # 5️⃣ Generate Allure Single-File Report (Allure 3)
       - name: Generate Single-File Allure Report
         run: |
           if [ -d "allure-results" ]; then
-            allure generate --clean allure-results -o allure-report.zip --single-file
+            allure generate allure-results --clean -o allure-report --single-file
           else
             echo "No allure-results found, creating empty report"
-            mkdir -p empty-report
-            echo "<html><body><h1>No tests executed</h1></body></html>" > empty-report/index.html
-            zip -r allure-report.zip empty-report
+            mkdir -p allure-report
+            echo "<html><body><h1>No tests executed</h1></body></html>" > allure-report/index.html
           fi
 
-      # 6️⃣ Upload Allure Report Artifact
+      # 6️⃣ Create GitHub Release for this Run
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: run-${{ github.run_id }}
+          name: Carrier Guard Run #${{ github.run_id }}
+          body: "Carrier Guard Test Report #${{ github.run_id }}"
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 7️⃣ Upload Allure Report Artifact
       - name: Upload Allure Report Artifact
         uses: actions/upload-artifact@v4
         with:
           name: allure-report-${{ github.run_id }}
-          path: allure-report.zip
-          retention-days: 7   # 7-day retention
+          path: allure-report
+          retention-days: 7
 
-      # 7️⃣ Parse Test Summary from Maven output
+      # 8️⃣ Parse Test Summary from Maven output
       - name: Parse Test Summary
         id: results
         run: |
@@ -95,7 +119,7 @@ jobs:
           echo "FAILED=$FAILED" >> $GITHUB_ENV
           echo "SKIPPED=$SKIPPED" >> $GITHUB_ENV
 
-      # 8️⃣ Send Microsoft Teams Notification (link to GitHub Actions run)
+      # 9️⃣ Send Microsoft Teams Notification
       - name: Send Teams Notification
         if: always()
         run: |
@@ -104,7 +128,6 @@ jobs:
           FAILED=${FAILED:-0}
           SKIPPED=${SKIPPED:-0}
 
-          # Redirect Teams link to GitHub Actions run page
           RUN_URL="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
 
           TEXT="**Carrier Guard CI/CD Test Results**\n\n**Total:** ${TOTAL}\n**Passed:** ${PASSED}\n**Failed:** ${FAILED}\n**Skipped:** ${SKIPPED}\n\n**Report :** [View and Download](${RUN_URL})"

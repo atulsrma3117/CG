@@ -17,7 +17,7 @@ public class SignupLoginValidationTest extends BaseTest {
 
     @Test(priority = 1)
     public void TC_01_signupValidationFlow() {
-        Logs.info(test, "Test Case Started: TC_01_signupValidationFlow");
+        Logs.info("Test Case Started: TC_01_signupValidationFlow");
         LoginPage login = new LoginPage(driver);
         login.clickLogin();
        login.clickSignUp();
@@ -26,21 +26,21 @@ public class SignupLoginValidationTest extends BaseTest {
         OtpPage otp = new OtpPage(driver);
         otp.enterOtp("222222");
         otp.clickVerify();
-        Logs.info(test, "Invalid OTP Toast: " + otp.getInvalidOtpMessage());
+        Logs.info("Invalid OTP Toast: " + otp.getInvalidOtpMessage());
         otp.clickResend();
-        Logs.info(test, "Resend OTP Toast: " + otp.getResendMessage());
+        Logs.info("Resend OTP Toast: " + otp.getResendMessage());
         otp.clickChangeEmail();
     }
 
     @Test(priority = 2)
     public void TC_02_loginValidationFlow() {
-        Logs.info(test, "Test Case Started: TC_02_loginValidationFlow");
+        Logs.info("Test Case Started: TC_02_loginValidationFlow");
 
         LoginPage login = new LoginPage(driver);
         login.clickLogintab();
 
         String[] invalidEmails = {"pnkj", "pnkj@", "pnkj@.com", "pnkj.com", "pnkj.com@", email};
         login.validateInvalidEmails(invalidEmails);
-        Logs.info(test, "User Not Found Message: " + login.getUserNotFoundMessage());
+        Logs.info("User Not Found Message: " + login.getUserNotFoundMessage());
     }
 }

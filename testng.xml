@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="All Test Suite">
-    <test verbose="2" preserve-order="true" name="H:/Automation/CarrierGuard/src/test">
+    <test verbose="2" preserve-order="true" name="H:/Automation/CarrierGuard">
         <classes>
             <class name="Signup_Login.Test_Cases.SignupLoginTest">
                 <methods>
                     <include name="TC_01_signupFlow"/>
                 </methods>
+
             </class>
         </classes>
     </test>

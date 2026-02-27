@@ -1,12 +1,11 @@
 package zutilities;
 
-import com.aventstack.extentreports.ExtentTest;
-import com.aventstack.extentreports.MediaEntityBuilder;
 import io.qameta.allure.Allure;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.*;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -17,55 +16,71 @@ public class Logs {
         return LogManager.getLogger(className);
     }
 
-    static void attachScreenshot(WebDriver driver, ExtentTest test, String label, String message) {
+    private static void attachScreenshot(WebDriver driver) {
         try {
-            String screenshotPath = Screenshot.takeScreenshot(driver, label);
-            String fileName = new File(screenshotPath).getName();
-            String relativePath = ".." + File.separator + "screenshots" + File.separator + fileName;
+            byte[] screenshot = ((TakesScreenshot) driver)
+                    .getScreenshotAs(OutputType.BYTES);
 
-            test.info(MediaEntityBuilder.createScreenCaptureFromPath(relativePath).build());
-            File screenshotFile = new File(screenshotPath);
+            Allure.addAttachment(
+                    "Screenshot",
+                    "image/png",
+                    new ByteArrayInputStream(screenshot),
+                    ".png"
+            );
 
-            Allure.step(message, () -> {
-                Allure.addAttachment("Screenshot", "image/png", new FileInputStream(screenshotFile), ".png");
-            });
-        } catch (IOException e) {
-            Logs.info(test, "⚠️ Failed to capture screenshot: " + e.getMessage());
+        } catch (Exception e) {
+            Logger().warn("⚠️ Failed to capture screenshot: " + e.getMessage());
         }
     }
 
-    public static void pass(WebDriver driver, ExtentTest test, String message) {
+    public static void pass(WebDriver driver, String message) {
         Logger().info("✅ " + message);
-        test.pass("✅ " + message);
-        Allure.step("✅ " + message);
-        attachScreenshot(driver, test, "pass", "✅ " + message);
-    }
 
-    public static void fail(WebDriver driver, ExtentTest test, String message) {
+        Allure.step("✅ " + message, () -> {
+            attachScreenshot(driver);
+        });
+    }
+    public static void fail(WebDriver driver, String message) {
         Logger().error("❌ " + message);
-        test.fail("❌ " + message);
-        Allure.step("❌ " + message);
-        attachScreenshot(driver, test, "fail", "❌ " + message);
+
+        Allure.step("❌ " + message, () -> {
+            attachScreenshot(driver);
+        });
     }
 
-    public static void info(ExtentTest test, String message) {
+    public static void info(String message) {
         Logger().info("ℹ️ " + message);
-        test.info("ℹ️ " + message);
         Allure.step("ℹ️ " + message);
     }
 
-    public static void warn(ExtentTest test, String message) {
+    public static void warn(String message) {
         Logger().warn("⚠️ " + message);
-        test.warning("⚠️ " + message);
         Allure.step("⚠️ " + message);
-        // attachScreenshot(driver, test, "warn", "⚠️ " + message);
     }
 
-    public static void error(ExtentTest test, String message) {
-        Logger().error("🛑" + message);
-        test.warning("🛑" + message);
-        Allure.step("🛑" + message);
-        // attachScreenshot(driver, test, "warn", "⚠️ " + message);
+    public static void error(String message) {
+        Logger().error("🛑 " + message);
+        Allure.step("🛑 " + message);
+    }
+
+    @FunctionalInterface
+    public interface CheckedRunnable {
+        void run() throws Exception;
+    }
+
+    public static void step(String message, CheckedRunnable action) {
+        Logger().info("🔹 " + message);
+        Allure.step("🔹 " + message, () -> {
+            try {
+                action.run();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+    public static void step(String message) {
+        Logger().info("🔹 " + message);
+        Allure.step("🔹 " + message);
     }
 
 }

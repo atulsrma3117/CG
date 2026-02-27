@@ -9,8 +9,6 @@ pipeline {
 
     environment {
         ALLURE_RESULTS = "allure-results"
-        EXTENT_REPORT_DIR = "test-output"
-        EXTENT_REPORT_FILE = "CarrierGuardExtentReport.html"
     }
 
     stages {
@@ -62,39 +60,6 @@ pipeline {
             steps {
                 echo "🧪 Generating Allure report..."
                 allure includeProperties: false, jdk: '', results: [[path: "${ALLURE_RESULTS}"]]
-            }
-        }
-
-        stage('Prepare Extent Report for Jenkins') {
-            steps {
-                echo "🛠️ Renaming timestamped Extent report to a fixed name..."
-                sh '''
-                    mkdir -p test-output
-                    latest_report=$(ls -t test-output/ExtentReport-*.html 2>/dev/null | head -n 1)
-                    if [ -f "$latest_report" ]; then
-                        cp "$latest_report" test-output/CarrierGuardExtentReport.html
-                        echo "✅ Copied $latest_report to test-output/CarrierGuardExtentReport.html"
-                    else
-                        echo "⚠️ No Extent report found to copy."
-                    fi
-                '''
-            }
-        }
-
-        stage('Publish HTML Report') {
-            when {
-                expression { fileExists("${EXTENT_REPORT_DIR}/${EXTENT_REPORT_FILE}") }
-            }
-            steps {
-                echo "🌐 Publishing Extent/HTML Report..."
-                publishHTML([
-                    allowMissing: false,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: "${EXTENT_REPORT_DIR}",
-                    reportFiles: "${EXTENT_REPORT_FILE}",
-                    reportName: 'CarrierGuard Extent Report'
-                ])
             }
         }
     }

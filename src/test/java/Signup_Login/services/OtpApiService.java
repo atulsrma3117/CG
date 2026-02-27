@@ -5,7 +5,6 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import zutilities.Logs;
 
-import static zutilities.StartupCode.test;
 
 public class OtpApiService {
 
@@ -23,7 +22,7 @@ public class OtpApiService {
 
         try {
 
-            Logs.info(test, "🚀 " + stepName);
+            Logs.info("🚀 " + stepName);
             Allure.step(stepName);
             Allure.addAttachment("Request JSON", "application/json", requestBody);
             Response response =
@@ -36,16 +35,16 @@ public class OtpApiService {
 
             String responseBody = response.getBody().asPrettyString();
             Allure.addAttachment("Response JSON", "application/json", responseBody);
-            Logs.info( test,"📤 Request JSON:<pre>" + requestBody + "</pre>");
-            Logs.info( test,"📥 Response JSON:<pre>" + responseBody + "</pre>");
+            Logs.info( "📤 Request JSON:<pre>" + requestBody + "</pre>");
+            Logs.info( "📥 Response JSON:<pre>" + responseBody + "</pre>");
 
-            Logs.info(test,
+            Logs.info(
                     "✅ API Status: " + response.getStatusCode()
                             + " (" + duration + " ms)");
 
             return response.jsonPath().getString("data.OTP");
         } catch (Exception e) {
-            Logs.info( test, "❌ OTP API FAILED → " + e.getMessage());
+            Logs.info("❌ OTP API FAILED → " + e.getMessage());
             throw e;
         }
     }

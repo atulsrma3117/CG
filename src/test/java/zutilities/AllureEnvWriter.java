@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.Properties;
 
 import static zutilities.StartupCode.driver;
-import static zutilities.StartupCode.test;
 
 public class AllureEnvWriter {
     public static void createEnvFile() {

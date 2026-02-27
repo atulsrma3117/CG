@@ -9,7 +9,6 @@ import java.lang.reflect.Field;
 import java.time.Duration;
 import java.util.List;
 
-import static zutilities.StartupCode.test;
 
 public class BasePage {
 
@@ -98,12 +97,12 @@ public class BasePage {
 
             long duration = System.currentTimeMillis() - start;
 
-            Logs.info(test, message + " (" + duration + " ms)");
+            Logs.info(message + " (" + duration + " ms)");
             Allure.step(message + " (" + duration + " ms)");
 
         } catch (Exception e) {
 
-            Logs.fail(driver, test, message + " ❌ " + e.getMessage());
+            Logs.fail(driver, message + " ❌ " + e.getMessage());
             Allure.step(message + " ❌ FAILED");
 
             throw e;

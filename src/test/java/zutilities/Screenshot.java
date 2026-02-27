@@ -1,6 +1,5 @@
 package zutilities;
 
-import com.aventstack.extentreports.MediaEntityBuilder;
 import io.qameta.allure.Allure;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
@@ -25,7 +24,6 @@ public class Screenshot extends StartupCode {
         try {
             File srcFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
             FileUtils.copyFile(srcFile, new File(filePath));
-           Logs.info(test,"✨ Screenshot saved to: " + filePath);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -36,12 +34,8 @@ public class Screenshot extends StartupCode {
     public static void tearDown(ITestResult result) throws IOException {
         if (result.getStatus() == ITestResult.FAILURE) {
             String screenshotPath = Screenshot.takeScreenshot(driver, result.getName());
-            String relativePath = ".." + File.separator + "screenshots" + File.separator + new File(screenshotPath).getName();
-            test.fail("Test Failed: " + result.getThrowable(),
-                    MediaEntityBuilder.createScreenCaptureFromPath(relativePath).build());
             Allure.addAttachment("Screenshot on Failure", "image/png", new FileInputStream(screenshotPath), ".png");
-        } //else if (result.getStatus() == ITestResult.SUCCESS) {
-         //   Logs.info(test,"Test Passed");
+        }
     }
-    }
+}
 

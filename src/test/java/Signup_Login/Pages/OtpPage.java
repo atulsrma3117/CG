@@ -12,7 +12,6 @@ import zutilities.Logs;
 import java.time.Duration;
 import java.util.List;
 
-import static zutilities.StartupCode.test;
 
 public class OtpPage extends BasePage {
 

@@ -7,41 +7,32 @@ import org.testng.ITestResult;
 import org.testng.annotations.*;
 import zutilities.*;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.time.Duration;
+
+import static zutilities.Screenshot.tearDown;
 
 @Listeners({io.qameta.allure.testng.AllureTestNg.class})
 public class BaseTest extends StartupCode {
     protected static WebDriverWait wait;
     protected final String HOME_PAGE_URL = Config.get("base.url");
 
-    @BeforeSuite
-    public void setupReport() {
-        extent = Extentreportmanager.getExtentReports();
-    }
-
 
     @BeforeClass
     @Parameters("browser")
     public void start(@Optional("") String browser) throws InterruptedException {
-        WebDriver originalDriver = Cross_Browser_factory.setupBrowser(browser);
-        CustomDriverListener listener = new CustomDriverListener();
-        driver = new EventFiringDecorator(listener).decorate(originalDriver);
-        wait = new WebDriverWait(driver, Duration.ofSeconds(12));
-        AllureEnvWriter.createEnvFile();
-
+            WebDriver originalDriver = Cross_Browser_factory.setupBrowser(browser);
+            CustomDriverListener listener = new CustomDriverListener();
+            driver = new EventFiringDecorator(listener).decorate(originalDriver);
+            wait = new WebDriverWait(driver, Duration.ofSeconds(12));
+            AllureEnvWriter.createEnvFile();
+            Logs.info("🚀 TEST STARTED on browser: " + (browser.isEmpty() ? Config.get("browser") : browser));
     }
 
-    @BeforeMethod
-    @Parameters("browser")
-    public void initTest(Method method, @Optional("") String browser) {
-        String className = this.getClass().getSimpleName();
-        String methodName = method.getName();
-
-        test = extent.createTest("Test Name - " + className + " - Test Case - " + methodName);
-
-        Logs.info(test, "🚀 TEST STARTED on browser: " +
-                (browser.isEmpty() ? Config.get("browser") : browser));
+    @AfterMethod
+    public void takescreenshot(ITestResult result) throws IOException {
+        tearDown(result);
 
     }
 
@@ -50,8 +41,4 @@ public class BaseTest extends StartupCode {
         quitDriver();
     }
 
-    @AfterSuite
-    public void ReportLoaded() {
-        finalizeReport();
-    }
 }

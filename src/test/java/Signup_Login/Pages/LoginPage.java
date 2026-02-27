@@ -4,8 +4,6 @@ import base.BasePage;
 import org.openqa.selenium.*;
 import zutilities.Logs;
 
-import static zutilities.StartupCode.test;
-
 public class LoginPage extends BasePage {
 
     private By loginBtn = By.xpath("//button[normalize-space(text())='Login' and contains(@class,'bg-primary-blue')]");
@@ -54,9 +52,9 @@ public class LoginPage extends BasePage {
             String validationMessage = (String) js.executeScript("return arguments[0].validationMessage;", driver.findElement(emailInput));
 
             if (validationMessage.isEmpty()) {
-                Logs.info(test, "Email '" + email + "' is accepted no validation message (Possibly valid email)");
+                Logs.info("Email '" + email + "' is accepted no validation message (Possibly valid email)");
             } else {
-                Logs.info(test, "Email validation for '" + email + "' is  → " + validationMessage);            }
+                Logs.info("Email validation for '" + email + "' is  → " + validationMessage);            }
         }
     }
 

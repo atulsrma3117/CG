@@ -22,12 +22,12 @@ public class Without_Login_Write_a_Review_Flow_Test extends BaseTest {
     @Description("Select DOT filter and search DOT number")
     @Severity(SeverityLevel.NORMAL)
     public void TC_01_Search_and_Review_Flow() {
-        Logs.info(test, "==== START FLOW FOR DOT: " + dotNumber + " ====");
+        Logs.info("==== START FLOW FOR DOT: " + dotNumber + " ====");
         homePage = new HomePage(driver);
         reviewPage = new ReviewPage(driver);
        // homePage.selectDOTFilter();
         homePage.searchDOT(dotNumber);
-        Logs.pass(driver, test, "MC number searched: " + dotNumber);
+        Logs.pass(driver, "MC number searched: " + dotNumber);
 
     }
 
@@ -36,15 +36,15 @@ public class Without_Login_Write_a_Review_Flow_Test extends BaseTest {
     @Severity(SeverityLevel.BLOCKER)
     public void TC_02_Click_on_Write_a_Review() {
         reviewPage.openReviewForm();
-        Logs.info(test, "POP-UP Titile: " + reviewPage.getPopupTitle());
+        Logs.info("POP-UP Titile: " + reviewPage.getPopupTitle());
         Assert.assertTrue(reviewPage.getPopupTitle().contains("Sign in to write a review"), "Popup title mismatch!");
-        Logs.info(test, "POP-UP Message: " + reviewPage.getPopupMessage());
+        Logs.info("POP-UP Message: " + reviewPage.getPopupMessage());
         Assert.assertTrue(reviewPage.getPopupMessage().contains("sign in or create an account"), "Popup message mismatch!");
-        Logs.info(test, "isCancelButtonDisplayed: " + reviewPage.isCancelButtonDisplayed());
+        Logs.info("isCancelButtonDisplayed: " + reviewPage.isCancelButtonDisplayed());
         Assert.assertTrue(reviewPage.isCancelButtonDisplayed(), "Cancel button is not displayed!");
-        Logs.info(test, "isContinueButtonDisplayed: " + reviewPage.isContinueButtonDisplayed());
+        Logs.info("isContinueButtonDisplayed: " + reviewPage.isContinueButtonDisplayed());
         Assert.assertTrue(reviewPage.isContinueButtonDisplayed(), "Continue to Login button is not displayed!");
-        Logs.pass(driver, test, "Sign-in popup validated successfully!");
+        Logs.pass(driver, "Sign-in popup validated successfully!");
     }
 }
 
