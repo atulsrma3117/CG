@@ -117,3 +117,136 @@
 16:04:10.653 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj.com@' is  → Please enter a part following '@'. 'pnkj.com@' is incomplete.
 16:04:10.863 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email 'user1772188435352@yopmail.com' is accepted no validation message (Possibly valid email)
 16:04:21.796 [main] INFO  zutilities.StartupCode - ℹ️ Browser Closed
+16:35:05.797 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+16:35:15.547 [main] INFO  base.BaseTest - ℹ️ 🚀 TEST STARTED on browser: chrome
+16:35:15.654 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ℹ️ Test Case Started: TC_01_signupValidationFlow
+16:35:15.874 [main] INFO  base.BasePage - ℹ️ LoginPage → Click → loginBtn (84 ms)
+16:35:17.549 [main] INFO  base.BasePage - ℹ️ LoginPage → Click → signUpBtn (62 ms)
+16:35:17.859 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj' is  → Please include an '@' in the email address. 'pnkj' is missing an '@'.
+16:35:18.170 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj@' is  → Please enter a part following '@'. 'pnkj@' is incomplete.
+16:35:18.468 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj@.com' is  → '.' is used at a wrong position in '.com'.
+16:35:18.790 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj.com' is  → Please include an '@' in the email address. 'pnkj.com' is missing an '@'.
+16:35:19.088 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj.com@' is  → Please enter a part following '@'. 'pnkj.com@' is incomplete.
+16:35:19.391 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email 'user1772190315555@yopmail.com' is accepted no validation message (Possibly valid email)
+16:35:22.108 [main] INFO  base.BasePage - ℹ️ OtpPage → Type → 222222 → otpField (69 ms)
+16:35:22.211 [main] INFO  base.BasePage - ℹ️ OtpPage → Click → verifyBtn (62 ms)
+16:35:27.512 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ℹ️ Invalid OTP Toast: Invalid or expired token.
+16:35:54.530 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ℹ️ Resend OTP Toast: OTP sent successfully.
+16:35:54.645 [main] INFO  base.BasePage - ℹ️ OtpPage → Click → changeEmailBtn (78 ms)
+16:35:54.930 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ℹ️ Test Case Started: TC_02_loginValidationFlow
+16:35:56.054 [main] ERROR base.BasePage - ❌ LoginPage → Click → logintab ❌ element click intercepted: Element <button type="button" class="cursor-pointer flex-1 py-3 px-4 rounded-md font-medium transition-all duration-200 text-text-clr-2 hover:text-text-clr-1">...</button> is not clickable at point (502, 68). Other element would receive the click: <li tabindex="0" class="" data-sonner-toast="" data-rich-colors="true" data-styled="true" data-mounted="true" data-promise="false" data-swiped="false" data-removed="false" data-visible="true" data-y-position="top" data-x-position="center" data-index="0" data-front="true" data-swiping="false" data-dismissible="true" data-type="success" data-swipe-out="false" data-expanded="false" style="--index: 0; --toasts-before: 0; --z-index: 1; --offset: 0px; --initial-height: 53.5px;">...</li>
+  (Session info: chrome=145.0.7632.117)
+Build info: version: '4.41.0', revision: '9fc754f'
+System info: os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '17.0.18'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Command: [6e68c62833b3f6b3e82fc56cc898e940, clickElement {id=f.9E3BC977CAD4BF665882F995D9346B1E.d.8A45ED17C63AADA53E6BFA6EE5BC0E9C.e.53}]
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 145.0.7632.117, chrome: {chromedriverVersion: 145.0.7632.117 (de4e5d6e13b..., userDataDir: C:\Users\PANKAJ~1\AppData\L...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:50955}, goog:processID: 3804, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:50955/devtoo..., se:cdpVersion: 145.0.7632.117, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Element: [[ChromeDriver: chrome on windows (6e68c62833b3f6b3e82fc56cc898e940)] -> xpath: //button[@type='button' and normalize-space()='Login']]
+Session ID: 6e68c62833b3f6b3e82fc56cc898e940
+16:35:56.667 [main] INFO  zutilities.StartupCode - ℹ️ Browser Closed
+16:36:25.920 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+16:36:32.853 [main] INFO  base.BaseTest - ℹ️ 🚀 TEST STARTED on browser: chrome
+16:36:32.956 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ℹ️ Test Case Started: TC_01_signupValidationFlow
+16:37:07.567 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+16:37:10.584 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+16:37:17.446 [main] INFO  base.BaseTest - ℹ️ 🚀 TEST STARTED on browser: chrome
+16:37:17.564 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ℹ️ Test Case Started: TC_01_signupValidationFlow
+16:37:18.170 [main] INFO  base.BasePage - ℹ️ LoginPage → Click → loginBtn (501 ms)
+16:37:18.957 [main] INFO  base.BasePage - ℹ️ LoginPage → Click → signUpBtn (81 ms)
+16:37:19.294 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj' is  → Please include an '@' in the email address. 'pnkj' is missing an '@'.
+16:37:19.987 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj@' is  → Please enter a part following '@'. 'pnkj@' is incomplete.
+16:37:20.530 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj@.com' is  → '.' is used at a wrong position in '.com'.
+16:37:21.002 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj.com' is  → Please include an '@' in the email address. 'pnkj.com' is missing an '@'.
+16:37:21.475 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj.com@' is  → Please enter a part following '@'. 'pnkj.com@' is incomplete.
+16:37:21.923 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email 'user1772190437454@yopmail.com' is accepted no validation message (Possibly valid email)
+16:37:22.647 [main] INFO  base.BaseTest - ℹ️ 🚀 TEST STARTED on browser: chrome
+16:37:22.746 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ℹ️ Test Case Started: TC_01_signupValidationFlow
+16:37:23.000 [main] INFO  base.BasePage - ℹ️ LoginPage → Click → loginBtn (87 ms)
+16:37:24.189 [main] INFO  base.BasePage - ℹ️ LoginPage → Click → signUpBtn (62 ms)
+16:37:24.540 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj' is  → Please include an '@' in the email address. 'pnkj' is missing an '@'.
+16:37:24.751 [main] INFO  base.BasePage - ℹ️ OtpPage → Type → 222222 → otpField (139 ms)
+16:37:24.953 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj@' is  → Please enter a part following '@'. 'pnkj@' is incomplete.
+16:37:25.091 [main] INFO  base.BasePage - ℹ️ OtpPage → Click → verifyBtn (233 ms)
+16:37:25.458 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj@.com' is  → '.' is used at a wrong position in '.com'.
+16:37:25.786 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj.com' is  → Please include an '@' in the email address. 'pnkj.com' is missing an '@'.
+16:37:26.189 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj.com@' is  → Please enter a part following '@'. 'pnkj.com@' is incomplete.
+16:37:26.557 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email 'user1772190442654@yopmail.com' is accepted no validation message (Possibly valid email)
+16:37:29.297 [main] INFO  base.BasePage - ℹ️ OtpPage → Type → 222222 → otpField (72 ms)
+16:37:29.399 [main] INFO  base.BasePage - ℹ️ OtpPage → Click → verifyBtn (67 ms)
+16:37:29.995 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ℹ️ Invalid OTP Toast: Invalid or expired token.
+16:37:32.552 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ℹ️ Invalid OTP Toast: Invalid or expired token.
+16:37:56.797 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ℹ️ Resend OTP Toast: OTP sent successfully.
+16:37:58.036 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ℹ️ Test Case Started: TC_02_loginValidationFlow
+16:38:01.549 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ℹ️ Resend OTP Toast: OTP sent successfully.
+16:38:01.696 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ℹ️ Test Case Started: TC_02_loginValidationFlow
+16:38:09.076 [main] INFO  zutilities.StartupCode - ℹ️ Browser Closed
+16:38:12.873 [main] INFO  zutilities.StartupCode - ℹ️ Browser Closed
+16:40:47.390 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+16:40:55.510 [main] INFO  base.BaseTest - ℹ️ 🚀 TEST STARTED on browser: chrome
+16:40:55.601 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ℹ️ Test Case Started: TC_01_signupValidationFlow
+16:40:55.786 [main] INFO  base.BasePage - ℹ️ LoginPage → Click → loginBtn (85 ms)
+16:40:56.968 [main] INFO  base.BasePage - ℹ️ LoginPage → Click → signUpBtn (74 ms)
+16:40:57.364 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj' is  → Please include an '@' in the email address. 'pnkj' is missing an '@'.
+16:40:57.663 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj@' is  → Please enter a part following '@'. 'pnkj@' is incomplete.
+16:40:57.940 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj@.com' is  → '.' is used at a wrong position in '.com'.
+16:40:58.224 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj.com' is  → Please include an '@' in the email address. 'pnkj.com' is missing an '@'.
+16:40:58.505 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj.com@' is  → Please enter a part following '@'. 'pnkj.com@' is incomplete.
+16:40:58.820 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email 'user1772190655517@yopmail.com' is accepted no validation message (Possibly valid email)
+16:41:01.575 [main] INFO  base.BasePage - ℹ️ OtpPage → Type → 222222 → otpField (70 ms)
+16:41:01.669 [main] INFO  base.BasePage - ℹ️ OtpPage → Click → verifyBtn (61 ms)
+16:41:05.387 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ℹ️ Invalid OTP Toast: Invalid or expired token.
+16:41:16.305 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ℹ️ Test Case Started: TC_02_loginValidationFlow
+16:41:27.235 [main] INFO  zutilities.StartupCode - ℹ️ Browser Closed
+16:41:59.824 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+16:42:07.303 [main] INFO  base.BaseTest - ℹ️ 🚀 TEST STARTED on browser: chrome
+16:42:07.416 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ℹ️ Test Case Started: TC_01_signupValidationFlow
+16:42:07.620 [main] INFO  base.BasePage - ℹ️ LoginPage → Click → loginBtn (74 ms)
+16:42:08.884 [main] INFO  base.BasePage - ℹ️ LoginPage → Click → signUpBtn (90 ms)
+16:42:09.172 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj' is  → Please include an '@' in the email address. 'pnkj' is missing an '@'.
+16:42:09.467 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj@' is  → Please enter a part following '@'. 'pnkj@' is incomplete.
+16:42:09.742 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj@.com' is  → '.' is used at a wrong position in '.com'.
+16:42:10.026 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj.com' is  → Please include an '@' in the email address. 'pnkj.com' is missing an '@'.
+16:42:10.334 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj.com@' is  → Please enter a part following '@'. 'pnkj.com@' is incomplete.
+16:42:10.642 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email 'user1772190727312@yopmail.com' is accepted no validation message (Possibly valid email)
+16:42:13.386 [main] INFO  base.BasePage - ℹ️ OtpPage → Type → 222222 → otpField (68 ms)
+16:42:13.486 [main] INFO  base.BasePage - ℹ️ OtpPage → Click → verifyBtn (67 ms)
+16:42:17.648 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ℹ️ Invalid OTP Toast: Invalid or expired token.
+16:42:17.737 [main] INFO  base.BasePage - ℹ️ OtpPage → Click → changeEmailBtn (58 ms)
+16:42:18.065 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ℹ️ Test Case Started: TC_02_loginValidationFlow
+16:42:18.154 [main] INFO  base.BasePage - ℹ️ LoginPage → Click → logintab (57 ms)
+16:42:18.422 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj' is  → Please include an '@' in the email address. 'pnkj' is missing an '@'.
+16:42:18.718 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj@' is  → Please enter a part following '@'. 'pnkj@' is incomplete.
+16:42:19.068 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj@.com' is  → '.' is used at a wrong position in '.com'.
+16:42:19.385 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj.com' is  → Please include an '@' in the email address. 'pnkj.com' is missing an '@'.
+16:42:19.670 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj.com@' is  → Please enter a part following '@'. 'pnkj.com@' is incomplete.
+16:42:20.025 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email 'user1772190727312@yopmail.com' is accepted no validation message (Possibly valid email)
+16:42:21.122 [main] INFO  base.BasePage - ℹ️ LoginPage → Get Text → userNotFoundAlert (16 ms)
+16:42:21.124 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ℹ️ User Not Found Message: User not found.
+16:42:21.357 [main] INFO  zutilities.StartupCode - ℹ️ Browser Closed
+16:42:41.585 [main] DEBUG org.testng.TestNG - suiteXmlPath: "C:\Users\pankaj_sharma\AppData\Local\JetBrains\IntelliJIdea2025.3\temp-testng-customsuite.xml"
+16:42:49.392 [main] INFO  base.BaseTest - ℹ️ 🚀 TEST STARTED on browser: chrome
+16:42:49.488 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ℹ️ Test Case Started: TC_01_signupValidationFlow
+16:42:49.688 [main] INFO  base.BasePage - ℹ️ LoginPage → Click → loginBtn (83 ms)
+16:42:50.838 [main] INFO  base.BasePage - ℹ️ LoginPage → Click → signUpBtn (57 ms)
+16:42:51.154 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj' is  → Please include an '@' in the email address. 'pnkj' is missing an '@'.
+16:42:51.434 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj@' is  → Please enter a part following '@'. 'pnkj@' is incomplete.
+16:42:51.727 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj@.com' is  → '.' is used at a wrong position in '.com'.
+16:42:52.017 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj.com' is  → Please include an '@' in the email address. 'pnkj.com' is missing an '@'.
+16:42:52.293 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj.com@' is  → Please enter a part following '@'. 'pnkj.com@' is incomplete.
+16:42:52.589 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email 'user1772190769399@yopmail.com' is accepted no validation message (Possibly valid email)
+16:42:55.373 [main] INFO  base.BasePage - ℹ️ OtpPage → Type → 222222 → otpField (99 ms)
+16:42:55.474 [main] INFO  base.BasePage - ℹ️ OtpPage → Click → verifyBtn (63 ms)
+16:42:59.701 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ℹ️ Invalid OTP Toast: Invalid or expired token.
+16:43:27.566 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ℹ️ Resend OTP Toast: OTP sent successfully.
+16:43:27.685 [main] INFO  base.BasePage - ℹ️ OtpPage → Click → changeEmailBtn (61 ms)
+16:43:27.965 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ℹ️ Test Case Started: TC_02_loginValidationFlow
+16:43:28.050 [main] INFO  base.BasePage - ℹ️ LoginPage → Click → logintab (53 ms)
+16:43:28.283 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj' is  → Please include an '@' in the email address. 'pnkj' is missing an '@'.
+16:43:28.570 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj@' is  → Please enter a part following '@'. 'pnkj@' is incomplete.
+16:43:28.863 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj@.com' is  → '.' is used at a wrong position in '.com'.
+16:43:29.176 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj.com' is  → Please include an '@' in the email address. 'pnkj.com' is missing an '@'.
+16:43:29.485 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email validation for 'pnkj.com@' is  → Please enter a part following '@'. 'pnkj.com@' is incomplete.
+16:43:29.816 [main] INFO  Signup_Login.Pages.LoginPage - ℹ️ Email 'user1772190769399@yopmail.com' is accepted no validation message (Possibly valid email)
+16:43:31.433 [main] INFO  base.BasePage - ℹ️ LoginPage → Get Text → userNotFoundAlert (11 ms)
+16:43:31.435 [main] INFO  Signup_Login.Test_Cases.SignupLoginValidationTest - ℹ️ User Not Found Message: User not found.
+16:43:31.746 [main] INFO  zutilities.StartupCode - ℹ️ Browser Closed
