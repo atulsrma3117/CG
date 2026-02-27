@@ -1,0 +1,69 @@
+17:01:31.571 [main] DEBUG org.testng.TestNG - suiteXmlPath: "H:\Automation\CarrierGuard\testng.xml"
+17:01:41.817 [main] INFO  base.BaseTest - ℹ️ 🚀 TEST STARTED on browser: chrome
+17:01:41.901 [main] INFO  Signup_Login.Test_Cases.SignupLoginTest - ℹ️ Starting signup flow
+17:01:41.906 [main] INFO  Signup_Login.Test_Cases.SignupLoginTest - 🔹 Signing up new user
+17:01:42.121 [main] INFO  base.BasePage - ℹ️ LoginPage → Click → loginBtn (85 ms)
+17:01:43.285 [main] INFO  base.BasePage - ℹ️ LoginPage → Click → signUpBtn (60 ms)
+17:01:43.529 [main] INFO  base.BasePage - ℹ️ SignupPage → Type → user3268361870900_c0d7ed40@yopmail.com → emailInput (208 ms)
+17:01:43.645 [main] INFO  base.BasePage - ℹ️ SignupPage → Click → createAccountBtn (74 ms)
+17:01:43.656 [main] INFO  Signup_Login.services.OtpApiService - ℹ️ 🚀 OTP API → Fetch OTP for → user3268361870900_c0d7ed40@yopmail.com
+17:01:47.581 [main] DEBUG org.apache.http.impl.conn.BasicClientConnectionManager - Get connection for route {}->http://3.84.224.180:80
+17:01:47.614 [main] DEBUG org.apache.http.impl.conn.DefaultClientConnectionOperator - Connecting to 3.84.224.180:80
+17:01:48.018 [main] DEBUG org.apache.http.client.protocol.RequestAddCookies - CookieSpec selected: ignoreCookies
+17:01:48.023 [main] DEBUG org.apache.http.client.protocol.RequestAuthCache - Auth cache not set in the context
+17:01:48.024 [main] DEBUG org.apache.http.client.protocol.RequestTargetAuthentication - Target auth state: UNCHALLENGED
+17:01:48.026 [main] DEBUG org.apache.http.client.protocol.RequestProxyAuthentication - Proxy auth state: UNCHALLENGED
+17:01:48.027 [main] DEBUG org.apache.http.impl.client.DefaultHttpClient - Attempt 1 to execute request
+17:01:48.028 [main] DEBUG org.apache.http.impl.conn.DefaultClientConnection - Sending request: POST /backend/api/v1/auth/send-otp/ HTTP/1.1
+17:01:48.030 [main] DEBUG org.apache.http.wire -  >> "POST /backend/api/v1/auth/send-otp/ HTTP/1.1[\r][\n]"
+17:01:48.034 [main] DEBUG org.apache.http.wire -  >> "Accept: */*[\r][\n]"
+17:01:48.034 [main] DEBUG org.apache.http.wire -  >> "Content-Type: application/json[\r][\n]"
+17:01:48.035 [main] DEBUG org.apache.http.wire -  >> "Content-Length: 76[\r][\n]"
+17:01:48.035 [main] DEBUG org.apache.http.wire -  >> "Host: 3.84.224.180[\r][\n]"
+17:01:48.036 [main] DEBUG org.apache.http.wire -  >> "Connection: Keep-Alive[\r][\n]"
+17:01:48.037 [main] DEBUG org.apache.http.wire -  >> "User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.18)[\r][\n]"
+17:01:48.038 [main] DEBUG org.apache.http.wire -  >> "Accept-Encoding: gzip,deflate[\r][\n]"
+17:01:48.038 [main] DEBUG org.apache.http.wire -  >> "[\r][\n]"
+17:01:48.039 [main] DEBUG org.apache.http.headers - >> POST /backend/api/v1/auth/send-otp/ HTTP/1.1
+17:01:48.039 [main] DEBUG org.apache.http.headers - >> Accept: */*
+17:01:48.040 [main] DEBUG org.apache.http.headers - >> Content-Type: application/json
+17:01:48.041 [main] DEBUG org.apache.http.headers - >> Content-Length: 76
+17:01:48.041 [main] DEBUG org.apache.http.headers - >> Host: 3.84.224.180
+17:01:48.042 [main] DEBUG org.apache.http.headers - >> Connection: Keep-Alive
+17:01:48.043 [main] DEBUG org.apache.http.headers - >> User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.18)
+17:01:48.043 [main] DEBUG org.apache.http.headers - >> Accept-Encoding: gzip,deflate
+17:01:48.044 [main] DEBUG org.apache.http.wire -  >> "{ "email": "user3268361870900_c0d7ed40@yopmail.com", "auth_type": "signup" }"
+17:02:03.639 [main] DEBUG org.apache.http.wire -  << "HTTP/1.1 200 OK[\r][\n]"
+17:02:03.646 [main] DEBUG org.apache.http.wire -  << "Server: nginx/1.28.2[\r][\n]"
+17:02:03.648 [main] DEBUG org.apache.http.wire -  << "Date: Fri, 27 Feb 2026 11:30:31 GMT[\r][\n]"
+17:02:03.648 [main] DEBUG org.apache.http.wire -  << "Content-Type: application/json[\r][\n]"
+17:02:03.649 [main] DEBUG org.apache.http.wire -  << "Content-Length: 97[\r][\n]"
+17:02:03.649 [main] DEBUG org.apache.http.wire -  << "Connection: keep-alive[\r][\n]"
+17:02:03.650 [main] DEBUG org.apache.http.wire -  << "[\r][\n]"
+17:02:03.656 [main] DEBUG org.apache.http.impl.conn.DefaultClientConnection - Receiving response: HTTP/1.1 200 OK
+17:02:03.658 [main] DEBUG org.apache.http.headers - << HTTP/1.1 200 OK
+17:02:03.658 [main] DEBUG org.apache.http.headers - << Server: nginx/1.28.2
+17:02:03.659 [main] DEBUG org.apache.http.headers - << Date: Fri, 27 Feb 2026 11:30:31 GMT
+17:02:03.660 [main] DEBUG org.apache.http.headers - << Content-Type: application/json
+17:02:03.661 [main] DEBUG org.apache.http.headers - << Content-Length: 97
+17:02:03.661 [main] DEBUG org.apache.http.headers - << Connection: keep-alive
+17:02:03.680 [main] DEBUG org.apache.http.impl.client.DefaultHttpClient - Connection can be kept alive indefinitely
+17:02:03.697 [main] DEBUG io.restassured.internal.RestAssuredHttpBuilder - Parsing response as: application/json
+17:02:03.700 [main] DEBUG io.restassured.internal.RestAssuredHttpBuilder - Parsed data to instance of: class org.apache.http.conn.EofSensorInputStream
+17:02:03.788 [main] DEBUG org.apache.http.wire -  << "{"status":"success","status_code":200,"message":"OTP sent successfully.","data":{"OTP":"303872"}}"
+17:02:03.795 [main] DEBUG org.apache.http.impl.conn.BasicClientConnectionManager - Releasing connection org.apache.http.impl.conn.ManagedClientConnectionImpl@1784a296
+17:02:03.795 [main] DEBUG org.apache.http.impl.conn.BasicClientConnectionManager - Connection can be kept alive indefinitely
+17:02:03.887 [main] INFO  Signup_Login.services.OtpApiService - ℹ️ 📤 Request JSON:<pre>{ "email": "user3268361870900_c0d7ed40@yopmail.com", "auth_type": "signup" }</pre>
+17:02:03.888 [main] INFO  Signup_Login.services.OtpApiService - ℹ️ 📥 Response JSON:<pre>{
+    "status": "success",
+    "status_code": 200,
+    "message": "OTP sent successfully.",
+    "data": {
+        "OTP": "303872"
+    }
+}</pre>
+17:02:03.892 [main] INFO  Signup_Login.services.OtpApiService - ℹ️ ✅ API Status: 200 (20103 ms)
+17:02:06.009 [main] INFO  base.BasePage - ℹ️ OtpPage → Type → 303872 → otpField (57 ms)
+17:02:06.099 [main] INFO  base.BasePage - ℹ️ OtpPage → Click → verifyBtn (60 ms)
+17:02:16.700 [main] INFO  Signup_Login.Test_Cases.SignupLoginTest - ✅ Signup successful - User logged in
+17:02:17.380 [main] INFO  zutilities.StartupCode - ℹ️ Browser Closed
