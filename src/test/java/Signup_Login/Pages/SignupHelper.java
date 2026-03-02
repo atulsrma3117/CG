@@ -1,9 +1,11 @@
 package Signup_Login.Pages;
 
 import Signup_Login.services.OtpApiService;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import zutilities.Logs;
-
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import java.time.Duration;
 import java.util.UUID;
 
 public class SignupHelper {
@@ -16,10 +18,12 @@ public class SignupHelper {
         SignupPage signup = login.clickSignUp();
         signup.enterEmail(email);
         signup.clickCreateAccount();
+        By otpSuccessMsg = By.xpath("//div[normalize-space()='OTP sent successfully.']");
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(otpSuccessMsg));
         String otp = OtpApiService.fetchOtp(email, "signup");
         OtpPage otpPage = new OtpPage(driver);
         otpPage.enterOtp(otp);
-        Thread.sleep(10000);
         otpPage.clickVerify();
 
         try {

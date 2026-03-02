@@ -23,10 +23,8 @@ public class SignupLoginTest extends BaseTest {
         try {
             Logs.info("Starting signup flow");
             Logs.step("Signing up new user", () -> {
-                Thread.sleep(10000);
                 email = SignupHelper.signupNewUser(driver);
             });
-            Thread.sleep(20000);
             boolean loggedIn = new HomePage(driver).isLoginSuccessful();
 
             if (loggedIn) {

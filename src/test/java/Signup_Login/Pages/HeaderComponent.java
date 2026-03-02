@@ -12,7 +12,7 @@ import java.time.Duration;
 
 public class HeaderComponent extends BasePage {
 
-    private By profileMenu = By.xpath("//a[@href='/profile']/parent::*");
+    private By profileMenu = By.xpath("/html[1]/body[1]/main[1]/div[1]/nav[1]/div[1]/div[1]/div[1]/div[2]/button[1]");
 
     private By logoutBtn = By.xpath("//button[normalize-space()='Log out']");
 

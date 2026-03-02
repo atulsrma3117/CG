@@ -7,10 +7,9 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-
-import java.util.HashMap;
 
 public class Reuseable {
     public WebDriver driver;
@@ -28,10 +27,10 @@ public class Reuseable {
         prefs.put("profile.default_content_settings.popups", 0);
         prefs.put("safebrowsing.enabled", true);
         ChromeOptions options = new ChromeOptions();
-       //options.addArguments("--headless=new");
+       // options.addArguments("--headless=new");
         options.addArguments("start-maximized");
         options.addArguments("--disable-save-password-bubble");
-         options.addArguments("--window-size=1366,768");
+        options.addArguments("--window-size=1366,768");
         options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
         options.setExperimentalOption("useAutomationExtension", false);
         HashMap allow = new HashMap<>();
@@ -41,7 +40,7 @@ public class Reuseable {
         allow.put("profile.default_content_setting_values.geolocation", 1);
         options.setExperimentalOption("prefs", allow);
         driver = new ChromeDriver(options);
-      //  driver.manage().window().maximize();
+        //  driver.manage().window().maximize();
         driver.get(Config.get("base.url"));
         return driver;
 

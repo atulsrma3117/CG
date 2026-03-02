@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="All Test Suite">
-    <test verbose="2" preserve-order="true" name="H:/Automation/CarrierGuard">
+    <test verbose="2" preserve-order="true" name="D:/CarrierGuard">
         <classes>
             <class name="Signup_Login.Test_Cases.SignupLoginTest">
                 <methods>
@@ -14,6 +14,11 @@
                 <methods>
                     <include name="TC_01_signupValidationFlow"/>
                     <include name="TC_02_loginValidationFlow"/>
+                </methods>
+            </class>
+            <class name="Write_a_review_flow.Test_Cases.Search_MC_DOT_Test">
+                <methods>
+                    <include name="TC_01_Search_and_Review_without_verification"/>
                 </methods>
             </class>
             <class name="Write_a_review_flow.Test_Cases.Without_Login_Write_a_Review_Flow_Test">
