@@ -18,26 +18,26 @@ public class SignupLoginTest extends BaseTest {
 
     @Test(priority = 1)
     @Severity(SeverityLevel.BLOCKER)
-    @Description("Verify that a new user can sign up successfully and login is confirmed")
-    public void TC_01_signupFlow() {
+    @Description("Verify that a new user can sign up successfully")
+    public void TC_01_signupFlow() throws InterruptedException {
         try {
             Logs.info("Starting signup flow");
-
             Logs.step("Signing up new user", () -> {
+                Thread.sleep(10000);
                 email = SignupHelper.signupNewUser(driver);
             });
-
+            Thread.sleep(20000);
             boolean loggedIn = new HomePage(driver).isLoginSuccessful();
 
             if (loggedIn) {
                 Logs.pass(driver, "Signup successful - User logged in");
             } else {
-                Logs.fail(driver, "Signup failed - User not logged in");
+                Logs.info( "Signup failed - User not logged in");
             }
 
             Assert.assertTrue(loggedIn, "Signup failed - User not logged in");
         } catch (Exception e) {
-            Logs.fail(driver, "Exception during signup: " + e.getMessage());
+            Logs.info( "Exception during signup: " + e.getMessage());
             throw e;
         }
     }
@@ -59,7 +59,7 @@ public class SignupLoginTest extends BaseTest {
         }
     }
 
-    @Test(priority = 3, dependsOnMethods = "TC_02_logoutFlow")
+    @Test(priority = 3)
     @Story("User login")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Verify that a registered user can login successfully using email")

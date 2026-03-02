@@ -32,7 +32,7 @@ public class Without_Login_Write_a_Review_Flow_Test extends BaseTest {
     }
 
     @Test(priority = 2, dependsOnMethods = "TC_01_Search_and_Review_Flow")
-    @Description("Click Write a Review and validate redirect to login/signup page")
+    @Description("Click Write a Review and validate redirect to login/signup Pop-up")
     @Severity(SeverityLevel.BLOCKER)
     public void TC_02_Click_on_Write_a_Review() {
         reviewPage.openReviewForm();

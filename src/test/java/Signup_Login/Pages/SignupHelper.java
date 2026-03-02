@@ -2,11 +2,13 @@ package Signup_Login.Pages;
 
 import Signup_Login.services.OtpApiService;
 import org.openqa.selenium.WebDriver;
+import zutilities.Logs;
+
 import java.util.UUID;
 
 public class SignupHelper {
 
-    public static String signupNewUser(WebDriver driver) {
+    public static String signupNewUser(WebDriver driver) throws InterruptedException {
 
         String email = "user" + System.nanoTime() + "_" + UUID.randomUUID().toString().substring(0, 8) + "@yopmail.com";
         LoginPage login = new LoginPage(driver);
@@ -17,6 +19,7 @@ public class SignupHelper {
         String otp = OtpApiService.fetchOtp(email, "signup");
         OtpPage otpPage = new OtpPage(driver);
         otpPage.enterOtp(otp);
+        Thread.sleep(10000);
         otpPage.clickVerify();
 
         try {

@@ -3,12 +3,13 @@ package Signup_Login.services;
 import io.qameta.allure.Allure;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import zutilities.Config;
 import zutilities.Logs;
 
 
 public class OtpApiService {
 
-    private static final String BASE_URL = "http://3.84.224.180/backend";
+    private static final String API_URL = Config.get("api.url");
 
     public static String fetchOtp(String email, String authType) {
 
@@ -29,7 +30,7 @@ public class OtpApiService {
                     RestAssured.given()
                             .contentType("application/json")
                             .body(requestBody)
-                            .post(BASE_URL + endpoint);
+                            .post(API_URL + endpoint);
 
             long duration = System.currentTimeMillis() - start;
 

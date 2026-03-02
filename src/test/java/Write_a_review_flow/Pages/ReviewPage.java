@@ -23,6 +23,13 @@ public class ReviewPage extends BasePage {
     private By popupMessage = By.xpath("//div[@role='dialog']//p[contains(text(),'sign in or create an account')]");
     private By cancelButton = By.xpath("//div[@role='dialog']//button[normalize-space()='Cancel']");
     private By continueButton = By.xpath("//div[@role='dialog']//button[normalize-space()='Continue to Login']");
+    private By numpopupContainer = By.xpath("//div[h2[text()='Please verify your business profile']]");
+    private By numpopupTitle = By.xpath("//h2[normalize-space()='Please verify your business profile']");
+    private By numpopupMessage = By.xpath("//p[contains(text(),'Help us confirm your account type')]");
+    private By nummcDropdown = By.xpath("//button[normalize-space()='MC']");
+    private By nummcInput = By.xpath("//input[@placeholder='MC No.']");
+    private By numskipForNowBtn = By.xpath("//button[normalize-space()='Skip for Now']");
+    private By numverifyAndContinueBtn = By.xpath("//button[normalize-space()='Verify & Continue']");
 
     public ReviewPage(WebDriver driver) {
         super(driver);
@@ -32,6 +39,7 @@ public class ReviewPage extends BasePage {
         scroll(350);
         click(writeReviewBtn);
     }
+
     public void enterMCNumber(String mcNumber) {
         wait.until(ExpectedConditions.visibilityOfElementLocated(mc_popup)).clear();
         driver.findElement(mc_popup).sendKeys(mcNumber);
@@ -41,6 +49,7 @@ public class ReviewPage extends BasePage {
         wait.until(ExpectedConditions.elementToBeClickable(verify)).click();
 
     }
+
     public void fillReview(int overallRating, int sliderRating, int paymentDays, String reviewText, String dotNumber) {
 
         click(By.xpath("//button[@aria-label='" + overallRating + " stars']"));
@@ -84,4 +93,45 @@ public class ReviewPage extends BasePage {
     public boolean isContinueButtonDisplayed() {
         return driver.findElement(continueButton).isDisplayed();
     }
+
+    public boolean isnumpopupContainerDisplayed() {
+        return driver.findElement(numpopupContainer).isDisplayed();
+    }
+
+    public String getnumPopuptitle() {
+        return driver.findElement(numpopupTitle).getText();
+    }
+
+    public String getnumpopupMessage() {
+        return driver.findElement(numpopupMessage).getText();
+    }
+
+    public boolean isnummcDropdownDisplayed() {
+        return driver.findElement(nummcDropdown).isDisplayed();
+    }
+
+    public boolean isnummcInputDisplayed() {
+        return driver.findElement(nummcInput).isDisplayed();
+    }
+
+    public boolean isnumskipForNowBtnDisplayed() {
+        return driver.findElement(numskipForNowBtn).isDisplayed();
+    }
+
+    public boolean isVerifyAndContinueDisabled() {
+        try {
+            return !driver.findElement(numverifyAndContinueBtn).isEnabled();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    // Check if Verify & Continue button is displayed
+    public boolean isnumverifyAndContinueBtnDisplayed() {
+        try {
+            return driver.findElement(numverifyAndContinueBtn).isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
+

@@ -15,6 +15,10 @@ public class CustomDriverListener implements WebDriverListener, ITestListener {
     public void onTestStart(ITestResult result) {
         Logs.info("🚀 TEST STARTED: " + result.getMethod().getMethodName());
     }
+    @Override
+    public void onTestSuccess(ITestResult result) {
+        Logs.info("🚀 TEST Case Completed: " + result.getMethod().getMethodName());
+    }
 
   /*  @Override
     public void onTestFailure(ITestResult result) {

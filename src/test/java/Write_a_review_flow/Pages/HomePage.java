@@ -29,24 +29,25 @@ public class HomePage extends BasePage {
 
     public void selectDOTFilter() {
 
-        click(dropdown);
+        WebElement dropdownElement = wait.until(ExpectedConditions.elementToBeClickable(dropdown));
+        dropdownElement.click();
+        List<WebElement> optionList = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(options));
 
-        List<WebElement> optionList = wait
-                .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(options));
 
         boolean found = false;
 
         for (WebElement option : optionList) {
             if (option.getText().trim().equals("DOT")) {
-                option.click();
+                wait.until(ExpectedConditions.elementToBeClickable(option)).click();
                 found = true;
                 break;
             }
         }
 
-        Assert.assertTrue(found, "DOT option not found in dropdown!");
+        if (!found) {
+            throw new RuntimeException("DOT option not found in dropdown");
+        }
     }
-
     public boolean searchDOT(String dotNumber) {
 
         type(searchBox, dotNumber);

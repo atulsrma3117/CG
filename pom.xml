@@ -12,7 +12,6 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- Default allure results directory so POM references resolve; can be overridden with -Dallure.results.directory -->
         <allure.results.directory>allure-results</allure.results.directory>
     </properties>
     <repositories>

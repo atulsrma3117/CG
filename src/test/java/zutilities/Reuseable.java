@@ -27,9 +27,8 @@ public class Reuseable {
         prefs.put("download.prompt_for_download", false);
         prefs.put("profile.default_content_settings.popups", 0);
         prefs.put("safebrowsing.enabled", true);
-        // logger = LogManager.getLogger(this.getClass());
         ChromeOptions options = new ChromeOptions();
-       options.addArguments("--headless=new");
+       //options.addArguments("--headless=new");
         options.addArguments("start-maximized");
         options.addArguments("--disable-save-password-bubble");
          options.addArguments("--window-size=1366,768");

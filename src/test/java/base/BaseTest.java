@@ -18,7 +18,6 @@ public class BaseTest extends StartupCode {
     protected static WebDriverWait wait;
     protected final String HOME_PAGE_URL = Config.get("base.url");
 
-
     @BeforeClass
     @Parameters("browser")
     public void start(@Optional("") String browser) throws InterruptedException {

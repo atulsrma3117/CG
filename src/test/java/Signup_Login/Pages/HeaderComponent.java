@@ -2,6 +2,7 @@ package Signup_Login.Pages;
 
 import base.BasePage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -11,7 +12,7 @@ import java.time.Duration;
 
 public class HeaderComponent extends BasePage {
 
-    private By profileMenu = By.xpath("//button[.//*[name()='path' and contains(@d,'M12 12C14.7614')]]");
+    private By profileMenu = By.xpath("//a[@href='/profile']/parent::*");
 
     private By logoutBtn = By.xpath("//button[normalize-space()='Log out']");
 
@@ -19,12 +20,22 @@ public class HeaderComponent extends BasePage {
         super(driver);
     }
 
-    public void logout() throws InterruptedException {
-        WebElement menu = wait.until(ExpectedConditions.visibilityOfElementLocated(profileMenu));
-        Thread.sleep(1000);
-        new Actions(driver).moveToElement(menu).perform();
-        WebElement logout = wait.until(ExpectedConditions.elementToBeClickable(logoutBtn));
-        logout.click();
+    public void logout() {
 
+        WebElement menu = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(profileMenu));
+
+        ((JavascriptExecutor) driver)
+                .executeScript("arguments[0].scrollIntoView(true);", menu);
+
+        new Actions(driver)
+                .moveToElement(menu)
+                .pause(Duration.ofMillis(500))
+                .perform();
+
+        WebElement logout = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(logoutBtn));
+
+        wait.until(ExpectedConditions.elementToBeClickable(logout)).click();
     }
 }
